@@ -28,8 +28,9 @@ func (s *PGSkillStore) LoadSkill(ctx context.Context, name string) (string, bool
 		if tid == uuid.Nil {
 			tid = store.MasterTenantID
 		}
-		q += " AND (is_system = true OR tenant_id = $2)"
-		args = append(args, tid)
+		// Include master-tenant skills (shared globally); prioritize tenant's own version over master's.
+		q += " AND (is_system = true OR tenant_id = $2 OR tenant_id = $3) ORDER BY CASE WHEN tenant_id = $2 THEN 0 ELSE 1 END LIMIT 1"
+		args = append(args, tid, store.MasterTenantID)
 	}
 	err := s.db.QueryRowContext(ctx, q, args...).Scan(&slug, &version, &filePath)
 	if err != nil {
@@ -103,8 +104,9 @@ func (s *PGSkillStore) GetSkill(ctx context.Context, name string) (*store.SkillI
 		if tid == uuid.Nil {
 			tid = store.MasterTenantID
 		}
-		q += " AND (is_system = true OR tenant_id = $2)"
-		args = append(args, tid)
+		// Include master-tenant skills (shared globally); prioritize tenant's own version over master's.
+		q += " AND (is_system = true OR tenant_id = $2 OR tenant_id = $3) ORDER BY CASE WHEN tenant_id = $2 THEN 0 ELSE 1 END LIMIT 1"
+		args = append(args, tid, store.MasterTenantID)
 	}
 	err := s.db.QueryRowContext(ctx, q, args...).Scan(&id, &skillName, &slug, &desc, &visibility, pq.Array(&tags), &version, &isSystem, &filePath)
 	if err != nil {
@@ -163,8 +165,9 @@ func (s *PGSkillStore) GetSkillByID(ctx context.Context, id uuid.UUID) (store.Sk
 		if tid == uuid.Nil {
 			tid = store.MasterTenantID
 		}
-		q += " AND (is_system = true OR tenant_id = $2)"
-		args = append(args, tid)
+		// Include master-tenant skills (shared globally); lookup by ID so no priority ordering needed.
+		q += " AND (is_system = true OR tenant_id = $2 OR tenant_id = $3)"
+		args = append(args, tid, store.MasterTenantID)
 	}
 	err := s.db.QueryRowContext(ctx, q, args...).Scan(&name, &slug, &desc, &visibility, pq.Array(&tags), &version, &isSystem, &status, &enabled, &depsRaw, &filePath)
 	if err != nil {
@@ -190,8 +193,8 @@ func (s *PGSkillStore) GetSkillOwnerID(ctx context.Context, id uuid.UUID) (strin
 		if tid == uuid.Nil {
 			tid = store.MasterTenantID
 		}
-		q += " AND (is_system = true OR tenant_id = $2)"
-		args = append(args, tid)
+		q += " AND (is_system = true OR tenant_id = $2 OR tenant_id = $3)"
+		args = append(args, tid, store.MasterTenantID)
 	}
 	var ownerID string
 	if err := s.db.QueryRowContext(ctx, q, args...).Scan(&ownerID); err != nil {
@@ -210,8 +213,9 @@ func (s *PGSkillStore) GetSkillOwnerIDBySlug(ctx context.Context, slug string) (
 		if tid == uuid.Nil {
 			tid = store.MasterTenantID
 		}
-		q += " AND (is_system = true OR tenant_id = $2)"
-		args = append(args, tid)
+		// Include master-tenant skills; prioritize tenant's own version over master's.
+		q += " AND (is_system = true OR tenant_id = $2 OR tenant_id = $3) ORDER BY CASE WHEN tenant_id = $2 THEN 0 ELSE 1 END LIMIT 1"
+		args = append(args, tid, store.MasterTenantID)
 	}
 	var ownerID string
 	if err := s.db.QueryRowContext(ctx, q, args...).Scan(&ownerID); err != nil {

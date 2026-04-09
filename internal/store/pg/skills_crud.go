@@ -203,8 +203,9 @@ func (s *PGSkillStore) GetSkillFilePath(ctx context.Context, id uuid.UUID) (file
 		if tid == uuid.Nil {
 			tid = store.MasterTenantID
 		}
-		q += " AND (is_system = true OR tenant_id = $2)"
-		args = append(args, tid)
+		// Include master-tenant skills (shared globally); lookup by ID so no priority ordering needed.
+		q += " AND (is_system = true OR tenant_id = $2 OR tenant_id = $3)"
+		args = append(args, tid, store.MasterTenantID)
 	}
 	err := s.db.QueryRowContext(ctx, q, args...).Scan(&filePath, &slug, &version, &isSystem)
 	return filePath, slug, version, isSystem, err == nil

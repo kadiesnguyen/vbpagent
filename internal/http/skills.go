@@ -185,6 +185,15 @@ func (h *SkillsHandler) handleUpdate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Prevent non-master tenants from modifying master-tenant shared skills.
+	if tid := store.TenantIDFromContext(r.Context()); tid != store.MasterTenantID {
+		if sk, ok := h.skills.GetSkillByID(r.Context(), id); ok && sk.TenantID == store.MasterTenantID.String() {
+			locale := store.LocaleFromContext(r.Context())
+			writeJSON(w, http.StatusForbidden, map[string]string{"error": i18n.T(locale, i18n.MsgPermissionDenied, "update master skill")})
+			return
+		}
+	}
+
 	// Ownership check (admins bypass)
 	auth := resolveAuth(r)
 	if !permissions.HasMinRole(auth.Role, permissions.RoleAdmin) {
@@ -224,6 +233,15 @@ func (h *SkillsHandler) handleDelete(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		writeJSON(w, http.StatusBadRequest, map[string]string{"error": i18n.T(locale, i18n.MsgInvalidID, "skill")})
 		return
+	}
+
+	// Prevent non-master tenants from deleting master-tenant shared skills.
+	if tid := store.TenantIDFromContext(r.Context()); tid != store.MasterTenantID {
+		if sk, ok := h.skills.GetSkillByID(r.Context(), id); ok && sk.TenantID == store.MasterTenantID.String() {
+			locale := store.LocaleFromContext(r.Context())
+			writeJSON(w, http.StatusForbidden, map[string]string{"error": i18n.T(locale, i18n.MsgPermissionDenied, "delete master skill")})
+			return
+		}
 	}
 
 	// Ownership check (admins bypass)

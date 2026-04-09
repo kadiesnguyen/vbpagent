@@ -77,11 +77,18 @@ func (s *PGSkillStore) ListSkills(ctx context.Context) []store.SkillInfo {
 	// Cache miss or TTL expired → query DB
 	// Returns active + archived + system skills. Archived skills are shown dimmed in the UI
 	// so admins can see missing deps and re-activate after installing them.
-	// Tenant filter: system skills visible globally, custom skills scoped to tenant.
+	// Tenant filter: system skills visible globally, master-tenant custom skills shared with all
+	// tenants (deduplicated by slug — tenant's own version takes precedence over master's).
 	rows, err := s.db.QueryContext(ctx,
-		`SELECT id, name, slug, description, visibility, tags, version, is_system, status, enabled, deps, frontmatter, file_path
-		 FROM skills WHERE (status IN ('active', 'archived') OR is_system = true) AND (is_system = true OR tenant_id = $1)
-		 ORDER BY name`, tid)
+		`SELECT d.id, d.name, d.slug, d.description, d.visibility, d.tags, d.version, d.is_system, d.status, d.enabled, d.deps, d.frontmatter, d.file_path, d.tenant_id
+		 FROM (
+		   SELECT DISTINCT ON (slug) id, name, slug, description, visibility, tags, version, is_system, status, enabled, deps, frontmatter, file_path, tenant_id
+		   FROM skills
+		   WHERE (status IN ('active', 'archived') OR is_system = true)
+		     AND (is_system = true OR tenant_id = $1 OR tenant_id = $2)
+		   ORDER BY slug, CASE WHEN tenant_id = $1 THEN 0 ELSE 1 END
+		 ) d
+		 ORDER BY d.name`, tid, store.MasterTenantID)
 	if err != nil {
 		return nil
 	}
@@ -97,7 +104,8 @@ func (s *PGSkillStore) ListSkills(ctx context.Context) []store.SkillInfo {
 		var isSystem, enabled bool
 		var depsRaw, fmRaw []byte
 		var filePath *string
-		if err := rows.Scan(&id, &name, &slug, &desc, &visibility, pq.Array(&tags), &version, &isSystem, &status, &enabled, &depsRaw, &fmRaw, &filePath); err != nil {
+		var tenantID uuid.UUID
+		if err := rows.Scan(&id, &name, &slug, &desc, &visibility, pq.Array(&tags), &version, &isSystem, &status, &enabled, &depsRaw, &fmRaw, &filePath, &tenantID); err != nil {
 			continue
 		}
 		info := buildSkillInfo(id.String(), name, slug, desc, version, s.baseDir, filePath)
@@ -108,6 +116,7 @@ func (s *PGSkillStore) ListSkills(ctx context.Context) []store.SkillInfo {
 		info.Enabled = enabled
 		info.MissingDeps = parseDepsColumn(depsRaw)
 		info.Author = parseFrontmatterAuthor(fmRaw)
+		info.TenantID = tenantID.String()
 		result = append(result, info)
 	}
 	if err := rows.Err(); err != nil {
@@ -131,8 +140,8 @@ func (s *PGSkillStore) ListAllSkills(ctx context.Context) []store.SkillInfo {
 	}
 	rows, err := s.db.QueryContext(ctx,
 		`SELECT id, name, slug, description, visibility, tags, version, is_system, status, enabled, deps, file_path
-		 FROM skills WHERE enabled = true AND status != 'deleted' AND (is_system = true OR tenant_id = $1)
-		 ORDER BY name`, tid)
+		 FROM skills WHERE enabled = true AND status != 'deleted' AND (is_system = true OR tenant_id = $1 OR tenant_id = $2)
+		 ORDER BY name`, tid, store.MasterTenantID)
 	if err != nil {
 		return nil
 	}

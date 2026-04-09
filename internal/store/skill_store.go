@@ -23,6 +23,7 @@ type SkillInfo struct {
 	Enabled     bool     `json:"enabled"`
 	Author      string   `json:"author,omitempty"`
 	MissingDeps []string `json:"missing_deps,omitempty"`
+	TenantID    string   `json:"tenant_id,omitempty"` // owning tenant; master tenant skills are shared globally
 }
 
 // SkillSearchResult is a scored skill returned from embedding search.

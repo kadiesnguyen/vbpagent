@@ -144,24 +144,28 @@ func (s *PGSkillStore) RevokeFromUser(ctx context.Context, skillID uuid.UUID, us
 // Access logic: public → all, private → owner only, internal → check grants.
 // System skills (is_system=true) are always visible regardless of tenant.
 func (s *PGSkillStore) ListAccessible(ctx context.Context, agentID uuid.UUID, userID string) ([]store.SkillInfo, error) {
-	// tenant filter: system skills bypass it, tenant-owned skills are filtered
+	// tenant filter: system skills bypass it; master-tenant skills shared globally;
+	// tenant-owned private skills scoped to their tenant.
 	tc, tcArgs, _, err := scopeClause(ctx, 3)
 	if err != nil {
 		return nil, err
 	}
 	tenantCond := ""
-	if tc != "" {
-		// tc is " AND tenant_id = $3"; we need it as an OR condition inside the WHERE
-		tenantCond = fmt.Sprintf(" AND (s.is_system = true OR s.tenant_id = $%d)", 3)
-		_ = tc // tcArgs carries the value
-	}
-	// LEFT JOIN skill_tenant_configs to exclude per-tenant disabled skills.
-	// stc.enabled = false → skill explicitly disabled for this tenant.
 	stcJoin := ""
 	stcFilter := ""
-	if len(tcArgs) > 0 {
+	if tc != "" {
+		// Include master-tenant skills alongside the requesting tenant's own skills.
+		tenantCond = fmt.Sprintf(" AND (s.is_system = true OR s.tenant_id = $%d OR s.tenant_id = $%d)", 3, 4)
+		_ = tc // tcArgs carries the tenant_id value
+		// LEFT JOIN skill_tenant_configs to allow per-tenant enable/disable of master skills.
 		stcJoin = fmt.Sprintf(" LEFT JOIN skill_tenant_configs stc ON s.id = stc.skill_id AND stc.tenant_id = $%d", 3)
 		stcFilter = " AND (stc.enabled IS NULL OR stc.enabled = true)"
+	}
+	// Only include masterID in args when tenant-scoped (tc != ""); cross-tenant queries
+	// have no $3/$4 placeholders and must not receive extra positional args.
+	queryArgs := append([]any{agentID, userID}, tcArgs...)
+	if tc != "" {
+		queryArgs = append(queryArgs, store.MasterTenantID)
 	}
 	rows, err := s.db.QueryContext(ctx,
 		`SELECT DISTINCT s.name, s.slug, s.description, s.version, s.file_path FROM skills s
@@ -173,7 +177,7 @@ func (s *PGSkillStore) ListAccessible(ctx context.Context, agentID uuid.UUID, us
 			OR (s.visibility = 'private' AND s.owner_id = $2)
 			OR (s.visibility = 'internal' AND (sag.id IS NOT NULL OR sug.id IS NOT NULL))
 		)
-		ORDER BY s.name`, append([]any{agentID, userID}, tcArgs...)...)
+		ORDER BY s.name`, queryArgs...)
 	if err != nil {
 		return nil, err
 	}
@@ -209,7 +213,13 @@ func (s *PGSkillStore) ListWithGrantStatus(ctx context.Context, agentID uuid.UUI
 	}
 	tenantCond := ""
 	if tc != "" {
-		tenantCond = fmt.Sprintf(" AND (s.is_system = true OR s.tenant_id = $%d)", 2)
+		// Include master-tenant skills alongside the requesting tenant's own skills.
+		tenantCond = fmt.Sprintf(" AND (s.is_system = true OR s.tenant_id = $%d OR s.tenant_id = $%d)", 2, 3)
+	}
+	// Only include masterID in args when tenant-scoped; cross-tenant queries have no $3 placeholder.
+	queryArgs := append([]any{agentID}, tcArgs...)
+	if tc != "" {
+		queryArgs = append(queryArgs, store.MasterTenantID)
 	}
 	rows, err := s.db.QueryContext(ctx,
 		`SELECT s.id, s.name, s.slug, COALESCE(s.description, ''), s.visibility, s.version,
@@ -219,7 +229,7 @@ func (s *PGSkillStore) ListWithGrantStatus(ctx context.Context, agentID uuid.UUI
 		 FROM skills s
 		 LEFT JOIN skill_agent_grants sag ON s.id = sag.skill_id AND sag.agent_id = $1
 		 WHERE s.status = 'active'`+tenantCond+`
-		 ORDER BY s.name`, append([]any{agentID}, tcArgs...)...)
+		 ORDER BY s.name`, queryArgs...)
 	if err != nil {
 		return nil, err
 	}
