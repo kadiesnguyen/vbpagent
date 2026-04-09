@@ -406,6 +406,11 @@ func (s *Server) SetTeamEventsHandler(h *httpapi.TeamEventsHandler) {
 	s.handlers = append(s.handlers, h)
 }
 
+// SetIntegrationsHandler registers the integrations status handler (Google OAuth, etc.).
+func (s *Server) SetIntegrationsHandler(h *httpapi.IntegrationsHandler) {
+	s.handlers = append(s.handlers, h)
+}
+
 // SetTeamAttachmentsHandler sets the team attachment download handler.
 func (s *Server) SetTeamAttachmentsHandler(h *httpapi.TeamAttachmentsHandler) {
 	s.handlers = append(s.handlers, h)

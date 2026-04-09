@@ -407,7 +407,19 @@
     "summonFailed": "Summon Failed",
     "defaultAgent": "Default Agent",
     "emoji": "Icon",
-    "emojiHint": "Optional emoji icon"
+    "emojiHint": "Optional emoji icon",
+    "email": "Contact Email",
+    "emailPlaceholder": "agent@example.com",
+    "emailHint": "Optional contact email for this agent."
+  },
+  "googleWorkspace": {
+    "title": "Google Workspace",
+    "description": "Bind Google accounts to this agent. The agent can only access Google Workspace (Gmail, Drive, Calendar) for authenticated emails.",
+    "signIn": "Sign in with Google",
+    "emailPlaceholder": "user@gmail.com",
+    "addEmail": "Add",
+    "hint": "Press Enter or comma to add. Green = authenticated, Red = not yet signed in.",
+    "notConfigured": "Google Workspace integration is not configured on this server."
   },
   "llmConfig": {
     "title": "LLM Configuration",

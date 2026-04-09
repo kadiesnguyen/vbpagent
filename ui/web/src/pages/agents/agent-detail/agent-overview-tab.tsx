@@ -10,6 +10,7 @@ import { SkillsSection } from "./overview-sections/skills-section";
 import { EvolutionSection } from "./overview-sections/evolution-section";
 import { CapabilitiesSection } from "./overview-sections/capabilities-section";
 import { ChatGPTOAuthRoutingSummarySection } from "./overview-sections/chatgpt-oauth-routing-summary-section";
+import { GoogleWorkspaceSection } from "./overview-sections/google-workspace-section";
 import { HeartbeatCard } from "./overview-sections/heartbeat-card";
 import { MemorySection } from "./config-sections";
 import type { UseAgentHeartbeatReturn } from "../hooks/use-agent-heartbeat";
@@ -32,6 +33,10 @@ export function AgentOverviewTab({ agent, onUpdate, heartbeat, onManageCodexPool
   const [frontmatter, setFrontmatter] = useState(agent.frontmatter ?? "");
   const [status, setStatus] = useState(agent.status);
   const [isDefault, setIsDefault] = useState(agent.is_default);
+  const [email, setEmail] = useState(typeof otherCfg.email === "string" ? otherCfg.email : "");
+  const [googleEmails, setGoogleEmails] = useState<string[]>(
+    Array.isArray(otherCfg.google_emails) ? (otherCfg.google_emails as string[]) : [],
+  );
 
   // Model & Budget
   const [provider, setProvider] = useState(agent.provider);
@@ -67,6 +72,8 @@ export function AgentOverviewTab({ agent, onUpdate, heartbeat, onManageCodexPool
       const updatedOtherConfig = {
         ...otherCfg,
         emoji: emoji.trim() || undefined,
+        email: email.trim() || undefined,
+        google_emails: googleEmails.length > 0 ? googleEmails : undefined,
         self_evolve: selfEvolve,
         skill_evolve: skillEvolve,
         skill_nudge_interval: skillEvolve ? skillNudgeInterval : undefined,
@@ -110,6 +117,8 @@ export function AgentOverviewTab({ agent, onUpdate, heartbeat, onManageCodexPool
         onStatusChange={setStatus}
         isDefault={isDefault}
         onIsDefaultChange={setIsDefault}
+        email={email}
+        onEmailChange={setEmail}
       />
 
       <ModelBudgetSection
@@ -129,6 +138,8 @@ export function AgentOverviewTab({ agent, onUpdate, heartbeat, onManageCodexPool
       />
 
       <ChatGPTOAuthRoutingSummarySection agent={agent} onManage={onManageCodexPool} />
+
+      <GoogleWorkspaceSection emails={googleEmails} onChange={setGoogleEmails} />
 
       {/* Memory — always visible, per-agent overrides */}
       <MemorySection

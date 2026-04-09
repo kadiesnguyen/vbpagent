@@ -407,7 +407,19 @@
     "summonFailed": "召唤失败",
     "defaultAgent": "默认Agent",
     "emoji": "图标",
-    "emojiHint": "可选的表情图标"
+    "emojiHint": "可选的表情图标",
+    "email": "联系邮箱",
+    "emailPlaceholder": "agent@example.com",
+    "emailHint": "此Agent的可选联系邮箱。"
+  },
+  "googleWorkspace": {
+    "title": "Google Workspace",
+    "description": "为此Agent绑定Google账号。Agent只能访问已认证邮箱的Google Workspace（Gmail、Drive、Calendar）。",
+    "signIn": "使用Google登录",
+    "emailPlaceholder": "user@gmail.com",
+    "addEmail": "添加",
+    "hint": "按Enter或逗号添加。绿色=已认证，红色=尚未登录。",
+    "notConfigured": "此服务器未配置Google Workspace集成。"
   },
   "llmConfig": {
     "title": "LLM 配置",

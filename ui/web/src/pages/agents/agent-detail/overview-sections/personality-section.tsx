@@ -29,11 +29,14 @@ interface PersonalitySectionProps {
   onStatusChange: (v: string) => void;
   isDefault: boolean;
   onIsDefaultChange: (v: boolean) => void;
+  email: string;
+  onEmailChange: (v: string) => void;
 }
 
 export function PersonalitySection({
   agentKey, emoji, onEmojiChange, displayName, onDisplayNameChange,
   frontmatter, onFrontmatterChange, status, onStatusChange, isDefault, onIsDefaultChange,
+  email, onEmailChange,
 }: PersonalitySectionProps) {
   const { t } = useTranslation("agents");
   const [copied, setCopied] = useState(false);
@@ -104,6 +107,21 @@ export function PersonalitySection({
               <p className="text-xs text-muted-foreground italic truncate">
                 {t("detail.llmSeesAs")}: "{frontmatter}"
               </p>
+            )}
+          </div>
+
+          <div className="space-y-1.5">
+            <Label htmlFor="agentEmail" className="text-xs">{t("identity.email")}</Label>
+            <Input
+              id="agentEmail"
+              type="email"
+              value={email}
+              onChange={(e) => onEmailChange(e.target.value)}
+              placeholder={t("identity.emailPlaceholder")}
+              className="text-base md:text-sm"
+            />
+            {email && (
+              <p className="text-xs text-muted-foreground">{t("identity.emailHint")}</p>
             )}
           </div>
         </div>

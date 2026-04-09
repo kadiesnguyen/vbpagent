@@ -407,7 +407,19 @@
     "summonFailed": "Triệu hồi thất bại",
     "defaultAgent": "Agent mặc định",
     "emoji": "Biểu tượng",
-    "emojiHint": "Emoji tùy chọn"
+    "emojiHint": "Emoji tùy chọn",
+    "email": "Email liên hệ",
+    "emailPlaceholder": "agent@example.com",
+    "emailHint": "Email liên hệ tùy chọn cho agent này."
+  },
+  "googleWorkspace": {
+    "title": "Google Workspace",
+    "description": "Gắn tài khoản Google cho agent này. Agent chỉ có thể truy cập Google Workspace (Gmail, Drive, Calendar) với email đã xác thực.",
+    "signIn": "Đăng nhập Google",
+    "emailPlaceholder": "user@gmail.com",
+    "addEmail": "Thêm",
+    "hint": "Nhấn Enter hoặc dấu phẩy để thêm. Xanh = đã xác thực, Đỏ = chưa đăng nhập.",
+    "notConfigured": "Tính năng Google Workspace chưa được cấu hình trên server này."
   },
   "llmConfig": {
     "title": "Cấu hình LLM",

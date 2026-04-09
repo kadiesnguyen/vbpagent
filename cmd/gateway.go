@@ -413,6 +413,9 @@ func runGateway() {
 		server.SetSecureCLIHandler(secureCLIH)
 	}
 
+	// Integrations status API (Google Workspace OAuth, etc.)
+	server.SetIntegrationsHandler(httpapi.NewIntegrationsHandler())
+
 	// Activity audit log API
 	if pgStores.Activity != nil {
 		server.SetActivityHandler(httpapi.NewActivityHandler(pgStores.Activity))
