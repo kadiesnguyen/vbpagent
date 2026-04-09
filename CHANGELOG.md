@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to GoClaw are documented here. For full documentation, see [docs.goclaw.sh](https://docs.goclaw.sh).
+All notable changes to VBPClaw are documented here. For full documentation, see [docs.vbpclaw.sh](https://docs.vbpclaw.sh).
 
 ## Project Status
 

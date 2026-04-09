@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="../_statics/goclaw.png" alt="GoClaw" />
+  <img src="../_statics/vbpclaw.png" alt="VBPClaw" />
 </p>
 
-<h1 align="center">GoClaw</h1>
+<h1 align="center">VBPClaw</h1>
 
 <p align="center"><strong>Enterprise AI Agent Platform</strong></p>
 
@@ -12,8 +12,8 @@ Single binary. Production-tested. Agents that orchestrate for you.
 </p>
 
 <p align="center">
-  <a href="https://docs.goclaw.sh">التوثيق</a> •
-  <a href="https://docs.goclaw.sh/#quick-start">البدء السريع</a> •
+  <a href="https://docs.vbpclaw.sh">التوثيق</a> •
+  <a href="https://docs.vbpclaw.sh/#quick-start">البدء السريع</a> •
   <a href="https://x.com/nlb_io">Twitter / X</a>
 </p>
 
@@ -28,7 +28,7 @@ Single binary. Production-tested. Agents that orchestrate for you.
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="License: MIT" />
 </p>
 
-**GoClaw** هو بوابة ذكاء اصطناعي متعددة الوكلاء تربط نماذج اللغة الكبيرة بأدواتك وقنواتك وبياناتك — يُنشر كملف Go ثنائي واحد بدون أي تبعيات وقت تشغيل. يُنسّق فرق الوكلاء والتفويض بين الوكلاء عبر أكثر من 20 مزوّد نماذج لغوية مع عزل كامل لمتعددي المستأجرين.
+**VBPClaw** هو بوابة ذكاء اصطناعي متعددة الوكلاء تربط نماذج اللغة الكبيرة بأدواتك وقنواتك وبياناتك — يُنشر كملف Go ثنائي واحد بدون أي تبعيات وقت تشغيل. يُنسّق فرق الوكلاء والتفويض بين الوكلاء عبر أكثر من 20 مزوّد نماذج لغوية مع عزل كامل لمتعددي المستأجرين.
 
 منفذ Go من [OpenClaw](https://github.com/openclaw/openclaw) مع أمان محسّن، وPostgreSQL متعدد المستأجرين، وإمكانية رصد وإنتاجية متميزة.
 
@@ -80,7 +80,7 @@ Single binary. Production-tested. Agents that orchestrate for you.
 
 ## نظام بيئة Claw
 
-|                 | OpenClaw        | ZeroClaw | PicoClaw | **GoClaw**                              |
+|                 | OpenClaw        | ZeroClaw | PicoClaw | **VBPClaw**                              |
 | --------------- | --------------- | -------- | -------- | --------------------------------------- |
 | اللغة           | TypeScript      | Rust     | Go       | **Go**                                  |
 | حجم الملف الثنائي | 28 MB + Node.js | 3.4 MB   | ~8 MB    | **~25 MB** (أساسي) / **~36 MB** (+ OTel) |
@@ -89,7 +89,7 @@ Single binary. Production-tested. Agents that orchestrate for you.
 | بدء التشغيل     | > 5 s           | < 10 ms  | < 1 s    | **< 1 s**                               |
 | العتاد المستهدف  | Mac Mini بـ599 دولار+ | حافة 10 دولار | حافة 10 دولار | **VPS بـ5 دولار+**              |
 
-| الميزة                     | OpenClaw                             | ZeroClaw                                     | PicoClaw                              | **GoClaw**                     |
+| الميزة                     | OpenClaw                             | ZeroClaw                                     | PicoClaw                              | **VBPClaw**                     |
 | -------------------------- | ------------------------------------ | -------------------------------------------- | ------------------------------------- | ------------------------------ |
 | متعدد المستأجرين (PostgreSQL) | —                                 | —                                            | —                                     | ✅                             |
 | تكامل MCP                  | — (يستخدم ACP)                       | —                                            | —                                     | ✅ (stdio/SSE/streamable-http) |
@@ -110,7 +110,7 @@ Single binary. Production-tested. Agents that orchestrate for you.
 ## المعمارية
 
 <p align="center">
-  <img src="../_statics/architecture.jpg" alt="GoClaw Architecture" width="800" />
+  <img src="../_statics/architecture.jpg" alt="VBPClaw Architecture" width="800" />
 </p>
 
 ## البدء السريع
@@ -120,10 +120,10 @@ Single binary. Production-tested. Agents that orchestrate for you.
 ### من المصدر
 
 ```bash
-git clone https://github.com/nextlevelbuilder/goclaw.git && cd goclaw
+git clone https://github.com/nextlevelbuilder/vbpclaw.git && cd vbpclaw
 make build
-./goclaw onboard        # معالج إعداد تفاعلي
-source .env.local && ./goclaw
+./vbpclaw onboard        # معالج إعداد تفاعلي
+source .env.local && ./vbpclaw
 ```
 
 ### مع Docker
@@ -132,20 +132,20 @@ source .env.local && ./goclaw
 # توليد .env مع أسرار مولّدة تلقائياً
 chmod +x prepare-env.sh && ./prepare-env.sh
 
-# أضف على الأقل مفتاح GOCLAW_*_API_KEY إلى .env، ثم:
+# أضف على الأقل مفتاح VBPCLAW_*_API_KEY إلى .env، ثم:
 make up
 
 # لوحة تحكم الويب على http://localhost:18790
 # فحص الصحة: curl http://localhost:18790/health
 ```
 
-عند تعيين متغيرات البيئة `GOCLAW_*_API_KEY`، تعمل البوابة على الإعداد التلقائي بدون مطالبات تفاعلية — تكتشف المزوّد، وتشغّل الترحيلات، وتزرع البيانات الافتراضية.
+عند تعيين متغيرات البيئة `VBPCLAW_*_API_KEY`، تعمل البوابة على الإعداد التلقائي بدون مطالبات تفاعلية — تكتشف المزوّد، وتشغّل الترحيلات، وتزرع البيانات الافتراضية.
 
-> لاختلافات البناء (OTel، Tailscale، Redis)، وعلامات صور Docker، والتراكبات المُركّبة، راجع [دليل النشر](https://docs.goclaw.sh/#deploy-docker-compose).
+> لاختلافات البناء (OTel، Tailscale، Redis)، وعلامات صور Docker، والتراكبات المُركّبة، راجع [دليل النشر](https://docs.vbpclaw.sh/#deploy-docker-compose).
 
 ## تنسيق متعدد الوكلاء
 
-يدعم GoClaw فرق الوكلاء والتفويض بين الوكلاء — يعمل كل وكيل بهويته الخاصة وأدواته ومزوّد نماذج اللغة الكبيرة وملفات السياق.
+يدعم VBPClaw فرق الوكلاء والتفويض بين الوكلاء — يعمل كل وكيل بهويته الخاصة وأدواته ومزوّد نماذج اللغة الكبيرة وملفات السياق.
 
 ### تفويض الوكيل
 
@@ -170,7 +170,7 @@ make up
 - **صندوق بريد الفريق** — رسائل مباشرة من نظير إلى نظير وبث جماعي
 - **الأدوات**: `team_tasks` لإدارة المهام، و`team_message` لصندوق البريد
 
-> للاطلاع على تفاصيل التفويض وروابط الأذونات والتحكم في التزامن، راجع [توثيق فرق الوكلاء](https://docs.goclaw.sh/#teams-what-are-teams).
+> للاطلاع على تفاصيل التفويض وروابط الأذونات والتحكم في التزامن، راجع [توثيق فرق الوكلاء](https://docs.vbpclaw.sh/#teams-what-are-teams).
 
 ## الأدوات المدمجة
 
@@ -214,19 +214,19 @@ make up
 
 ## التوثيق
 
-التوثيق الكامل على **[docs.goclaw.sh](https://docs.goclaw.sh)** — أو تصفّح المصدر في [`goclaw-docs/`](https://github.com/nextlevelbuilder/goclaw-docs)
+التوثيق الكامل على **[docs.vbpclaw.sh](https://docs.vbpclaw.sh)** — أو تصفّح المصدر في [`vbpclaw-docs/`](https://github.com/nextlevelbuilder/vbpclaw-docs)
 
 | القسم | المواضيع |
 |---------|--------|
-| [البدء](https://docs.goclaw.sh/#what-is-goclaw) | التثبيت، البدء السريع، الإعداد، جولة لوحة تحكم الويب |
-| [المفاهيم الأساسية](https://docs.goclaw.sh/#how-goclaw-works) | حلقة الوكيل، الجلسات، الأدوات، الذاكرة، متعددية المستأجرين |
-| [الوكلاء](https://docs.goclaw.sh/#creating-agents) | إنشاء الوكلاء، ملفات السياق، الشخصية، المشاركة والوصول |
-| [المزودون](https://docs.goclaw.sh/#providers-overview) | Anthropic، OpenAI، OpenRouter، Gemini، DeepSeek، +15 المزيد |
-| [القنوات](https://docs.goclaw.sh/#channels-overview) | Telegram، Discord، Slack، Feishu، Zalo، WhatsApp، WebSocket |
-| [فرق الوكلاء](https://docs.goclaw.sh/#teams-what-are-teams) | الفرق، لوحة المهام، المراسلة، التفويض والتسليم |
-| [متقدم](https://docs.goclaw.sh/#custom-tools) | الأدوات المخصصة، MCP، المهارات، الكرون، صندوق الحماية، الخطافات، RBAC |
-| [النشر](https://docs.goclaw.sh/#deploy-docker-compose) | Docker Compose، قاعدة البيانات، الأمان، إمكانية الرصد، Tailscale |
-| [المرجع](https://docs.goclaw.sh/#cli-commands) | أوامر CLI، REST API، بروتوكول WebSocket، متغيرات البيئة |
+| [البدء](https://docs.vbpclaw.sh/#what-is-vbpclaw) | التثبيت، البدء السريع، الإعداد، جولة لوحة تحكم الويب |
+| [المفاهيم الأساسية](https://docs.vbpclaw.sh/#how-vbpclaw-works) | حلقة الوكيل، الجلسات، الأدوات، الذاكرة، متعددية المستأجرين |
+| [الوكلاء](https://docs.vbpclaw.sh/#creating-agents) | إنشاء الوكلاء، ملفات السياق، الشخصية، المشاركة والوصول |
+| [المزودون](https://docs.vbpclaw.sh/#providers-overview) | Anthropic، OpenAI، OpenRouter، Gemini، DeepSeek، +15 المزيد |
+| [القنوات](https://docs.vbpclaw.sh/#channels-overview) | Telegram، Discord، Slack، Feishu، Zalo، WhatsApp، WebSocket |
+| [فرق الوكلاء](https://docs.vbpclaw.sh/#teams-what-are-teams) | الفرق، لوحة المهام، المراسلة، التفويض والتسليم |
+| [متقدم](https://docs.vbpclaw.sh/#custom-tools) | الأدوات المخصصة، MCP، المهارات، الكرون، صندوق الحماية، الخطافات، RBAC |
+| [النشر](https://docs.vbpclaw.sh/#deploy-docker-compose) | Docker Compose، قاعدة البيانات، الأمان، إمكانية الرصد، Tailscale |
+| [المرجع](https://docs.vbpclaw.sh/#cli-commands) | أوامر CLI، REST API، بروتوكول WebSocket، متغيرات البيئة |
 
 ## الاختبار
 
@@ -241,7 +241,7 @@ go test -v ./tests/integration/ -timeout 120s    # اختبارات التكام
 
 ## شكر وتقدير
 
-بُني GoClaw على مشروع [OpenClaw](https://github.com/openclaw/openclaw) الأصلي. نحن ممتنون للمعمارية والرؤية التي ألهمت هذا المنفذ بلغة Go.
+بُني VBPClaw على مشروع [OpenClaw](https://github.com/openclaw/openclaw) الأصلي. نحن ممتنون للمعمارية والرؤية التي ألهمت هذا المنفذ بلغة Go.
 
 ## الرخصة
 

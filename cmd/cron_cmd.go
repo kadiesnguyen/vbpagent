@@ -9,8 +9,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/nextlevelbuilder/goclaw/internal/store"
-	"github.com/nextlevelbuilder/goclaw/pkg/protocol"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/pkg/protocol"
 )
 
 func cronCmd() *cobra.Command {

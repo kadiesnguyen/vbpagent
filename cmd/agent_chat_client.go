@@ -10,9 +10,9 @@ import (
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 
-	"github.com/nextlevelbuilder/goclaw/internal/config"
-	"github.com/nextlevelbuilder/goclaw/internal/sessions"
-	"github.com/nextlevelbuilder/goclaw/pkg/protocol"
+	"github.com/nextlevelbuilder/vbpclaw/internal/config"
+	"github.com/nextlevelbuilder/vbpclaw/internal/sessions"
+	"github.com/nextlevelbuilder/vbpclaw/pkg/protocol"
 )
 
 func runClientMode(cfg *config.Config, addr, agentName, message, sessionKey string) {
@@ -45,7 +45,7 @@ func runClientMode(cfg *config.Config, addr, agentName, message, sessionKey stri
 	}
 
 	// Interactive REPL
-	fmt.Fprintf(os.Stderr, "\nGoClaw Interactive Chat (agent: %s, model: %s)\n", agentName, agentCfg.Model)
+	fmt.Fprintf(os.Stderr, "\nVBPClaw Interactive Chat (agent: %s, model: %s)\n", agentName, agentCfg.Model)
 	fmt.Fprintf(os.Stderr, "Session: %s\n", sessionKey)
 	fmt.Fprintf(os.Stderr, "Type \"exit\" to quit, \"/new\" for new session\n\n")
 

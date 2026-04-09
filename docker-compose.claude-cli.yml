@@ -6,7 +6,7 @@
 #   docker compose -f docker-compose.yml -f docker-compose.postgres.yml -f docker-compose.claude-cli.yml up -d --build
 
 services:
-  goclaw:
+  vbpclaw:
     build:
       args:
         ENABLE_CLAUDE_CLI: "true"

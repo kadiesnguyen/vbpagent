@@ -1,11 +1,11 @@
 package cmd
 
 import (
-	"github.com/nextlevelbuilder/goclaw/internal/bus"
-	httpapi "github.com/nextlevelbuilder/goclaw/internal/http"
-	"github.com/nextlevelbuilder/goclaw/internal/providers"
-	"github.com/nextlevelbuilder/goclaw/internal/store"
-	"github.com/nextlevelbuilder/goclaw/internal/tools"
+	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
+	httpapi "github.com/nextlevelbuilder/vbpclaw/internal/http"
+	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/tools"
 )
 
 // wireHTTP creates HTTP handlers (agents + skills + traces + MCP + channel instances + providers + builtin tools + pending messages).

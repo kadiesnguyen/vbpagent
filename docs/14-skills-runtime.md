@@ -21,8 +21,8 @@ How skills access Python, Node.js, and system tools inside the Docker container.
 │  └─────────────────┘  └──────────────────────────────┘  │
 │                                                         │
 │  Volumes (read-write):                                  │
-│    /app/data      ← goclaw-data volume                  │
-│    /app/workspace ← goclaw-workspace volume             │
+│    /app/data      ← vbpclaw-data volume                  │
+│    /app/workspace ← vbpclaw-workspace volume             │
 │                                                         │
 │  tmpfs (noexec):                                        │
 │    /tmp           ← 256MB, no executables               │
@@ -33,7 +33,7 @@ How skills access Python, Node.js, and system tools inside the Docker container.
 
 ## 2. Pre-installed Packages (Option A)
 
-Pre-installed runtimes depend on the Docker image variant you deploy. The Packages page and `/v1/packages/runtimes` report what exists inside the active GoClaw container, not what exists on the host machine.
+Pre-installed runtimes depend on the Docker image variant you deploy. The Packages page and `/v1/packages/runtimes` report what exists inside the active VBPClaw container, not what exists on the host machine.
 
 ### Runtime Variant Matrix
 
@@ -111,20 +111,20 @@ To install additional packages: pip3 install <pkg> or npm install -g <pkg>
 | `cap_drop: ALL` | No privilege escalation |
 | `no-new-privileges` | Prevents setuid/setgid |
 | Exec deny patterns | Blocks `curl \| sh`, reverse shells, crypto miners, etc. (see `shell.go`) |
-| `.goclaw/` denied | Exec tool blocks access to `.goclaw/` except `.goclaw/skills-store/` |
+| `.vbpclaw/` denied | Exec tool blocks access to `.vbpclaw/` except `.vbpclaw/skills-store/` |
 
 ### What Agents CAN Do
 
 - Run Python/Node scripts via exec tool
 - Install packages via `pip3 install` / `npm install -g`
 - Access files in `/app/workspace/` including `.media/` subdirectory
-- Read skill files from `.goclaw/skills-store/`
+- Read skill files from `.vbpclaw/skills-store/`
 
 ### What Agents CANNOT Do
 
 - Write to system paths (rootfs is read-only)
 - Execute binaries from `/tmp` (noexec)
-- Access `.goclaw/` except skills-store
+- Access `.vbpclaw/` except skills-store
 - Run denied shell patterns (network tools, reverse shells, etc.)
 
 ---

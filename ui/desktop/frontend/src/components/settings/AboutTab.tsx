@@ -17,7 +17,7 @@ export function AboutTab() {
   return (
     <div className="space-y-6 max-w-lg">
       <div className="flex items-center gap-4">
-        <img src="/goclaw-icon.svg" alt="GoClaw" className="h-12 w-12" />
+        <img src="/vbpclaw-icon.svg" alt="VBPClaw" className="h-12 w-12" />
         <div>
           <h3 className="text-base font-semibold text-text-primary">{t('about.title')}</h3>
           <p className="text-xs text-text-muted">{t('about.subtitle')}</p>
@@ -83,7 +83,7 @@ export function AboutTab() {
 
       <div className="text-xs text-text-muted">
         <button
-          onClick={() => BrowserOpenURL('https://github.com/nextlevelbuilder/goclaw')}
+          onClick={() => BrowserOpenURL('https://github.com/nextlevelbuilder/vbpclaw')}
           className="text-accent hover:underline cursor-pointer"
         >
           GitHub

@@ -9,12 +9,12 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/nextlevelbuilder/goclaw/internal/agent"
-	"github.com/nextlevelbuilder/goclaw/internal/i18n"
-	"github.com/nextlevelbuilder/goclaw/internal/permissions"
-	"github.com/nextlevelbuilder/goclaw/internal/sessions"
-	"github.com/nextlevelbuilder/goclaw/internal/store"
-	"github.com/nextlevelbuilder/goclaw/internal/tools"
+	"github.com/nextlevelbuilder/vbpclaw/internal/agent"
+	"github.com/nextlevelbuilder/vbpclaw/internal/i18n"
+	"github.com/nextlevelbuilder/vbpclaw/internal/permissions"
+	"github.com/nextlevelbuilder/vbpclaw/internal/sessions"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/tools"
 )
 
 // ChatCompletionsHandler handles POST /v1/chat/completions (OpenAI-compatible).

@@ -6,8 +6,8 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/nextlevelbuilder/goclaw/internal/i18n"
-	"github.com/nextlevelbuilder/goclaw/internal/providers"
+	"github.com/nextlevelbuilder/vbpclaw/internal/i18n"
+	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
 )
 
 // IntentType represents the classified intent of a user message.

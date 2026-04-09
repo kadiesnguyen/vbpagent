@@ -8,7 +8,7 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 
-	sharedmedia "github.com/nextlevelbuilder/goclaw/internal/channels/media"
+	sharedmedia "github.com/nextlevelbuilder/vbpclaw/internal/channels/media"
 )
 
 func TestResolveMediaPreservesSourceURL(t *testing.T) {

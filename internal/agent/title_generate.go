@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/nextlevelbuilder/goclaw/internal/providers"
+	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
 )
 
 const titleGenerateTimeout = 120 * time.Second

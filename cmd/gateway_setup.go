@@ -10,22 +10,22 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/nextlevelbuilder/goclaw/internal/bootstrap"
-	"github.com/nextlevelbuilder/goclaw/internal/bus"
-	"github.com/nextlevelbuilder/goclaw/internal/config"
-	mcpbridge "github.com/nextlevelbuilder/goclaw/internal/mcp"
-	"github.com/nextlevelbuilder/goclaw/internal/permissions"
-	"github.com/nextlevelbuilder/goclaw/internal/providers"
-	"github.com/nextlevelbuilder/goclaw/internal/sandbox"
-	"github.com/nextlevelbuilder/goclaw/internal/edition"
-	"github.com/nextlevelbuilder/goclaw/internal/skills"
-	"github.com/nextlevelbuilder/goclaw/internal/store"
-	"github.com/nextlevelbuilder/goclaw/internal/store/pg"
-	"github.com/nextlevelbuilder/goclaw/internal/tools"
-	"github.com/nextlevelbuilder/goclaw/internal/tracing"
-	"github.com/nextlevelbuilder/goclaw/internal/tts"
-	"github.com/nextlevelbuilder/goclaw/pkg/browser"
-	"github.com/nextlevelbuilder/goclaw/pkg/protocol"
+	"github.com/nextlevelbuilder/vbpclaw/internal/bootstrap"
+	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
+	"github.com/nextlevelbuilder/vbpclaw/internal/config"
+	mcpbridge "github.com/nextlevelbuilder/vbpclaw/internal/mcp"
+	"github.com/nextlevelbuilder/vbpclaw/internal/permissions"
+	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
+	"github.com/nextlevelbuilder/vbpclaw/internal/sandbox"
+	"github.com/nextlevelbuilder/vbpclaw/internal/edition"
+	"github.com/nextlevelbuilder/vbpclaw/internal/skills"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store/pg"
+	"github.com/nextlevelbuilder/vbpclaw/internal/tools"
+	"github.com/nextlevelbuilder/vbpclaw/internal/tracing"
+	"github.com/nextlevelbuilder/vbpclaw/internal/tts"
+	"github.com/nextlevelbuilder/vbpclaw/pkg/browser"
+	"github.com/nextlevelbuilder/vbpclaw/pkg/protocol"
 )
 
 // setupToolRegistry creates the tool registry and registers all tools.
@@ -208,13 +208,17 @@ func setupToolRegistry(
 	dataDir = cfg.ResolvedDataDir()
 	os.MkdirAll(dataDir, 0755)
 
-	// Block exec from accessing sensitive directories (data dir, .goclaw, config file).
+	// Block exec from accessing sensitive directories (data dir, .vbpclaw, config file).
 	// Prevents `cp /app/data/config.json workspace/` and similar exfiltration.
-	// Exception: .goclaw/skills-store/ is allowed (skills may contain executable scripts).
+	// Exception: skills-store/ directories are allowed (skills may contain executable scripts).
 	if execTool, ok := toolsReg.Get("exec"); ok {
 		if et, ok := execTool.(*tools.ExecTool); ok {
-			et.DenyPaths(dataDir, ".goclaw/")
-			et.AllowPathExemptions(".goclaw/skills-store/")
+			et.DenyPaths(dataDir, ".vbpclaw/")
+			et.AllowPathExemptions(
+				".vbpclaw/skills-store/",
+				filepath.Join(dataDir, "skills-store"),
+				filepath.Join(dataDir, "tenants"),
+			)
 			// Harden: block access to internal workspace files via shell commands.
 			// Prevents `cat ../config.json`, `cat memory.db` etc. from user workspaces.
 			et.DenyPaths(
@@ -223,11 +227,11 @@ func setupToolRegistry(
 				filepath.Join(workspace, "memory.db-shm"),
 				filepath.Join(workspace, "config.json"),
 				filepath.Join(workspace, "delegate"),
-				filepath.Join(dataDir, "goclaw.db"),
-				filepath.Join(dataDir, "goclaw.db-wal"),
-				filepath.Join(dataDir, "goclaw.db-shm"),
+				filepath.Join(dataDir, "vbpclaw.db"),
+				filepath.Join(dataDir, "vbpclaw.db-wal"),
+				filepath.Join(dataDir, "vbpclaw.db-shm"),
 			)
-			if cfgPath := os.Getenv("GOCLAW_CONFIG"); cfgPath != "" {
+			if cfgPath := os.Getenv("VBPCLAW_CONFIG"); cfgPath != "" {
 				et.DenyPaths(cfgPath)
 			}
 		}
@@ -240,14 +244,14 @@ func setupToolRegistry(
 	// deny paths add defense-in-depth.
 	internalDenyPaths := []string{
 		"config.json", "memory.db", "memory.db-wal", "memory.db-shm",
-		"goclaw.db", "goclaw.db-wal", "goclaw.db-shm",
+		"vbpclaw.db", "vbpclaw.db-wal", "vbpclaw.db-shm",
 		"memory/", ".media/", ".uploads/", "delegate/",
 	}
 	// read_file: allow .media/ access (uploaded documents accessed via AllowPaths
 	// for backward compat; new uploads go to per-user .uploads/ within workspace).
 	readFileDenyPaths := []string{
 		"config.json", "memory.db", "memory.db-wal", "memory.db-shm",
-		"goclaw.db", "goclaw.db-wal", "goclaw.db-shm",
+		"vbpclaw.db", "vbpclaw.db-wal", "vbpclaw.db-shm",
 		"memory/", "delegate/",
 	}
 	if rf, ok := toolsReg.Get("read_file"); ok {
@@ -475,14 +479,14 @@ func setupSkillsSystem(
 	var bundledSkillsDir string // resolved later; returned for HTTP handler fallback
 
 	// Skills loader + search tool
-	// Global skills live under ~/.goclaw/skills/ (user-managed), not data/skills/.
-	globalSkillsDir := os.Getenv("GOCLAW_SKILLS_DIR")
+	// Global skills live under ~/.vbpclaw/skills/ (user-managed), not data/skills/.
+	globalSkillsDir := os.Getenv("VBPCLAW_SKILLS_DIR")
 	if globalSkillsDir == "" {
 		globalSkillsDir = filepath.Join(dataDir, "skills")
 	}
 	// Bundled skills: shipped with the Docker image at /app/bundled-skills/.
 	// Lowest priority — managed (skills-store) and user-uploaded skills override these.
-	builtinSkillsDir := os.Getenv("GOCLAW_BUILTIN_SKILLS_DIR")
+	builtinSkillsDir := os.Getenv("VBPCLAW_BUILTIN_SKILLS_DIR")
 	if builtinSkillsDir == "" {
 		builtinSkillsDir = "/app/bundled-skills"
 	}
@@ -501,7 +505,7 @@ func setupSkillsSystem(
 			slog.Info("skills-store directory wired into loader", "dir", storeDirs[0])
 
 			// Seed system/bundled skills into DB
-			bundledSkillsDir = os.Getenv("GOCLAW_BUNDLED_SKILLS_DIR")
+			bundledSkillsDir = os.Getenv("VBPCLAW_BUNDLED_SKILLS_DIR")
 			if bundledSkillsDir == "" {
 				// Check common locations: Docker default, then local dev
 				for _, candidate := range []string{"bundled-skills", "/app/bundled-skills", "skills"} {

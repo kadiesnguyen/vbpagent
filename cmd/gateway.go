@@ -14,33 +14,33 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/nextlevelbuilder/goclaw/internal/agent"
-	"github.com/nextlevelbuilder/goclaw/internal/bus"
-	"github.com/nextlevelbuilder/goclaw/internal/cache"
-	"github.com/nextlevelbuilder/goclaw/internal/channels"
-	"github.com/nextlevelbuilder/goclaw/internal/channels/discord"
-	"github.com/nextlevelbuilder/goclaw/internal/channels/feishu"
-	slackchannel "github.com/nextlevelbuilder/goclaw/internal/channels/slack"
-	"github.com/nextlevelbuilder/goclaw/internal/channels/telegram"
-	"github.com/nextlevelbuilder/goclaw/internal/channels/whatsapp"
-	"github.com/nextlevelbuilder/goclaw/internal/channels/zalo"
-	zalopersonal "github.com/nextlevelbuilder/goclaw/internal/channels/zalo/personal"
-	"github.com/nextlevelbuilder/goclaw/internal/config"
-	"github.com/nextlevelbuilder/goclaw/internal/edition"
-	"github.com/nextlevelbuilder/goclaw/internal/gateway"
-	"github.com/nextlevelbuilder/goclaw/internal/heartbeat"
-	"github.com/nextlevelbuilder/goclaw/internal/gateway/methods"
-	httpapi "github.com/nextlevelbuilder/goclaw/internal/http"
-	mcpbridge "github.com/nextlevelbuilder/goclaw/internal/mcp"
-	"github.com/nextlevelbuilder/goclaw/internal/media"
-	"github.com/nextlevelbuilder/goclaw/internal/providers"
-	"github.com/nextlevelbuilder/goclaw/internal/scheduler"
-	"github.com/nextlevelbuilder/goclaw/internal/skills"
-	"github.com/nextlevelbuilder/goclaw/internal/store"
-	"github.com/nextlevelbuilder/goclaw/internal/store/pg"
-	"github.com/nextlevelbuilder/goclaw/internal/tasks"
-	"github.com/nextlevelbuilder/goclaw/internal/tools"
-	"github.com/nextlevelbuilder/goclaw/pkg/protocol"
+	"github.com/nextlevelbuilder/vbpclaw/internal/agent"
+	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
+	"github.com/nextlevelbuilder/vbpclaw/internal/cache"
+	"github.com/nextlevelbuilder/vbpclaw/internal/channels"
+	"github.com/nextlevelbuilder/vbpclaw/internal/channels/discord"
+	"github.com/nextlevelbuilder/vbpclaw/internal/channels/feishu"
+	slackchannel "github.com/nextlevelbuilder/vbpclaw/internal/channels/slack"
+	"github.com/nextlevelbuilder/vbpclaw/internal/channels/telegram"
+	"github.com/nextlevelbuilder/vbpclaw/internal/channels/whatsapp"
+	"github.com/nextlevelbuilder/vbpclaw/internal/channels/zalo"
+	zalopersonal "github.com/nextlevelbuilder/vbpclaw/internal/channels/zalo/personal"
+	"github.com/nextlevelbuilder/vbpclaw/internal/config"
+	"github.com/nextlevelbuilder/vbpclaw/internal/edition"
+	"github.com/nextlevelbuilder/vbpclaw/internal/gateway"
+	"github.com/nextlevelbuilder/vbpclaw/internal/heartbeat"
+	"github.com/nextlevelbuilder/vbpclaw/internal/gateway/methods"
+	httpapi "github.com/nextlevelbuilder/vbpclaw/internal/http"
+	mcpbridge "github.com/nextlevelbuilder/vbpclaw/internal/mcp"
+	"github.com/nextlevelbuilder/vbpclaw/internal/media"
+	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
+	"github.com/nextlevelbuilder/vbpclaw/internal/scheduler"
+	"github.com/nextlevelbuilder/vbpclaw/internal/skills"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store/pg"
+	"github.com/nextlevelbuilder/vbpclaw/internal/tasks"
+	"github.com/nextlevelbuilder/vbpclaw/internal/tools"
+	"github.com/nextlevelbuilder/vbpclaw/pkg/protocol"
 )
 
 func runGateway() {
@@ -49,8 +49,8 @@ func runGateway() {
 	if verbose {
 		logLevel = slog.LevelDebug
 	}
-	// Env override (docker/K8s friendly, default: info): GOCLAW_LOG_LEVEL=debug|info|warn|error
-	if lvl := os.Getenv("GOCLAW_LOG_LEVEL"); lvl != "" {
+	// Env override (docker/K8s friendly, default: info): VBPCLAW_LOG_LEVEL=debug|info|warn|error
+	if lvl := os.Getenv("VBPCLAW_LOG_LEVEL"); lvl != "" {
 		switch strings.ToLower(lvl) {
 		case "debug":
 			logLevel = slog.LevelDebug
@@ -61,7 +61,7 @@ func runGateway() {
 		case "error":
 			logLevel = slog.LevelError
 		default:
-			fmt.Fprintf(os.Stderr, "warning: unknown GOCLAW_LOG_LEVEL=%q, using info\n", lvl)
+			fmt.Fprintf(os.Stderr, "warning: unknown VBPCLAW_LOG_LEVEL=%q, using info\n", lvl)
 		}
 	}
 	textHandler := slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
@@ -79,9 +79,9 @@ func runGateway() {
 		os.Exit(1)
 	}
 
-	// Edition override: explicit GOCLAW_EDITION takes precedence over auto-detection.
+	// Edition override: explicit VBPCLAW_EDITION takes precedence over auto-detection.
 	// Auto-detection happens later in setupStoresAndTracing (sqlite → lite).
-	if edName := os.Getenv("GOCLAW_EDITION"); edName != "" {
+	if edName := os.Getenv("VBPCLAW_EDITION"); edName != "" {
 		switch edName {
 		case "lite":
 			edition.SetCurrent(edition.Lite)
@@ -90,7 +90,7 @@ func runGateway() {
 			edition.SetCurrent(edition.Standard)
 			slog.Info("edition: standard (explicit)")
 		default:
-			slog.Warn("unknown GOCLAW_EDITION, using standard", "value", edName)
+			slog.Warn("unknown VBPCLAW_EDITION, using standard", "value", edName)
 		}
 	}
 
@@ -485,8 +485,8 @@ func runGateway() {
 	server.SetFilesHandler(httpapi.NewFilesHandler(workspace, dataDir))
 
 	// Storage file management — browse/delete files under the resolved workspace directory.
-	// Uses GOCLAW_WORKSPACE (or default ~/.goclaw/workspace) so it works correctly
-	// in Docker deployments where volumes are mounted outside ~/.goclaw/.
+	// Uses VBPCLAW_WORKSPACE (or default ~/.vbpclaw/workspace) so it works correctly
+	// in Docker deployments where volumes are mounted outside ~/.vbpclaw/.
 	server.SetStorageHandler(httpapi.NewStorageHandler(workspace))
 
 	// Media upload endpoint — accepts multipart file uploads, returns temp path + MIME type.
@@ -1138,7 +1138,7 @@ func runGateway() {
 		cancel()
 	}()
 
-	slog.Info("goclaw gateway starting",
+	slog.Info("vbpclaw gateway starting",
 		"version", Version,
 		"protocol", protocol.ProtocolVersion,
 		"agents", agentRouter.List(),
@@ -1165,17 +1165,17 @@ func runGateway() {
 
 	// Phase 1: suggest localhost binding when Tailscale is active
 	if cfg.Tailscale.Hostname != "" && cfg.Gateway.Host == "0.0.0.0" {
-		slog.Info("Tailscale enabled. Consider setting GOCLAW_HOST=127.0.0.1 for localhost-only + Tailscale access")
+		slog.Info("Tailscale enabled. Consider setting VBPCLAW_HOST=127.0.0.1 for localhost-only + Tailscale access")
 	}
 
 	// Security warnings
-	if strings.Contains(cfg.Database.PostgresDSN, ":goclaw@") {
+	if strings.Contains(cfg.Database.PostgresDSN, ":vbpclaw@") {
 		slog.Warn("security.default_db_password: using default Postgres password — run ./prepare-env.sh to generate a strong one")
 	}
 	if len(cfg.Gateway.AllowedOrigins) > 0 {
 		slog.Info("cors: allowed_origins configured", "origins", cfg.Gateway.AllowedOrigins)
 	} else if !edition.Current().IsLimited() {
-		slog.Warn("security.cors_open: no allowed_origins configured — all WebSocket origins accepted. Set gateway.allowed_origins or GOCLAW_ALLOWED_ORIGINS for production")
+		slog.Warn("security.cors_open: no allowed_origins configured — all WebSocket origins accepted. Set gateway.allowed_origins or VBPCLAW_ALLOWED_ORIGINS for production")
 	}
 
 	if err := server.Start(ctx); err != nil {

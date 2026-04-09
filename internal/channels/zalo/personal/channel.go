@@ -8,12 +8,12 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/nextlevelbuilder/goclaw/internal/bus"
-	"github.com/nextlevelbuilder/goclaw/internal/channels"
-	"github.com/nextlevelbuilder/goclaw/internal/channels/typing"
-	"github.com/nextlevelbuilder/goclaw/internal/channels/zalo/personal/protocol"
-	"github.com/nextlevelbuilder/goclaw/internal/config"
-	"github.com/nextlevelbuilder/goclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
+	"github.com/nextlevelbuilder/vbpclaw/internal/channels"
+	"github.com/nextlevelbuilder/vbpclaw/internal/channels/typing"
+	"github.com/nextlevelbuilder/vbpclaw/internal/channels/zalo/personal/protocol"
+	"github.com/nextlevelbuilder/vbpclaw/internal/config"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
 )
 
 // Channel connects to Zalo Personal Chat via the internal protocol port (from zcago, MIT).

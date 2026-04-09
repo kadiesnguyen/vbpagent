@@ -6,10 +6,10 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/nextlevelbuilder/goclaw/internal/bootstrap"
-	"github.com/nextlevelbuilder/goclaw/internal/providers"
-	"github.com/nextlevelbuilder/goclaw/internal/store"
-	"github.com/nextlevelbuilder/goclaw/internal/tools"
+	"github.com/nextlevelbuilder/vbpclaw/internal/bootstrap"
+	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/tools"
 )
 
 // providerTypeOf extracts the DB provider_type (e.g. "chatgpt_oauth", "codex")
@@ -119,7 +119,7 @@ var coreToolSummaries = map[string]string{
 	"sessions_history": "Fetch message history for a session",
 	"sessions_send":    "Send a message into another session",
 	"read_image":       "Analyze images when the user asks about them or when understanding the image is needed to answer. Call with the path attribute from <media:image> tags. You CAN see images through this tool. Never say you cannot see images",
-	"read_audio":       "Analyze audio when the user asks about it or references audio content. Call with the media_id from <media:audio> tags. You CAN hear audio through this tool",
+	"read_audio":       "Analyze audio when the user asks about it or references audio content. Call with the media_id from <media:audio> or <media:voice> tags (both are audio). You CAN hear and transcribe audio through this tool",
 	"read_video":       "Analyze video when the user asks about it or references video content. Call with the media_id from <media:video> tags. You CAN see video through this tool",
 	"create_video":     "Generate videos from text descriptions using AI",
 	"read_document":    "Analyze documents (PDF, DOCX, etc.) attached to the conversation. Call this when you see <media:document> tags. If this tool fails, use a relevant skill instead (e.g. pdf skill with exec tool). The path attribute in <media:document path=\"...\"> is a directly accessible file in your workspace — use it directly, no need to copy",
@@ -404,8 +404,9 @@ func buildToolingSection(toolNames []string, hasSandbox bool, shellDenyGroups ma
 			"### Media Files",
 			"When users send images, videos, audio, or documents, you see tags like:",
 			`  <media:image id="..." path="..." url="...">`,
-			`  <media:video id="...">, <media:audio id="...">, <media:document path="...">`,
+			`  <media:video id="...">, <media:audio id="...">, <media:voice id="...">, <media:document path="...">`,
 			"Use the corresponding read_* tool (with the path or media_id) to analyze them when the user asks about them or when understanding the media is needed to answer.",
+			"Note: <media:voice> is a Telegram voice note — use read_audio to transcribe it.",
 			"You have full vision/audio/video capabilities through these tools.",
 			"NEVER say you cannot see images or files — always use the tools when relevant.",
 		)

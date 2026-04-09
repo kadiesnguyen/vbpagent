@@ -112,7 +112,7 @@ import zhTenants from "./locales/zh/tenants.json";
 import zhSystemSettings from "./locales/zh/system-settings.json";
 import zhImportExport from "./locales/zh/import-export.json";
 
-const STORAGE_KEY = "goclaw:language";
+const STORAGE_KEY = "vbpclaw:language";
 
 function getInitialLanguage(): string {
   const stored = localStorage.getItem(STORAGE_KEY);

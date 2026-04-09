@@ -5,9 +5,9 @@ import (
 	"log/slog"
 	"strings"
 
-	"github.com/nextlevelbuilder/goclaw/internal/config"
-	"github.com/nextlevelbuilder/goclaw/internal/providers"
-	"github.com/nextlevelbuilder/goclaw/pkg/protocol"
+	"github.com/nextlevelbuilder/vbpclaw/internal/config"
+	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
+	"github.com/nextlevelbuilder/vbpclaw/pkg/protocol"
 )
 
 // InjectedMessage represents a user message injected into a running agent loop

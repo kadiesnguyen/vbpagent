@@ -1,6 +1,6 @@
 # Model Steering System — Track, Hint & Guard
 
-> How GoClaw steers and assists small models (MiniMax, Qwen, Gemini Flash...) through 3 control layers.
+> How VBPClaw steers and assists small models (MiniMax, Qwen, Gemini Flash...) through 3 control layers.
 
 ---
 
@@ -14,7 +14,7 @@ Small models (< 70B params) commonly face 3 issues when running agent loops:
 | **Forgetting context** | Doesn't report progress, doesn't leverage existing information |
 | **Safety violations** | Runs dangerous commands, falls to prompt injection, writes malicious code |
 
-GoClaw addresses these with **3 steering layers** operating concurrently:
+VBPClaw addresses these with **3 steering layers** operating concurrently:
 
 ```mermaid
 flowchart LR
@@ -317,7 +317,7 @@ Small models are more susceptible to injection than large models → InputGuard 
 | `package_install` | `pip install`, `npm install`, `apk add` |
 | `persistence` | `crontab`, shell RC file writes |
 | `process_control` | `kill -9`, `killall`, `pkill` |
-| `env_dump` | `env`, `printenv`, `/proc/*/environ`, `GOCLAW_*` |
+| `env_dump` | `env`, `printenv`, `/proc/*/environ`, `VBPCLAW_*` |
 
 **Special case:** `package_install` → approval flow (not hard deny), all others → hard block.
 

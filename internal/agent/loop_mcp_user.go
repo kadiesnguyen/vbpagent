@@ -5,8 +5,8 @@ import (
 	"log/slog"
 	"maps"
 
-	mcpbridge "github.com/nextlevelbuilder/goclaw/internal/mcp"
-	"github.com/nextlevelbuilder/goclaw/internal/tools"
+	mcpbridge "github.com/nextlevelbuilder/vbpclaw/internal/mcp"
+	"github.com/nextlevelbuilder/vbpclaw/internal/tools"
 )
 
 // getUserMCPTools returns per-user MCP tools for servers requiring user credentials.

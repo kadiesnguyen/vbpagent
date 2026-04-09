@@ -12,6 +12,7 @@ type UsageSnapshot struct {
 	ID                uuid.UUID  `json:"id"`
 	BucketHour        time.Time  `json:"bucket_hour"`
 	AgentID           *uuid.UUID `json:"agent_id,omitempty"`
+	TenantID          uuid.UUID  `json:"tenant_id,omitempty"` // set by aggregator per agent; falls back to context tenant
 	Provider          string     `json:"provider"`
 	Model             string     `json:"model"`
 	Channel           string     `json:"channel"`

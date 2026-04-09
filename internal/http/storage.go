@@ -14,16 +14,16 @@ import (
 	"sync"
 	"time"
 
-	"github.com/nextlevelbuilder/goclaw/internal/config"
-	"github.com/nextlevelbuilder/goclaw/internal/i18n"
-	"github.com/nextlevelbuilder/goclaw/internal/permissions"
-	"github.com/nextlevelbuilder/goclaw/internal/skills"
-	"github.com/nextlevelbuilder/goclaw/internal/store"
-	"github.com/nextlevelbuilder/goclaw/internal/tools"
+	"github.com/nextlevelbuilder/vbpclaw/internal/config"
+	"github.com/nextlevelbuilder/vbpclaw/internal/i18n"
+	"github.com/nextlevelbuilder/vbpclaw/internal/permissions"
+	"github.com/nextlevelbuilder/vbpclaw/internal/skills"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/tools"
 )
 
 // StorageHandler provides HTTP endpoints for browsing and managing
-// files inside the ~/.goclaw/ data directory.
+// files inside the ~/.vbpclaw/ data directory.
 // Skills directories are browsable (read-only) but deletion is blocked.
 // sizeCacheEntry holds a cached storage size calculation for one tenant.
 type sizeCacheEntry struct {
@@ -33,7 +33,7 @@ type sizeCacheEntry struct {
 }
 
 type StorageHandler struct {
-	baseDir string // global data dir (resolved absolute path to ~/.goclaw/)
+	baseDir string // global data dir (resolved absolute path to ~/.vbpclaw/)
 
 	// sizeCache caches the total storage size per tenant for 60 minutes.
 	sizeCache sync.Map // tenantBaseDir (string) → *sizeCacheEntry
@@ -88,7 +88,7 @@ func isProtectedPath(rel string) bool {
 	return false
 }
 
-// handleList lists files and directories under ~/.goclaw/ with depth limiting.
+// handleList lists files and directories under ~/.vbpclaw/ with depth limiting.
 // Query params:
 //   - ?path=  scopes the listing to a subtree
 //   - ?depth= max depth to walk (default 3, max 20)

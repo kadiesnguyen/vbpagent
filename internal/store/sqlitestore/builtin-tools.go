@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/nextlevelbuilder/goclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
 )
 
 // SQLiteBuiltinToolStore implements store.BuiltinToolStore backed by SQLite.

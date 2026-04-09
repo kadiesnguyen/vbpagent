@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="../_statics/goclaw.png" alt="GoClaw" />
+  <img src="../_statics/vbpclaw.png" alt="VBPClaw" />
 </p>
 
-<h1 align="center">GoClaw</h1>
+<h1 align="center">VBPClaw</h1>
 
 <p align="center"><strong>Enterprise AI Agent Platform</strong></p>
 
@@ -12,8 +12,8 @@ Single binary. Production-tested. Agents that orchestrate for you.
 </p>
 
 <p align="center">
-  <a href="https://docs.goclaw.sh">Dokumentacja</a> •
-  <a href="https://docs.goclaw.sh/#quick-start">Szybki Start</a> •
+  <a href="https://docs.vbpclaw.sh">Dokumentacja</a> •
+  <a href="https://docs.vbpclaw.sh/#quick-start">Szybki Start</a> •
   <a href="https://x.com/nlb_io">Twitter / X</a>
 </p>
 
@@ -28,9 +28,9 @@ Single binary. Production-tested. Agents that orchestrate for you.
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="License: MIT" />
 </p>
 
-**GoClaw** to wieloagentowa bramka AI łącząca LLM z Twoimi narzędziami, kanałami i danymi — wdrażana jako pojedynczy binarny plik Go bez żadnych zależności w czasie wykonywania. Orkiestruje zespoły agentów i delegowanie między agentami przez 20+ dostawców LLM z pełną izolacją wielodostępną.
+**VBPClaw** to wieloagentowa bramka AI łącząca LLM z Twoimi narzędziami, kanałami i danymi — wdrażana jako pojedynczy binarny plik Go bez żadnych zależności w czasie wykonywania. Orkiestruje zespoły agentów i delegowanie między agentami przez 20+ dostawców LLM z pełną izolacją wielodostępną.
 
-Port GoClaw w języku Go projektu [OpenClaw](https://github.com/openclaw/openclaw) z rozszerzonymi zabezpieczeniami, wielodostępnym PostgreSQL i obserwowalnością na poziomie produkcyjnym.
+Port VBPClaw w języku Go projektu [OpenClaw](https://github.com/openclaw/openclaw) z rozszerzonymi zabezpieczeniami, wielodostępnym PostgreSQL i obserwowalnością na poziomie produkcyjnym.
 
 🌐 **Języki:**
 [🇺🇸 English](../README.md) ·
@@ -80,7 +80,7 @@ Port GoClaw w języku Go projektu [OpenClaw](https://github.com/openclaw/opencla
 
 ## Ekosystem Claw
 
-|                 | OpenClaw        | ZeroClaw | PicoClaw | **GoClaw**                              |
+|                 | OpenClaw        | ZeroClaw | PicoClaw | **VBPClaw**                              |
 | --------------- | --------------- | -------- | -------- | --------------------------------------- |
 | Język           | TypeScript      | Rust     | Go       | **Go**                                  |
 | Rozmiar binarny | 28 MB + Node.js | 3.4 MB   | ~8 MB    | **~25 MB** (bazowy) / **~36 MB** (+ OTel) |
@@ -89,7 +89,7 @@ Port GoClaw w języku Go projektu [OpenClaw](https://github.com/openclaw/opencla
 | Uruchomienie    | > 5 s           | < 10 ms  | < 1 s    | **< 1 s**                               |
 | Docelowy sprzęt | Mac Mini $599+  | Edge $10 | Edge $10 | **VPS $5+**                             |
 
-| Funkcja                        | OpenClaw                             | ZeroClaw                                     | PicoClaw                              | **GoClaw**                     |
+| Funkcja                        | OpenClaw                             | ZeroClaw                                     | PicoClaw                              | **VBPClaw**                     |
 | ------------------------------ | ------------------------------------ | -------------------------------------------- | ------------------------------------- | ------------------------------ |
 | Wielodostęp (PostgreSQL)       | —                                    | —                                            | —                                     | ✅                             |
 | Integracja MCP                 | — (używa ACP)                        | —                                            | —                                     | ✅ (stdio/SSE/streamable-http) |
@@ -110,7 +110,7 @@ Port GoClaw w języku Go projektu [OpenClaw](https://github.com/openclaw/opencla
 ## Architektura
 
 <p align="center">
-  <img src="../_statics/architecture.jpg" alt="GoClaw Architecture" width="800" />
+  <img src="../_statics/architecture.jpg" alt="VBPClaw Architecture" width="800" />
 </p>
 
 ## Szybki Start
@@ -120,10 +120,10 @@ Port GoClaw w języku Go projektu [OpenClaw](https://github.com/openclaw/opencla
 ### Ze Źródła
 
 ```bash
-git clone https://github.com/nextlevelbuilder/goclaw.git && cd goclaw
+git clone https://github.com/nextlevelbuilder/vbpclaw.git && cd vbpclaw
 make build
-./goclaw onboard        # Interaktywny kreator konfiguracji
-source .env.local && ./goclaw
+./vbpclaw onboard        # Interaktywny kreator konfiguracji
+source .env.local && ./vbpclaw
 ```
 
 ### Z Docker
@@ -132,20 +132,20 @@ source .env.local && ./goclaw
 # Wygeneruj .env z automatycznie generowanymi sekretami
 chmod +x prepare-env.sh && ./prepare-env.sh
 
-# Dodaj co najmniej jeden GOCLAW_*_API_KEY do .env, a następnie:
+# Dodaj co najmniej jeden VBPCLAW_*_API_KEY do .env, a następnie:
 make up
 
 # Panel webowy pod adresem http://localhost:18790
 # Sprawdzenie stanu: curl http://localhost:18790/health
 ```
 
-Gdy ustawione są zmienne środowiskowe `GOCLAW_*_API_KEY`, bramka automatycznie konfiguruje się bez interaktywnych pytań — wykrywa dostawcę, uruchamia migracje i wypełnia domyślnymi danymi.
+Gdy ustawione są zmienne środowiskowe `VBPCLAW_*_API_KEY`, bramka automatycznie konfiguruje się bez interaktywnych pytań — wykrywa dostawcę, uruchamia migracje i wypełnia domyślnymi danymi.
 
-> Aby zapoznać się z wariantami budowania (OTel, Tailscale, Redis), tagami obrazów Docker i nakładkami compose, zapoznaj się z [Przewodnikiem Wdrażania](https://docs.goclaw.sh/#deploy-docker-compose).
+> Aby zapoznać się z wariantami budowania (OTel, Tailscale, Redis), tagami obrazów Docker i nakładkami compose, zapoznaj się z [Przewodnikiem Wdrażania](https://docs.vbpclaw.sh/#deploy-docker-compose).
 
 ## Wieloagentowa Orkiestracja
 
-GoClaw obsługuje zespoły agentów i delegowanie między agentami — każdy agent działa z własną tożsamością, narzędziami, dostawcą LLM i plikami kontekstu.
+VBPClaw obsługuje zespoły agentów i delegowanie między agentami — każdy agent działa z własną tożsamością, narzędziami, dostawcą LLM i plikami kontekstu.
 
 ### Delegowanie Agentów
 
@@ -170,7 +170,7 @@ Agenty komunikują się przez jawne **łącza uprawnień** z kontrolą kierunku 
 - **Skrzynka zespołu** — Bezpośrednia wymiana wiadomości peer-to-peer i transmisje
 - **Narzędzia**: `team_tasks` do zarządzania zadaniami, `team_message` do skrzynki
 
-> Aby zapoznać się ze szczegółami delegowania, łączami uprawnień i kontrolą współbieżności, zapoznaj się z [dokumentacją Zespołów Agentów](https://docs.goclaw.sh/#teams-what-are-teams).
+> Aby zapoznać się ze szczegółami delegowania, łączami uprawnień i kontrolą współbieżności, zapoznaj się z [dokumentacją Zespołów Agentów](https://docs.vbpclaw.sh/#teams-what-are-teams).
 
 ## Wbudowane Narzędzia
 
@@ -214,19 +214,19 @@ Agenty komunikują się przez jawne **łącza uprawnień** z kontrolą kierunku 
 
 ## Dokumentacja
 
-Pełna dokumentacja dostępna na **[docs.goclaw.sh](https://docs.goclaw.sh)** — lub przejrzyj źródło w [`goclaw-docs/`](https://github.com/nextlevelbuilder/goclaw-docs)
+Pełna dokumentacja dostępna na **[docs.vbpclaw.sh](https://docs.vbpclaw.sh)** — lub przejrzyj źródło w [`vbpclaw-docs/`](https://github.com/nextlevelbuilder/vbpclaw-docs)
 
 | Sekcja | Tematy |
 |--------|--------|
-| [Pierwsze Kroki](https://docs.goclaw.sh/#what-is-goclaw) | Instalacja, Szybki Start, Konfiguracja, Przewodnik po Panelu Webowym |
-| [Podstawowe Koncepcje](https://docs.goclaw.sh/#how-goclaw-works) | Pętla Agenta, Sesje, Narzędzia, Pamięć, Wielodostępność |
-| [Agenty](https://docs.goclaw.sh/#creating-agents) | Tworzenie Agentów, Pliki Kontekstu, Osobowość, Udostępnianie i Dostęp |
-| [Dostawcy](https://docs.goclaw.sh/#providers-overview) | Anthropic, OpenAI, OpenRouter, Gemini, DeepSeek, +15 innych |
-| [Kanały](https://docs.goclaw.sh/#channels-overview) | Telegram, Discord, Slack, Feishu, Zalo, WhatsApp, WebSocket |
-| [Zespoły Agentów](https://docs.goclaw.sh/#teams-what-are-teams) | Zespoły, Tablica Zadań, Wiadomości, Delegowanie i Przekazywanie |
-| [Zaawansowane](https://docs.goclaw.sh/#custom-tools) | Własne Narzędzia, MCP, Umiejętności, Cron, Sandbox, Hooki, RBAC |
-| [Wdrażanie](https://docs.goclaw.sh/#deploy-docker-compose) | Docker Compose, Baza Danych, Bezpieczeństwo, Obserwowalność, Tailscale |
-| [Dokumentacja Referencyjna](https://docs.goclaw.sh/#cli-commands) | Polecenia CLI, REST API, Protokół WebSocket, Zmienne Środowiskowe |
+| [Pierwsze Kroki](https://docs.vbpclaw.sh/#what-is-vbpclaw) | Instalacja, Szybki Start, Konfiguracja, Przewodnik po Panelu Webowym |
+| [Podstawowe Koncepcje](https://docs.vbpclaw.sh/#how-vbpclaw-works) | Pętla Agenta, Sesje, Narzędzia, Pamięć, Wielodostępność |
+| [Agenty](https://docs.vbpclaw.sh/#creating-agents) | Tworzenie Agentów, Pliki Kontekstu, Osobowość, Udostępnianie i Dostęp |
+| [Dostawcy](https://docs.vbpclaw.sh/#providers-overview) | Anthropic, OpenAI, OpenRouter, Gemini, DeepSeek, +15 innych |
+| [Kanały](https://docs.vbpclaw.sh/#channels-overview) | Telegram, Discord, Slack, Feishu, Zalo, WhatsApp, WebSocket |
+| [Zespoły Agentów](https://docs.vbpclaw.sh/#teams-what-are-teams) | Zespoły, Tablica Zadań, Wiadomości, Delegowanie i Przekazywanie |
+| [Zaawansowane](https://docs.vbpclaw.sh/#custom-tools) | Własne Narzędzia, MCP, Umiejętności, Cron, Sandbox, Hooki, RBAC |
+| [Wdrażanie](https://docs.vbpclaw.sh/#deploy-docker-compose) | Docker Compose, Baza Danych, Bezpieczeństwo, Obserwowalność, Tailscale |
+| [Dokumentacja Referencyjna](https://docs.vbpclaw.sh/#cli-commands) | Polecenia CLI, REST API, Protokół WebSocket, Zmienne Środowiskowe |
 
 ## Testowanie
 
@@ -241,7 +241,7 @@ Zobacz [CHANGELOG.md](CHANGELOG.md), aby uzyskać szczegółowy status funkcji, 
 
 ## Podziękowania
 
-GoClaw jest zbudowany na podstawie oryginalnego projektu [OpenClaw](https://github.com/openclaw/openclaw). Jesteśmy wdzięczni za architekturę i wizję, która zainspirowała ten port w języku Go.
+VBPClaw jest zbudowany na podstawie oryginalnego projektu [OpenClaw](https://github.com/openclaw/openclaw). Jesteśmy wdzięczni za architekturę i wizję, która zainspirowała ten port w języku Go.
 
 ## Licencja
 

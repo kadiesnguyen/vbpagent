@@ -14,8 +14,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/nextlevelbuilder/goclaw/internal/bus"
-	"github.com/nextlevelbuilder/goclaw/internal/providers"
+	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
+	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
 )
 
 // credentialProvider is a narrow interface for providers that expose API credentials.

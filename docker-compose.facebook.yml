@@ -1,0 +1,63 @@
+# Facebook MCP overlay
+# Usage: docker compose -f docker-compose.yml -f docker-compose.postgres.yml -f docker-compose.facebook.yml up -d --build
+#
+# Required env vars (set in .env):
+#   FACEBOOK_APP_ID     — Facebook App ID
+#   FACEBOOK_APP_SECRET — Facebook App Secret
+
+services:
+  facebook-mcp:
+    build:
+      context: ./mcp-server/facebook
+      dockerfile: Dockerfile
+    image: vbpclaw/facebook-mcp:latest
+    environment:
+      - XDG_DATA_HOME=/data
+    volumes:
+      - facebook-data:/data
+    networks:
+      - vbpclaw-net
+    restart: unless-stopped
+    mem_limit: 512m
+    mem_reservation: 64m
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3200/mcp', r => process.exit(r.statusCode < 500 ? 0 : 1)).on('error', () => process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  facebook-oauth:
+    build:
+      context: ./mcp-server/facebook-oauth
+      dockerfile: Dockerfile
+    image: vbpclaw/facebook-oauth:latest
+    environment:
+      - FACEBOOK_APP_ID=${FACEBOOK_APP_ID:-}
+      - FACEBOOK_APP_SECRET=${FACEBOOK_APP_SECRET:-}
+      - REDIRECT_URI=https://vbpagent.com/fb/callback
+      - PORT=9878
+      - XDG_DATA_HOME=/data
+    volumes:
+      - facebook-data:/data
+    ports:
+      - "127.0.0.1:9878:9878"
+    networks:
+      - vbpclaw-net
+    restart: unless-stopped
+    mem_limit: 128m
+    mem_reservation: 32m
+
+  vbpclaw:
+    depends_on:
+      - facebook-mcp
+      - facebook-oauth
+
+volumes:
+  facebook-data:
+    external: true
+    name: vbpclaw_facebook-data
+
+networks:
+  vbpclaw-net:
+    external: true
+    name: vbpclaw-net

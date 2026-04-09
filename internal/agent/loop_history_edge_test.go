@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/nextlevelbuilder/goclaw/internal/providers"
+	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
 )
 
 // --- sanitizeHistory: all-tool-message history ---

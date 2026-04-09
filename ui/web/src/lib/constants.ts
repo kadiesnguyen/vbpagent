@@ -46,16 +46,16 @@ export const ROUTES = {
 } as const;
 
 export const LOCAL_STORAGE_KEYS = {
-  TOKEN: "goclaw:token",
-  USER_ID: "goclaw:userId",
-  SENDER_ID: "goclaw:senderID",
-  TENANT_ID: "goclaw:tenant_id",
-  TENANT_HINT: "goclaw:tenant_hint",
-  SETUP_SKIPPED: "goclaw:setup_skipped",
-  THEME: "goclaw:theme",
-  SIDEBAR_COLLAPSED: "goclaw:sidebarCollapsed",
-  LANGUAGE: "goclaw:language",
-  TIMEZONE: "goclaw:timezone",
+  TOKEN: "vbpclaw:token",
+  USER_ID: "vbpclaw:userId",
+  SENDER_ID: "vbpclaw:senderID",
+  TENANT_ID: "vbpclaw:tenant_id",
+  TENANT_HINT: "vbpclaw:tenant_hint",
+  SETUP_SKIPPED: "vbpclaw:setup_skipped",
+  THEME: "vbpclaw:theme",
+  SIDEBAR_COLLAPSED: "vbpclaw:sidebarCollapsed",
+  LANGUAGE: "vbpclaw:language",
+  TIMEZONE: "vbpclaw:timezone",
 } as const;
 
 export const SUPPORTED_LANGUAGES = ["en", "vi", "zh"] as const;

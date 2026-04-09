@@ -1,11 +1,11 @@
-// Package edition defines feature tiers for GoClaw.
+// Package edition defines feature tiers for VBPClaw.
 // Set once at startup via SetCurrent(), read everywhere via Current().
 // Adding a new edition = add one preset struct. No code changes elsewhere.
 package edition
 
 import "sync/atomic"
 
-// Edition defines the feature limits for a GoClaw instance.
+// Edition defines the feature limits for a VBPClaw instance.
 type Edition struct {
 	Name                  string         `json:"name"`                    // "standard" or "lite"
 	MaxAgents             int            `json:"max_agents"`              // 0 = unlimited

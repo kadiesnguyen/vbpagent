@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/nextlevelbuilder/goclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
 )
 
 // SnapshotWorker periodically aggregates trace/span data into usage_snapshots.
@@ -137,16 +137,23 @@ func (w *SnapshotWorker) Backfill(ctx context.Context) (int, error) {
 func (w *SnapshotWorker) aggregateHour(ctx context.Context, bucketStart time.Time) error {
 	bucketEnd := bucketStart.Add(time.Hour)
 
-	// Query 1: trace-level metrics by (agent_id, channel)
+	// Query 1: trace-level metrics by (agent_id, tenant_id, channel)
 	traceRows, err := queryTraceAggregates(ctx, w.db, bucketStart, bucketEnd)
 	if err != nil {
 		return fmt.Errorf("trace aggregates: %w", err)
 	}
 
-	// Query 2: span-level metrics by (agent_id, channel, provider, model)
+	// Query 2: span-level metrics by (agent_id, tenant_id, channel, provider, model)
 	spanRows, err := querySpanAggregates(ctx, w.db, bucketStart, bucketEnd)
 	if err != nil {
 		return fmt.Errorf("span aggregates: %w", err)
+	}
+
+	// Agent → tenant map (for memory/KG-only rows without traces this hour)
+	agentTenants, err := queryAgentTenants(ctx, w.db)
+	if err != nil {
+		slog.Warn("snapshot: agent tenants failed, continuing with master", "error", err)
+		agentTenants = nil
 	}
 
 	// Memory & KG point-in-time counts
@@ -162,7 +169,7 @@ func (w *SnapshotWorker) aggregateHour(ctx context.Context, bucketStart time.Tim
 	}
 
 	// Merge into UsageSnapshot rows
-	snapshots := mergeTraceAndSpanRows(bucketStart, traceRows, spanRows, memoryCounts, kgCounts)
+	snapshots := mergeTraceAndSpanRows(bucketStart, traceRows, spanRows, agentTenants, memoryCounts, kgCounts)
 
 	if len(snapshots) == 0 {
 		return nil
@@ -171,9 +178,10 @@ func (w *SnapshotWorker) aggregateHour(ctx context.Context, bucketStart time.Tim
 	return w.snapshots.UpsertSnapshots(ctx, snapshots)
 }
 
-// traceAggregate holds trace-level metrics for one (agent_id, channel) group.
+// traceAggregate holds trace-level metrics for one (agent_id, tenant_id, channel) group.
 type traceAggregate struct {
 	AgentID       *uuid.UUID
+	TenantID      uuid.UUID
 	Channel       string
 	RequestCount  int
 	ErrorCount    int
@@ -189,6 +197,7 @@ func queryTraceAggregates(ctx context.Context, db *sql.DB, from, to time.Time) (
 	rows, err := db.QueryContext(ctx, `
 		SELECT
 			agent_id,
+			tenant_id,
 			COALESCE(channel, '') as channel,
 			COUNT(*) as request_count,
 			SUM(CASE WHEN status = 'error' THEN 1 ELSE 0 END) as error_count,
@@ -201,7 +210,7 @@ func queryTraceAggregates(ctx context.Context, db *sql.DB, from, to time.Time) (
 		FROM traces
 		WHERE start_time >= $1 AND start_time < $2
 		  AND parent_trace_id IS NULL
-		GROUP BY agent_id, channel`, from, to)
+		GROUP BY agent_id, tenant_id, channel`, from, to)
 	if err != nil {
 		return nil, err
 	}
@@ -211,7 +220,7 @@ func queryTraceAggregates(ctx context.Context, db *sql.DB, from, to time.Time) (
 	for rows.Next() {
 		var ta traceAggregate
 		if err := rows.Scan(
-			&ta.AgentID, &ta.Channel,
+			&ta.AgentID, &ta.TenantID, &ta.Channel,
 			&ta.RequestCount, &ta.ErrorCount, &ta.UniqueUsers,
 			&ta.InputTokens, &ta.OutputTokens, &ta.TotalCost,
 			&ta.ToolCallCount, &ta.AvgDurationMS,
@@ -223,9 +232,10 @@ func queryTraceAggregates(ctx context.Context, db *sql.DB, from, to time.Time) (
 	return result, rows.Err()
 }
 
-// spanAggregate holds span-level LLM metrics for one (agent_id, channel, provider, model) group.
+// spanAggregate holds span-level LLM metrics for one (agent_id, tenant_id, channel, provider, model) group.
 type spanAggregate struct {
 	AgentID           *uuid.UUID
+	TenantID          uuid.UUID
 	Channel           string
 	Provider          string
 	Model             string
@@ -242,6 +252,7 @@ func querySpanAggregates(ctx context.Context, db *sql.DB, from, to time.Time) ([
 	rows, err := db.QueryContext(ctx, `
 		SELECT
 			t.agent_id,
+			t.tenant_id,
 			COALESCE(t.channel, '') as channel,
 			COALESCE(s.provider, '') as provider,
 			COALESCE(s.model, '') as model,
@@ -256,7 +267,7 @@ func querySpanAggregates(ctx context.Context, db *sql.DB, from, to time.Time) ([
 		JOIN spans s ON s.trace_id = t.id AND s.span_type = 'llm_call'
 		WHERE t.start_time >= $1 AND t.start_time < $2
 		  AND t.parent_trace_id IS NULL
-		GROUP BY t.agent_id, t.channel, s.provider, s.model`, from, to)
+		GROUP BY t.agent_id, t.tenant_id, t.channel, s.provider, s.model`, from, to)
 	if err != nil {
 		return nil, err
 	}
@@ -266,7 +277,7 @@ func querySpanAggregates(ctx context.Context, db *sql.DB, from, to time.Time) ([
 	for rows.Next() {
 		var sa spanAggregate
 		if err := rows.Scan(
-			&sa.AgentID, &sa.Channel,
+			&sa.AgentID, &sa.TenantID, &sa.Channel,
 			&sa.Provider, &sa.Model,
 			&sa.LLMCallCount,
 			&sa.InputTokens, &sa.OutputTokens, &sa.TotalCost,
@@ -275,6 +286,25 @@ func querySpanAggregates(ctx context.Context, db *sql.DB, from, to time.Time) ([
 			return nil, err
 		}
 		result = append(result, sa)
+	}
+	return result, rows.Err()
+}
+
+// queryAgentTenants returns a map of agent_id → tenant_id from the agents table.
+// Used for memory/KG-only rows where there are no traces this hour.
+func queryAgentTenants(ctx context.Context, db *sql.DB) (map[uuid.UUID]uuid.UUID, error) {
+	rows, err := db.QueryContext(ctx, `SELECT id, tenant_id FROM agents WHERE deleted_at IS NULL`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	result := make(map[uuid.UUID]uuid.UUID)
+	for rows.Next() {
+		var agentID, tenantID uuid.UUID
+		if err := rows.Scan(&agentID, &tenantID); err != nil {
+			return nil, err
+		}
+		result[agentID] = tenantID
 	}
 	return result, rows.Err()
 }
@@ -389,6 +419,7 @@ func mergeTraceAndSpanRows(
 	bucketStart time.Time,
 	traceRows []traceAggregate,
 	spanRows []spanAggregate,
+	agentTenants map[uuid.UUID]uuid.UUID,
 	memoryCounts map[uuid.UUID]agentMemoryCounts,
 	kgCounts map[uuid.UUID]agentKGCounts,
 ) []store.UsageSnapshot {
@@ -406,6 +437,7 @@ func mergeTraceAndSpanRows(
 		snap := store.UsageSnapshot{
 			BucketHour:    bucketStart,
 			AgentID:       tr.AgentID,
+			TenantID:      tr.TenantID,
 			Provider:      "",
 			Model:         "",
 			Channel:       tr.Channel,
@@ -436,6 +468,7 @@ func mergeTraceAndSpanRows(
 		snapshots = append(snapshots, store.UsageSnapshot{
 			BucketHour:        bucketStart,
 			AgentID:           sp.AgentID,
+			TenantID:          sp.TenantID,
 			Provider:          sp.Provider,
 			Model:             sp.Model,
 			Channel:           sp.Channel,
@@ -464,9 +497,16 @@ func mergeTraceAndSpanRows(
 				continue
 			}
 			aid := agentID
+			tenantID := store.MasterTenantID
+			if agentTenants != nil {
+				if tid, ok := agentTenants[agentID]; ok && tid != uuid.Nil {
+					tenantID = tid
+				}
+			}
 			snap := store.UsageSnapshot{
 				BucketHour: bucketStart,
 				AgentID:    &aid,
+				TenantID:   tenantID,
 				Provider:   "",
 				Model:      "",
 				Channel:    "",

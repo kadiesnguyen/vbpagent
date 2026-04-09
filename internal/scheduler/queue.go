@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/nextlevelbuilder/goclaw/internal/agent"
+	"github.com/nextlevelbuilder/vbpclaw/internal/agent"
 )
 
 // QueueMode determines how incoming messages are handled when an agent

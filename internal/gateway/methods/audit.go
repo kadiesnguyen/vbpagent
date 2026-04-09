@@ -1,9 +1,9 @@
 package methods
 
 import (
-	"github.com/nextlevelbuilder/goclaw/internal/bus"
-	"github.com/nextlevelbuilder/goclaw/internal/gateway"
-	"github.com/nextlevelbuilder/goclaw/pkg/protocol"
+	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
+	"github.com/nextlevelbuilder/vbpclaw/internal/gateway"
+	"github.com/nextlevelbuilder/vbpclaw/pkg/protocol"
 )
 
 // emitAudit broadcasts an audit event via eventBus for async persistence.

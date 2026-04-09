@@ -10,35 +10,35 @@ type contextKey string
 
 const (
 	// UserIDKey is the context key for the external user ID (TEXT, free-form).
-	UserIDKey contextKey = "goclaw_user_id"
+	UserIDKey contextKey = "vbpclaw_user_id"
 	// AgentIDKey is the context key for the agent UUID.
-	AgentIDKey contextKey = "goclaw_agent_id"
+	AgentIDKey contextKey = "vbpclaw_agent_id"
 	// AgentTypeKey is the context key for the agent type ("open" or "predefined").
-	AgentTypeKey contextKey = "goclaw_agent_type"
+	AgentTypeKey contextKey = "vbpclaw_agent_type"
 	// SenderIDKey is the original individual sender's ID (not group-scoped).
 	// In group chats, UserIDKey is group-scoped but SenderIDKey preserves
 	// the actual person who sent the message.
-	SenderIDKey contextKey = "goclaw_sender_id"
+	SenderIDKey contextKey = "vbpclaw_sender_id"
 	// SelfEvolveKey indicates whether a predefined agent can update its SOUL.md.
-	SelfEvolveKey contextKey = "goclaw_self_evolve"
+	SelfEvolveKey contextKey = "vbpclaw_self_evolve"
 	// LocaleKey is the context key for the user's preferred locale (e.g. "en", "vi", "zh").
-	LocaleKey contextKey = "goclaw_locale"
+	LocaleKey contextKey = "vbpclaw_locale"
 	// SharedMemoryKey indicates memory should be shared (no per-user scoping).
-	SharedMemoryKey contextKey = "goclaw_shared_memory"
+	SharedMemoryKey contextKey = "vbpclaw_shared_memory"
 	// SharedKGKey indicates KG should be shared across all users of the agent (no per-user scoping).
-	SharedKGKey contextKey = "goclaw_shared_kg"
+	SharedKGKey contextKey = "vbpclaw_shared_kg"
 	// ShellDenyGroupsKey holds per-agent shell deny group overrides.
-	ShellDenyGroupsKey contextKey = "goclaw_shell_deny_groups"
+	ShellDenyGroupsKey contextKey = "vbpclaw_shell_deny_groups"
 	// AgentKeyKey is the context key for the agent key/name (string identifier, e.g. "default").
-	AgentKeyKey contextKey = "goclaw_agent_key"
+	AgentKeyKey contextKey = "vbpclaw_agent_key"
 	// TenantIDKey is the context key for the tenant UUID.
-	TenantIDKey contextKey = "goclaw_tenant_id"
+	TenantIDKey contextKey = "vbpclaw_tenant_id"
 	// CrossTenantKey indicates the caller has cross-tenant access (owner/system admin).
-	CrossTenantKey contextKey = "goclaw_cross_tenant"
+	CrossTenantKey contextKey = "vbpclaw_cross_tenant"
 	// TenantSlugKey stores the tenant's URL-safe slug for filesystem paths.
-	TenantSlugKey contextKey = "goclaw_tenant_slug"
+	TenantSlugKey contextKey = "vbpclaw_tenant_slug"
 	// RoleKey is the context key for the caller's permission role (e.g. "admin", "operator", "viewer").
-	RoleKey contextKey = "goclaw_role"
+	RoleKey contextKey = "vbpclaw_role"
 )
 
 // WithShellDenyGroups returns a new context with shell deny group overrides.

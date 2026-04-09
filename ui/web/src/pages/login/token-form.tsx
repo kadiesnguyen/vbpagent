@@ -8,7 +8,7 @@ interface TokenFormProps {
 
 export function TokenForm({ onSubmit }: TokenFormProps) {
   const { t } = useTranslation("login");
-  const [userId, setUserId] = useState("system");
+  const [userId, setUserId] = useState("");
   const [token, setToken] = useState("");
   const [connecting, setConnecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -25,7 +25,7 @@ export function TokenForm({ onSubmit }: TokenFormProps) {
       const res = await fetch("/v1/agents", {
         headers: {
           Authorization: `Bearer ${token.trim()}`,
-          "X-GoClaw-User-Id": userId.trim(),
+          "X-VBPClaw-User-Id": userId.trim(),
         },
       });
 
@@ -63,9 +63,7 @@ export function TokenForm({ onSubmit }: TokenFormProps) {
           autoFocus
           disabled={connecting}
         />
-        <p className="text-xs text-muted-foreground">
-          {t("token.userIdHint")}
-        </p>
+
       </div>
 
       <div className="space-y-2">

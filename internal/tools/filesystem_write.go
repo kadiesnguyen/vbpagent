@@ -6,16 +6,16 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/nextlevelbuilder/goclaw/internal/bus"
-	"github.com/nextlevelbuilder/goclaw/internal/sandbox"
-	"github.com/nextlevelbuilder/goclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
+	"github.com/nextlevelbuilder/vbpclaw/internal/sandbox"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
 )
 
 // WriteFileTool writes content to a file, optionally through a sandbox container.
 type WriteFileTool struct {
 	workspace        string
 	restrict         bool
-	deniedPrefixes   []string // path prefixes to deny access to (e.g. .goclaw)
+	deniedPrefixes   []string // path prefixes to deny access to (e.g. .vbpclaw)
 	sandboxMgr       sandbox.Manager
 	contextFileIntc  *ContextFileInterceptor // nil = no virtual FS routing
 	memIntc          *MemoryInterceptor      // nil = no memory routing

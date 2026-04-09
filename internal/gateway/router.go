@@ -9,12 +9,13 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/nextlevelbuilder/goclaw/internal/cache"
-	httpapi "github.com/nextlevelbuilder/goclaw/internal/http"
-	"github.com/nextlevelbuilder/goclaw/internal/i18n"
-	"github.com/nextlevelbuilder/goclaw/internal/permissions"
-	"github.com/nextlevelbuilder/goclaw/internal/store"
-	"github.com/nextlevelbuilder/goclaw/pkg/protocol"
+	"github.com/nextlevelbuilder/vbpclaw/internal/agent"
+	"github.com/nextlevelbuilder/vbpclaw/internal/cache"
+	httpapi "github.com/nextlevelbuilder/vbpclaw/internal/http"
+	"github.com/nextlevelbuilder/vbpclaw/internal/i18n"
+	"github.com/nextlevelbuilder/vbpclaw/internal/permissions"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/pkg/protocol"
 )
 
 // MethodHandler processes a single RPC method request.
@@ -227,7 +228,7 @@ func (r *MethodRouter) handleConnect(ctx context.Context, client *Client, req *p
 
 	// Path 3a: Reconnecting with a previously-paired sender_id
 	if ps != nil && params.SenderID != "" {
-		paired, pairErr := ps.IsPaired(ctx, params.SenderID, "browser")
+		device, pairErr := ps.GetPairedDevice(ctx, params.SenderID, "browser")
 		if pairErr != nil {
 			slog.Warn("security.pairing_check_failed",
 				"sender_id", params.SenderID, "error", pairErr)
@@ -237,19 +238,30 @@ func (r *MethodRouter) handleConnect(ctx context.Context, client *Client, req *p
 				i18n.T(locale, i18n.MsgInternalError, pairErr.Error())))
 			return
 		}
-		if paired {
-			client.role = permissions.RoleOperator
+		if device != nil {
 			client.authenticated = true
 			client.userID = params.UserID
 			client.pairedSenderID = params.SenderID
 			client.pairedChannel = "browser"
-			tid, errCode := r.resolveTenantHint(ctx, params.TenantHint, params.UserID)
-			if errCode != "" {
-				client.SendResponse(protocol.NewErrorResponse(req.ID, errCode, "tenant access revoked"))
-				return
+			// Use the tenant recorded in the paired_devices table (set at request time).
+			// Fall back to tenant_id/tenant_hint param (for legacy Master-scoped pairings).
+			if device.TenantID != uuid.Nil && device.TenantID != store.MasterTenantID {
+				client.tenantID = device.TenantID
+			} else {
+				// Browser sends tenant_id (slug or UUID); also accept tenant_hint for compat.
+				hint := params.TenantID
+				if hint == "" {
+					hint = params.TenantHint
+				}
+				if hint != "" && r.tenantStore != nil {
+					r.applyTenantScope(ctx, client, hint)
+				}
 			}
-			client.tenantID = tid
-			slog.Info("browser pairing authenticated", "sender_id", params.SenderID, "client", client.id, "tenant_id", client.tenantID)
+			if client.tenantID == uuid.Nil {
+				client.tenantID = store.MasterTenantID
+			}
+			client.role = permissions.RoleAdmin
+			slog.Info("browser pairing authenticated", "sender_id", params.SenderID, "client", client.id, "tenant_id", client.tenantID, "role", client.role)
 			r.sendConnectResponse(ctx, client, req.ID)
 			return
 		}
@@ -257,7 +269,15 @@ func (r *MethodRouter) handleConnect(ctx context.Context, client *Client, req *p
 
 	// Path 3b: No token, no valid pairing → initiate browser pairing (if service available)
 	if ps != nil && params.Token == "" {
-		code, err := ps.RequestPairing(ctx, client.id, "browser", "", "default", nil)
+		// Resolve tenant from hint to scope the pairing request to the correct tenant.
+		// This allows browser users who specify a tenant_hint to get tenant-scoped pairings.
+		reqCtx := ctx
+		if params.TenantHint != "" && r.tenantStore != nil {
+			if t, err := r.tenantStore.GetTenantBySlug(ctx, params.TenantHint); err == nil && t != nil {
+				reqCtx = store.WithTenantID(reqCtx, t.ID)
+			}
+		}
+		code, err := ps.RequestPairing(reqCtx, client.id, "browser", "", "default", nil)
 		if err != nil {
 			slog.Warn("browser pairing request failed", "error", err, "client", client.id)
 			// Fall through to viewer role
@@ -271,7 +291,7 @@ func (r *MethodRouter) handleConnect(ctx context.Context, client *Client, req *p
 				"pairing_code": code,
 				"sender_id":    client.id,
 				"server": map[string]any{
-					"name":    "goclaw",
+					"name":    "vbpclaw",
 					"version": r.server.version,
 				},
 			}))
@@ -300,7 +320,7 @@ func (r *MethodRouter) sendConnectResponse(ctx context.Context, client *Client, 
 		"tenant_id": client.tenantID.String(),
 		"is_owner":  client.IsOwner(),
 		"server": map[string]any{
-			"name":    "goclaw",
+			"name":    "vbpclaw",
 			"version": r.server.version,
 		},
 	}
@@ -471,7 +491,7 @@ func (r *MethodRouter) handleHealth(ctx context.Context, client *Client, req *pr
 }
 
 func (r *MethodRouter) handleStatus(ctx context.Context, client *Client, req *protocol.RequestFrame) {
-	agents := r.server.agents.ListInfo()
+	allAgents := r.server.agents.ListInfo()
 
 	sessionCount := 0
 	if r.server.sessions != nil {
@@ -479,18 +499,53 @@ func (r *MethodRouter) handleStatus(ctx context.Context, client *Client, req *pr
 	}
 
 	// Agents are lazily resolved — router only has loaded agents.
-	// Query the DB store for the real total count.
-	agentTotal := len(agents)
+	// Query the DB store for the real total count (tenant-scoped via ctx).
+	var dbAgentIDs map[string]struct{}
+	agentTotal := len(allAgents)
 	if r.server.agentStore != nil {
-		if dbAgents, err := r.server.agentStore.List(ctx, ""); err == nil && len(dbAgents) > agentTotal {
-			agentTotal = len(dbAgents)
+		if dbAgents, err := r.server.agentStore.List(ctx, ""); err == nil {
+			if len(dbAgents) > agentTotal {
+				agentTotal = len(dbAgents)
+			}
+			// Build ID set for tenant-aware filtering of in-memory agents.
+			dbAgentIDs = make(map[string]struct{}, len(dbAgents))
+			for _, a := range dbAgents {
+				dbAgentIDs[a.ID.String()] = struct{}{}
+			}
 		}
+	}
+
+	// For tenant-scoped clients, filter running agents and client count to their tenant.
+	clientTenantID := client.TenantID()
+	isMaster := clientTenantID == store.MasterTenantID
+
+	agents := allAgents
+	if !isMaster && dbAgentIDs != nil {
+		filtered := make([]agent.AgentInfo, 0, len(allAgents))
+		for _, a := range allAgents {
+			if _, ok := dbAgentIDs[a.ID]; ok {
+				filtered = append(filtered, a)
+			}
+		}
+		agents = filtered
+	}
+
+	clientCount := len(r.server.clients)
+	if !isMaster {
+		clientCount = 0
+		r.server.mu.RLock()
+		for _, c := range r.server.clients {
+			if c.TenantID() == clientTenantID {
+				clientCount++
+			}
+		}
+		r.server.mu.RUnlock()
 	}
 
 	client.SendResponse(protocol.NewOKResponse(req.ID, map[string]any{
 		"agents":     agents,
 		"agentTotal": agentTotal,
-		"clients":    len(r.server.clients),
+		"clients":    clientCount,
 		"sessions":   sessionCount,
 	}))
 }

@@ -3,7 +3,7 @@ package pg
 import (
 	"context"
 
-	"github.com/nextlevelbuilder/goclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
 )
 
 // ListAllInstances returns all channel instances across all tenants. Server-internal only.

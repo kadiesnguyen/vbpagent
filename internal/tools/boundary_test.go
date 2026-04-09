@@ -242,18 +242,18 @@ func TestCheckDeniedPath(t *testing.T) {
 	ws := setupWorkspace(t)
 	wsReal, _ := filepath.EvalSymlinks(ws)
 
-	denied := filepath.Join(wsReal, ".goclaw", "secrets")
+	denied := filepath.Join(wsReal, ".vbpclaw", "secrets")
 	if err := os.MkdirAll(filepath.Dir(denied), 0755); err != nil {
 		t.Fatal(err)
 	}
 
-	err := checkDeniedPath(denied, ws, []string{".goclaw"})
+	err := checkDeniedPath(denied, ws, []string{".vbpclaw"})
 	if err == nil {
 		t.Fatal("expected error for denied path, got nil")
 	}
 
 	// Non-denied path should pass
-	err = checkDeniedPath(filepath.Join(wsReal, "hello.txt"), ws, []string{".goclaw"})
+	err = checkDeniedPath(filepath.Join(wsReal, "hello.txt"), ws, []string{".vbpclaw"})
 	if err != nil {
 		t.Fatalf("expected no error for non-denied path, got: %v", err)
 	}

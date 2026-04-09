@@ -9,8 +9,8 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/nextlevelbuilder/goclaw/internal/bootstrap"
-	"github.com/nextlevelbuilder/goclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/bootstrap"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
 )
 
 // effectiveWorkspace returns the per-user workspace from ctx if available,

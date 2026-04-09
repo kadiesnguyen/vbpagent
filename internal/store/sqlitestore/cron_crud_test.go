@@ -13,7 +13,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/nextlevelbuilder/goclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
 )
 
 func TestSQLiteCronStore_ReenableRestoresNextRun(t *testing.T) {

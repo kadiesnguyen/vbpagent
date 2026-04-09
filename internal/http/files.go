@@ -10,10 +10,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/nextlevelbuilder/goclaw/internal/config"
-	"github.com/nextlevelbuilder/goclaw/internal/edition"
-	"github.com/nextlevelbuilder/goclaw/internal/i18n"
-	"github.com/nextlevelbuilder/goclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/config"
+	"github.com/nextlevelbuilder/vbpclaw/internal/edition"
+	"github.com/nextlevelbuilder/vbpclaw/internal/i18n"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
 )
 
 // FilesHandler serves files over HTTP with Bearer token auth.
@@ -106,7 +106,7 @@ func (h *FilesHandler) handleServe(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// URL path is the absolute path with leading "/" stripped (e.g. "app/.goclaw/workspace/file.png")
+	// URL path is the absolute path with leading "/" stripped (e.g. "app/.vbpclaw/workspace/file.png")
 	// Windows drive letter: "C:/Users/..." → use directly without prepending "/"
 	var absPath string
 	if len(urlPath) >= 2 && urlPath[1] == ':' {
@@ -228,7 +228,7 @@ func (h *FilesHandler) findInWorkspace(workspace, basename string) string {
 			if path == workspace {
 				return nil
 			}
-			// Allow direct children of workspace root (agent workspace dirs like "quill", "goclaw")
+			// Allow direct children of workspace root (agent workspace dirs like "quill", "vbpclaw")
 			if filepath.Dir(path) == workspace {
 				return nil
 			}

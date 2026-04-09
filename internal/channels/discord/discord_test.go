@@ -9,9 +9,9 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 
-	"github.com/nextlevelbuilder/goclaw/internal/bus"
-	"github.com/nextlevelbuilder/goclaw/internal/channels"
-	"github.com/nextlevelbuilder/goclaw/internal/channels/typing"
+	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
+	"github.com/nextlevelbuilder/vbpclaw/internal/channels"
+	"github.com/nextlevelbuilder/vbpclaw/internal/channels/typing"
 )
 
 func TestSendStopsTypingAfterPlaceholderEditSucceeds(t *testing.T) {

@@ -12,9 +12,9 @@ import (
 	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/spf13/cobra"
 
-	"github.com/nextlevelbuilder/goclaw/internal/config"
-	"github.com/nextlevelbuilder/goclaw/internal/upgrade"
-	"github.com/nextlevelbuilder/goclaw/pkg/protocol"
+	"github.com/nextlevelbuilder/vbpclaw/internal/config"
+	"github.com/nextlevelbuilder/vbpclaw/internal/upgrade"
+	"github.com/nextlevelbuilder/vbpclaw/pkg/protocol"
 )
 
 func upgradeCmd() *cobra.Command {
@@ -48,7 +48,7 @@ func runUpgradeStatus() error {
 	fmt.Printf("  App version:     %s (protocol %d)\n", Version, protocol.ProtocolVersion)
 
 	if cfg.Database.PostgresDSN == "" {
-		fmt.Println("  Database:        NOT CONFIGURED (set GOCLAW_POSTGRES_DSN)")
+		fmt.Println("  Database:        NOT CONFIGURED (set VBPCLAW_POSTGRES_DSN)")
 		return nil
 	}
 
@@ -94,7 +94,7 @@ func runUpgradeStatus() error {
 
 	if s.NeedsMigration {
 		fmt.Println()
-		fmt.Println("  Run 'goclaw upgrade' to apply all pending changes.")
+		fmt.Println("  Run 'vbpclaw upgrade' to apply all pending changes.")
 	}
 
 	return nil
@@ -107,7 +107,7 @@ func runUpgrade(dryRun bool) error {
 	}
 
 	if cfg.Database.PostgresDSN == "" {
-		fmt.Println("Database not configured. Set GOCLAW_POSTGRES_DSN to enable migrations.")
+		fmt.Println("Database not configured. Set VBPCLAW_POSTGRES_DSN to enable migrations.")
 		return nil
 	}
 
@@ -200,7 +200,7 @@ func runUpgrade(dryRun bool) error {
 var ErrUpgradeFailed = fmt.Errorf("upgrade cannot proceed")
 
 // checkSchemaOrAutoUpgrade is called from gateway startup to gate on schema compatibility.
-// If GOCLAW_AUTO_UPGRADE=true and schema is outdated, it runs the upgrade inline.
+// If VBPCLAW_AUTO_UPGRADE=true and schema is outdated, it runs the upgrade inline.
 func checkSchemaOrAutoUpgrade(dsn string) error {
 	db, err := sql.Open("pgx", dsn)
 	if err != nil {
@@ -231,7 +231,7 @@ func checkSchemaOrAutoUpgrade(dsn string) error {
 	}
 
 	// Schema is outdated — check if auto-upgrade is enabled.
-	if os.Getenv("GOCLAW_AUTO_UPGRADE") == "true" {
+	if os.Getenv("VBPCLAW_AUTO_UPGRADE") == "true" {
 		slog.Info("auto-upgrade: applying migrations", "from", s.CurrentVersion, "to", s.RequiredVersion)
 
 		m, mErr := newMigrator(dsn)

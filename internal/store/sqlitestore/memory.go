@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/nextlevelbuilder/goclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
 )
 
 // SQLiteMemoryStore implements store.MemoryStore backed by SQLite.

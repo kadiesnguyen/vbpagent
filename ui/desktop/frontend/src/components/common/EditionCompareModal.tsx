@@ -93,7 +93,7 @@ export function EditionCompareModal({ open, onClose }: EditionCompareModalProps)
         <div className="flex items-center justify-between p-4 border-b border-border shrink-0">
           <div>
             <h3 className="text-sm font-semibold text-text-primary">
-              {t('editionCompare', 'GoClaw Lite vs Standard')}
+              {t('editionCompare', 'VBPClaw Lite vs Standard')}
             </h3>
             <p className="text-[10px] text-text-muted mt-0.5">
               {t('editionUpgrade', 'Upgrade to Standard with PostgreSQL for full features')}

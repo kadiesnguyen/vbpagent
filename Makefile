@@ -1,6 +1,6 @@
 VERSION ?= $(shell git describe --tags --abbrev=0 --match "v[0-9]*" 2>/dev/null || echo dev)
-LDFLAGS  = -s -w -X github.com/nextlevelbuilder/goclaw/cmd.Version=$(VERSION)
-BINARY   = goclaw
+LDFLAGS  = -s -w -X github.com/nextlevelbuilder/vbpclaw/cmd.Version=$(VERSION)
+BINARY   = vbpclaw
 
 .PHONY: build build-full run clean version up down logs reset test vet check-web dev migrate setup ci desktop-dev desktop-build desktop-dmg
 
@@ -65,7 +65,7 @@ down:
 	$(COMPOSE) down
 
 logs:
-	$(COMPOSE) logs -f goclaw
+	$(COMPOSE) logs -f vbpclaw
 
 reset: version-file
 	$(COMPOSE) down -v
@@ -84,7 +84,7 @@ dev:
 	cd ui/web && pnpm dev
 
 migrate:
-	$(COMPOSE) run --rm goclaw migrate up
+	$(COMPOSE) run --rm vbpclaw migrate up
 
 setup:
 	go mod download
@@ -98,15 +98,15 @@ desktop-dev:
 	cd ui/desktop && wails dev -tags sqliteonly
 
 desktop-build:
-	cd ui/desktop && wails build -tags sqliteonly -ldflags="-s -w -X github.com/nextlevelbuilder/goclaw/cmd.Version=$(VERSION)"
+	cd ui/desktop && wails build -tags sqliteonly -ldflags="-s -w -X github.com/nextlevelbuilder/vbpclaw/cmd.Version=$(VERSION)"
 
 desktop-dmg: desktop-build
 	@echo "Creating DMG..."
-	rm -rf /tmp/goclaw-dmg-staging
-	mkdir -p /tmp/goclaw-dmg-staging
-	cp -R ui/desktop/build/bin/goclaw-lite.app /tmp/goclaw-dmg-staging/
-	ln -s /Applications /tmp/goclaw-dmg-staging/Applications
-	hdiutil create -volname "GoClaw Lite $(VERSION)" -srcfolder /tmp/goclaw-dmg-staging \
-		-ov -format UDZO "goclaw-lite-$(VERSION)-darwin-$$(uname -m | sed 's/x86_64/amd64/').dmg"
-	rm -rf /tmp/goclaw-dmg-staging
-	@echo "DMG created: goclaw-lite-$(VERSION)-darwin-$$(uname -m | sed 's/x86_64/amd64/').dmg"
+	rm -rf /tmp/vbpclaw-dmg-staging
+	mkdir -p /tmp/vbpclaw-dmg-staging
+	cp -R ui/desktop/build/bin/vbpclaw-lite.app /tmp/vbpclaw-dmg-staging/
+	ln -s /Applications /tmp/vbpclaw-dmg-staging/Applications
+	hdiutil create -volname "VBPClaw Lite $(VERSION)" -srcfolder /tmp/vbpclaw-dmg-staging \
+		-ov -format UDZO "vbpclaw-lite-$(VERSION)-darwin-$$(uname -m | sed 's/x86_64/amd64/').dmg"
+	rm -rf /tmp/vbpclaw-dmg-staging
+	@echo "DMG created: vbpclaw-lite-$(VERSION)-darwin-$$(uname -m | sed 's/x86_64/amd64/').dmg"

@@ -7,8 +7,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/nextlevelbuilder/goclaw/internal/store"
-	"github.com/nextlevelbuilder/goclaw/internal/store/pg"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store/pg"
 )
 
 // testPostgresConnection verifies connectivity to Postgres with a 5s timeout.
@@ -40,7 +40,7 @@ var defaultPlaceholderProviders = []store.LLMProviderData{
 func seedOnboardPlaceholders(dsn string) error {
 	storeCfg := store.StoreConfig{
 		PostgresDSN:   dsn,
-		EncryptionKey: os.Getenv("GOCLAW_ENCRYPTION_KEY"),
+		EncryptionKey: os.Getenv("VBPCLAW_ENCRYPTION_KEY"),
 	}
 	stores, err := pg.NewPGStores(storeCfg)
 	if err != nil {

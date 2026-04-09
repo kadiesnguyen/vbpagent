@@ -79,7 +79,7 @@ export function OnboardingWizard({ onComplete }: OnboardingWizardProps) {
 
         {/* Header */}
         <div className="text-center">
-          <img src="/goclaw-icon.svg" alt="GoClaw" className="mx-auto mb-4 h-16 w-16" />
+          <img src="/vbpclaw-icon.svg" alt="VBPClaw" className="mx-auto mb-4 h-16 w-16" />
           <h1 className="text-4xl font-bold tracking-tight text-text-primary">{t('onboarding.welcome')}</h1>
           <p className="mt-2 text-sm text-text-muted">
             {t('onboarding.welcomeDesc')}

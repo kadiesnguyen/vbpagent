@@ -5,8 +5,8 @@ import (
 	"slices"
 	"time"
 
-	"github.com/nextlevelbuilder/goclaw/internal/providers"
-	"github.com/nextlevelbuilder/goclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
 )
 
 const codexPoolRuntimeHealthSampleSize = 120

@@ -11,8 +11,8 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/nextlevelbuilder/goclaw/internal/memory"
-	"github.com/nextlevelbuilder/goclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/memory"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
 )
 
 func (s *SQLiteMemoryStore) GetDocument(ctx context.Context, agentID, userID, path string) (string, error) {

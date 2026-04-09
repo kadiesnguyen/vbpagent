@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/nextlevelbuilder/goclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
 )
 
 // Search performs hybrid search (FTS + vector) over memory_chunks.

@@ -7,12 +7,12 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/nextlevelbuilder/goclaw/internal/bus"
-	"github.com/nextlevelbuilder/goclaw/internal/config"
-	"github.com/nextlevelbuilder/goclaw/internal/edition"
-	"github.com/nextlevelbuilder/goclaw/internal/store"
-	"github.com/nextlevelbuilder/goclaw/internal/store/sqlitestore"
-	"github.com/nextlevelbuilder/goclaw/internal/tracing"
+	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
+	"github.com/nextlevelbuilder/vbpclaw/internal/config"
+	"github.com/nextlevelbuilder/vbpclaw/internal/edition"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store/sqlitestore"
+	"github.com/nextlevelbuilder/vbpclaw/internal/tracing"
 )
 
 // setupStoresAndTracing creates SQLite-only stores, tracing collector, and snapshot worker.
@@ -24,12 +24,12 @@ func setupStoresAndTracing(
 ) (*store.Stores, *tracing.Collector, *tracing.SnapshotWorker) {
 	sqlitePath := cfg.Database.SQLitePath
 	if sqlitePath == "" {
-		sqlitePath = filepath.Join(dataDir, "goclaw.db")
+		sqlitePath = filepath.Join(dataDir, "vbpclaw.db")
 	}
 	storeCfg := store.StoreConfig{
 		SQLitePath:       sqlitePath,
 		StorageBackend:   "sqlite",
-		EncryptionKey:    os.Getenv("GOCLAW_ENCRYPTION_KEY"),
+		EncryptionKey:    os.Getenv("VBPCLAW_ENCRYPTION_KEY"),
 		SkillsStorageDir: filepath.Join(dataDir, "skills-store"),
 	}
 	stores, err := sqlitestore.NewSQLiteStores(storeCfg)
@@ -39,7 +39,7 @@ func setupStoresAndTracing(
 	}
 
 	// SQLite-only always defaults to Lite edition unless explicitly overridden.
-	if os.Getenv("GOCLAW_EDITION") == "" {
+	if os.Getenv("VBPCLAW_EDITION") == "" {
 		edition.SetCurrent(edition.Lite)
 		slog.Info("edition: lite (auto, sqliteonly build)")
 	}

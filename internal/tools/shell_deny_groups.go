@@ -25,7 +25,7 @@ var DenyGroupRegistry = map[string]*DenyGroup{
 			regexp.MustCompile(`\brm\s+.*--force`),
 			regexp.MustCompile(`\bdel\s+/[fq]\b`),
 			regexp.MustCompile(`\brmdir\s+/s\b`),
-			regexp.MustCompile(`\b(mkfs|diskpart)\b|\bformat\s`),
+			regexp.MustCompile(`\b(mkfs|diskpart)\b|\bformat\s+[A-Za-z/\\]`), // disk format (not --format flag)
 			regexp.MustCompile(`\bdd\s+if=`),
 			regexp.MustCompile(`>\s*/dev/sd[a-z]\b`),
 			regexp.MustCompile(`\b(shutdown|reboot|poweroff|halt)\b`),
@@ -213,10 +213,10 @@ var DenyGroupRegistry = map[string]*DenyGroup{
 			regexp.MustCompile(`/proc/[^/]+/environ`),
 			regexp.MustCompile(`/proc/self/environ`),
 			regexp.MustCompile(`(?i)\bstrings\b.*/proc/`),
-			regexp.MustCompile(`(?i)\becho\b.*\$\{?GOCLAW_(GATEWAY_TOKEN|ENCRYPTION_KEY|POSTGRES_DSN)`),
-			regexp.MustCompile(`(?i)\bprintf\b.*\$\{?GOCLAW_(GATEWAY_TOKEN|ENCRYPTION_KEY|POSTGRES_DSN)`),
-			regexp.MustCompile(`\bpython[23]?\b.*os\.(environ|getenv).*GOCLAW_`),
-			regexp.MustCompile(`\bnode\b.*-e.*process\.env\.GOCLAW_`),
+			regexp.MustCompile(`(?i)\becho\b.*\$\{?VBPCLAW_(GATEWAY_TOKEN|ENCRYPTION_KEY|POSTGRES_DSN)`),
+			regexp.MustCompile(`(?i)\bprintf\b.*\$\{?VBPCLAW_(GATEWAY_TOKEN|ENCRYPTION_KEY|POSTGRES_DSN)`),
+			regexp.MustCompile(`\bpython[23]?\b.*os\.(environ|getenv).*VBPCLAW_`),
+			regexp.MustCompile(`\bnode\b.*-e.*process\.env\.VBPCLAW_`),
 		},
 	},
 }

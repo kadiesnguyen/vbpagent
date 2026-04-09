@@ -1,0 +1,19 @@
+# VPS Admin overlay — mounts docker socket so agent can run system commands.
+# Only activate this if you want agents to have full VPS control (docker, system stats, etc.)
+#
+# Usage:
+#   docker compose -f docker-compose.yml -f docker-compose.postgres.yml -f docker-compose.vps-admin.yml up -d --build
+
+services:
+  vbpclaw:
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+    environment:
+      - HOST_PROC=/host/proc
+      - HOST_SYS=/host/sys
+    cap_add:
+      - SYS_PTRACE
+    group_add:
+      - "999"

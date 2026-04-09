@@ -92,7 +92,7 @@ export function AgentCard({ agent, onClick, onResummon, onDelete }: AgentCardPro
             <TooltipTrigger asChild>
               <Badge
                 variant={selfEvolve ? "default" : "outline"}
-                className={`text-[11px] ${selfEvolve ? "bg-orange-100 text-orange-700 hover:bg-orange-100 dark:bg-orange-900/30 dark:text-orange-300" : "text-muted-foreground"}`}
+                className={`text-[11px] ${selfEvolve ? "bg-blue-100 text-blue-700 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-300" : "text-muted-foreground"}`}
               >
                 <Sparkles className="mr-0.5 h-3 w-3" />
                 {selfEvolve ? t("card.evolving") : t("card.static")}

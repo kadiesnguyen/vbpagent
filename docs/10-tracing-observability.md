@@ -67,9 +67,9 @@ Token counts are aggregated **only from `llm_call` spans** (not `agent` spans) t
 | Mode | InputPreview | OutputPreview |
 |------|:---:|:---:|
 | Normal | Not recorded | 500 characters max |
-| Verbose (`GOCLAW_TRACE_VERBOSE=1`) | Up to 200KB | Up to 200KB |
+| Verbose (`VBPCLAW_TRACE_VERBOSE=1`) | Up to 200KB | Up to 200KB |
 
-Verbose mode is useful for debugging LLM conversations. When enabled via `GOCLAW_TRACE_VERBOSE=1`:
+Verbose mode is useful for debugging LLM conversations. When enabled via `VBPCLAW_TRACE_VERBOSE=1`:
 
 - **LLM spans**: Full input messages (including system prompt, history, and tool results) are serialized as JSON and stored in `InputPreview` (truncated at 200KB). LLM response content is stored in `OutputPreview` (truncated at 200KB, includes `<thinking>` tag if present).
 - **Tool spans**: Tool input and output are both recorded up to 200KB.
@@ -98,7 +98,7 @@ flowchart TD
 | `endpoint` | OTLP endpoint (e.g., `localhost:4317` for gRPC, `localhost:4318` for HTTP) |
 | `protocol` | `grpc` (default) or `http` |
 | `insecure` | Skip TLS for local development |
-| `service_name` | OTel service name (default: `goclaw-gateway`) |
+| `service_name` | OTel service name (default: `vbpclaw-gateway`) |
 | `headers` | Extra headers (auth tokens, etc.) |
 
 ### Batch Processing

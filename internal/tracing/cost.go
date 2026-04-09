@@ -1,8 +1,8 @@
 package tracing
 
 import (
-	"github.com/nextlevelbuilder/goclaw/internal/config"
-	"github.com/nextlevelbuilder/goclaw/internal/providers"
+	"github.com/nextlevelbuilder/vbpclaw/internal/config"
+	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
 )
 
 // CalculateCost computes the USD cost for a single LLM call based on token usage and pricing.

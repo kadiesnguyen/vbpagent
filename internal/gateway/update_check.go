@@ -11,11 +11,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/nextlevelbuilder/goclaw/internal/version"
+	"github.com/nextlevelbuilder/vbpclaw/internal/version"
 )
 
 const (
-	githubRepo         = "nextlevelbuilder/goclaw"
+	githubRepo         = "nextlevelbuilder/vbpclaw"
 	liteTagPrefix      = "lite-v"
 	updateCheckInterval = 1 * time.Hour
 	maxResponseBody    = 2 << 20 // 2 MB
@@ -93,7 +93,7 @@ func (uc *UpdateChecker) check() {
 		return
 	}
 	req.Header.Set("Accept", "application/vnd.github+json")
-	req.Header.Set("User-Agent", "goclaw/"+uc.currentVersion)
+	req.Header.Set("User-Agent", "vbpclaw/"+uc.currentVersion)
 
 	// ETag conditional request to reduce API rate limit usage.
 	if uc.etag != "" {

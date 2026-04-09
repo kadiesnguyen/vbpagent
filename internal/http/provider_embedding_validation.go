@@ -3,7 +3,7 @@ package http
 import (
 	"fmt"
 
-	"github.com/nextlevelbuilder/goclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
 )
 
 // Provider-level embedding settings are used by the memory system, whose
@@ -18,7 +18,7 @@ func validateProviderEmbeddingSettings(p *store.LLMProviderData) error {
 	}
 	if es.Dimensions > 0 && es.Dimensions != store.RequiredMemoryEmbeddingDimensions {
 		return fmt.Errorf(
-			"embedding.dimensions must be %d or omitted because GoClaw memory stores vector(%d)",
+			"embedding.dimensions must be %d or omitted because VBPClaw memory stores vector(%d)",
 			store.RequiredMemoryEmbeddingDimensions,
 			store.RequiredMemoryEmbeddingDimensions,
 		)

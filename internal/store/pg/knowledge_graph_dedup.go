@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	kg "github.com/nextlevelbuilder/goclaw/internal/knowledgegraph"
-	"github.com/nextlevelbuilder/goclaw/internal/store"
+	kg "github.com/nextlevelbuilder/vbpclaw/internal/knowledgegraph"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
 )
 
 const (

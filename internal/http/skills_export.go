@@ -14,10 +14,10 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/nextlevelbuilder/goclaw/internal/config"
-	"github.com/nextlevelbuilder/goclaw/internal/i18n"
-	"github.com/nextlevelbuilder/goclaw/internal/store"
-	"github.com/nextlevelbuilder/goclaw/internal/store/pg"
+	"github.com/nextlevelbuilder/vbpclaw/internal/config"
+	"github.com/nextlevelbuilder/vbpclaw/internal/i18n"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store/pg"
 )
 
 // SetDB injects the raw DB handle needed for export/import direct queries.
@@ -62,7 +62,7 @@ func (h *SkillsHandler) handleSkillsExport(w http.ResponseWriter, r *http.Reques
 			return
 		}
 
-		tmpFile, err := os.CreateTemp("", "goclaw-skills-export-*.tar.gz")
+		tmpFile, err := os.CreateTemp("", "vbpclaw-skills-export-*.tar.gz")
 		if err != nil {
 			sendSSE(w, flusher, "error", ProgressEvent{Phase: "init", Status: "error", Detail: "failed to create temp file"})
 			return

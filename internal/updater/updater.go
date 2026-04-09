@@ -17,11 +17,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/nextlevelbuilder/goclaw/internal/version"
+	"github.com/nextlevelbuilder/vbpclaw/internal/version"
 )
 
 const (
-	githubRepo = "nextlevelbuilder/goclaw"
+	githubRepo = "nextlevelbuilder/vbpclaw"
 	tagPrefix  = "lite-v"
 	// maxFileSize limits individual extracted files to 500 MB (decompression bomb guard).
 	maxFileSize = 500 << 20
@@ -154,7 +154,7 @@ func DownloadAndApply(info *UpdateInfo, appPath string) error {
 		return fmt.Errorf("download: %s", resp.Status)
 	}
 
-	tmpDir, err := os.MkdirTemp("", "goclaw-update-*")
+	tmpDir, err := os.MkdirTemp("", "vbpclaw-update-*")
 	if err != nil {
 		return fmt.Errorf("create temp dir: %w", err)
 	}
@@ -224,7 +224,7 @@ func applyMacOS(r io.Reader, tmpDir, appPath string) error {
 	}
 
 	// Find extracted .app
-	newApp := filepath.Join(tmpDir, "goclaw-lite.app")
+	newApp := filepath.Join(tmpDir, "vbpclaw-lite.app")
 	if _, err := os.Stat(newApp); err != nil {
 		return fmt.Errorf("extracted app not found: %w", err)
 	}
@@ -283,7 +283,7 @@ func applyWindows(r io.Reader, tmpDir, exePath string) error {
 	}
 
 	// Extract to temp
-	newExe := filepath.Join(tmpDir, "goclaw-lite.exe")
+	newExe := filepath.Join(tmpDir, "vbpclaw-lite.exe")
 	src, err := exeFile.Open()
 	if err != nil {
 		return err
@@ -357,8 +357,8 @@ func ResolveAppPath() (string, error) {
 
 	switch runtime.GOOS {
 	case "darwin":
-		// exe: /path/to/GoClaw Lite.app/Contents/MacOS/goclaw-lite
-		// app: /path/to/GoClaw Lite.app
+		// exe: /path/to/VBPClaw Lite.app/Contents/MacOS/vbpclaw-lite
+		// app: /path/to/VBPClaw Lite.app
 		dir := filepath.Dir(filepath.Dir(filepath.Dir(exe)))
 		if strings.HasSuffix(dir, ".app") {
 			return dir, nil

@@ -1,6 +1,10 @@
 package store
 
-import "context"
+import (
+	"context"
+
+	"github.com/google/uuid"
+)
 
 // PairingRequest represents a pending pairing code.
 type PairingRequestData struct {
@@ -22,6 +26,7 @@ type PairedDeviceData struct {
 	PairedAt int64             `json:"paired_at"`
 	PairedBy string            `json:"paired_by"`
 	Metadata map[string]string `json:"metadata,omitempty"`
+	TenantID uuid.UUID         `json:"tenant_id,omitempty"`
 }
 
 // PairingStore manages device pairing.
@@ -31,6 +36,9 @@ type PairingStore interface {
 	DenyPairing(ctx context.Context, code string) error
 	RevokePairing(ctx context.Context, senderID, channel string) error
 	IsPaired(ctx context.Context, senderID, channel string) (bool, error)
+	// GetPairedDevice does a cross-tenant lookup for the given sender_id+channel
+	// and returns the device info (including tenant_id) or nil if not found/expired.
+	GetPairedDevice(ctx context.Context, senderID, channel string) (*PairedDeviceData, error)
 	ListPending(ctx context.Context) []PairingRequestData
 	ListPaired(ctx context.Context) []PairedDeviceData
 }

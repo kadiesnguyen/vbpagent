@@ -66,7 +66,7 @@ export const useUiStore = create<UiState>()(
         set({ activeView: 'team-board', activeTeamId: teamId }),
     }),
     {
-      name: 'goclaw-ui',
+      name: 'vbpclaw-ui',
       partialize: (s) => ({
         theme: s.theme,
         locale: s.locale,

@@ -5,7 +5,7 @@ import (
 	"log/slog"
 	"strings"
 
-	"github.com/nextlevelbuilder/goclaw/internal/channels"
+	"github.com/nextlevelbuilder/vbpclaw/internal/channels"
 )
 
 // Matching TS pi-embedded-helpers/errors.ts error classification.

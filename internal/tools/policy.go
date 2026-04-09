@@ -6,8 +6,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/nextlevelbuilder/goclaw/internal/config"
-	"github.com/nextlevelbuilder/goclaw/internal/providers"
+	"github.com/nextlevelbuilder/vbpclaw/internal/config"
+	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
 )
 
 // toolGroupsMu protects toolGroups from concurrent access.
@@ -24,8 +24,8 @@ var toolGroups = map[string][]string{
 	"automation": {"cron"},
 	"messaging":  {"message", "create_forum_topic", "list_group_members"},
 	"team":       {"team_tasks"},
-	// Composite group: all goclaw native tools (excludes MCP/custom plugins).
-	"goclaw": {
+	// Composite group: all vbpclaw native tools (excludes MCP/custom plugins).
+	"vbpclaw": {
 		"read_file", "write_file", "list_files", "edit", "exec",
 		"web_search", "web_fetch", "browser",
 		"memory_search", "memory_get",

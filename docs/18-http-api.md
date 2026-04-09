@@ -1,6 +1,6 @@
 # 18 — HTTP REST API
 
-GoClaw exposes a comprehensive HTTP REST API alongside the WebSocket RPC protocol. All endpoints are served from the same gateway server and share authentication, rate limiting, and i18n infrastructure.
+VBPClaw exposes a comprehensive HTTP REST API alongside the WebSocket RPC protocol. All endpoints are served from the same gateway server and share authentication, rate limiting, and i18n infrastructure.
 
 Interactive documentation is available at `/docs` (Swagger UI) and the raw OpenAPI 3.0 spec at `/v1/openapi.json`.
 
@@ -19,7 +19,7 @@ Two token types are accepted:
 | Type | Format | Scope |
 |------|--------|-------|
 | Gateway token | Configured in `config.json` | Full admin access |
-| API key | `goclaw_` + 32 hex chars | Scoped by key permissions |
+| API key | `vbpclaw_` + 32 hex chars | Scoped by key permissions |
 
 API keys are hashed with SHA-256 before lookup — the raw key is never stored. See [20 — API Keys & Auth](20-api-keys-auth.md) for details.
 
@@ -30,9 +30,9 @@ API keys are hashed with SHA-256 before lookup — the raw key is never stored. 
 | Header | Purpose |
 |--------|---------|
 | `Authorization` | Bearer token for authentication |
-| `X-GoClaw-User-Id` | External user ID for multi-tenant context |
-| `X-GoClaw-Agent-Id` | Agent identifier for scoped operations |
-| `X-GoClaw-Tenant-Id` | Tenant scope — UUID or slug (gateway token / cross-tenant API keys) |
+| `X-VBPClaw-User-Id` | External user ID for multi-tenant context |
+| `X-VBPClaw-Agent-Id` | Agent identifier for scoped operations |
+| `X-VBPClaw-Tenant-Id` | Tenant scope — UUID or slug (gateway token / cross-tenant API keys) |
 | `Accept-Language` | Locale (`en`, `vi`, `zh`) for i18n error messages |
 | `Content-Type` | `application/json` for request bodies |
 
@@ -46,7 +46,7 @@ OpenAI-compatible chat API for programmatic access to agents.
 
 ```json
 {
-  "model": "goclaw:agent-id-or-key",
+  "model": "vbpclaw:agent-id-or-key",
   "messages": [
     {"role": "user", "content": "Hello"}
   ],
@@ -86,7 +86,7 @@ Alternative response-based protocol (compatible with OpenAI Responses API). Acce
 
 ## 4. Agents
 
-CRUD operations for agent management. Requires `X-GoClaw-User-Id` header for multi-tenant context.
+CRUD operations for agent management. Requires `X-VBPClaw-User-Id` header for multi-tenant context.
 
 | Method | Path | Description | Auth |
 |--------|------|-------------|------|
@@ -587,7 +587,7 @@ CLI authentication credentials for secure command execution. Requires **admin ro
 
 ## 17. Runtime & Packages Management
 
-Manage system (apk), Python (pip), and Node (npm) package installation in the GoClaw runtime container. These endpoints do not inspect host-level runtimes. Requires authentication. When `GOCLAW_GATEWAY_TOKEN` is empty (dev/single-user mode), all users get admin role and can manage packages.
+Manage system (apk), Python (pip), and Node (npm) package installation in the VBPClaw runtime container. These endpoints do not inspect host-level runtimes. Requires authentication. When `VBPCLAW_GATEWAY_TOKEN` is empty (dev/single-user mode), all users get admin role and can manage packages.
 
 ### List Installed Packages
 
@@ -672,7 +672,7 @@ Same format as install. System packages are removed from persist file and contai
 GET /v1/packages/runtimes
 ```
 
-Check which prerequisite runtimes are available inside the active GoClaw runtime container. Host-installed runtimes and shell-profile-managed binaries (for example `nvm`) are not included in this result.
+Check which prerequisite runtimes are available inside the active VBPClaw runtime container. Host-installed runtimes and shell-profile-managed binaries (for example `nvm`) are not included in this result.
 
 **Response:**
 
@@ -801,8 +801,8 @@ Admin-only endpoints for managing gateway API keys. See [20 — API Keys & Auth]
 {
   "id": "01961234-...",
   "name": "ci-deploy",
-  "prefix": "goclaw_a1b2c3d4",
-  "key": "goclaw_a1b2c3d4e5f6...full-key",
+  "prefix": "vbpclaw_a1b2c3d4",
+  "key": "vbpclaw_a1b2c3d4e5f6...full-key",
   "scopes": ["operator.read", "operator.write"],
   "expires_at": "2026-04-14T12:00:00Z",
   "created_at": "2026-03-15T12:00:00Z"
@@ -884,7 +884,7 @@ Failure payload:
   "windows": [],
   "error": "Quota metadata is missing for this account.",
   "error_code": "missing_account_id",
-  "action_hint": "Sign in again so GoClaw can restore the ChatGPT account workspace metadata.",
+  "action_hint": "Sign in again so VBPClaw can restore the ChatGPT account workspace metadata.",
   "last_updated": "2026-03-24T19:15:00Z"
 }
 ```
@@ -896,7 +896,7 @@ Notes:
 - `needs_reauth`, `is_forbidden`, and `retryable` are boolean hints for UI/state-machine handling.
 - `error_code` can be `missing_account_id`, `reauth_required`, `payment_required`, `quota_api_forbidden`, `quota_endpoint_not_found`, `rate_limited`, `provider_unavailable`, `network_timeout`, `network_error`, `quota_request_failed`, or `unknown_upstream_error`.
 - Failure payloads still include `windows: []` so clients can treat the envelope consistently.
-- `core_usage.five_hour` and `core_usage.weekly` are derived from upstream windows. When labels drift, GoClaw falls back to shortest-reset and longest-reset usage windows.
+- `core_usage.five_hour` and `core_usage.weekly` are derived from upstream windows. When labels drift, VBPClaw falls back to shortest-reset and longest-reset usage windows.
 
 ---
 
@@ -921,7 +921,7 @@ Notes:
 
 ## 27. MCP Bridge
 
-Exposes GoClaw tools to Claude CLI via streamable HTTP at `/mcp/bridge`. Only listens on localhost. Protected by gateway token with HMAC-signed context headers.
+Exposes VBPClaw tools to Claude CLI via streamable HTTP at `/mcp/bridge`. Only listens on localhost. Protected by gateway token with HMAC-signed context headers.
 
 | Header | Purpose |
 |--------|---------|

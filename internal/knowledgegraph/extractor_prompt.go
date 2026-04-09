@@ -26,14 +26,14 @@ Output valid JSON with this schema:
 ## Entity ID Rules
 - Use consistent, canonical lowercase IDs with hyphens
 - For people: use full name when known (e.g., "john-doe"), not partial ("john")
-- For projects/products: use official name (e.g., "project-alpha", "goclaw")
+- For projects/products: use official name (e.g., "project-alpha", "vbpclaw")
 - Same real-world entity MUST always get the same external_id across extractions
 - When a pronoun or partial reference clearly refers to a named entity, use that entity's ID — do NOT create a new entity
 
 ## Entity Types (use ONLY these 10)
 - person: named individuals (developer, manager, doctor, teacher)
 - organization: companies, teams, departments, groups (Google, marketing team, hospital)
-- project: initiatives, campaigns, programs being built or executed (GoClaw, thesis, ad campaign)
+- project: initiatives, campaigns, programs being built or executed (VBPClaw, thesis, ad campaign)
 - product: finished goods, services, SaaS, platforms being used or sold (LadiSales, iPhone, insurance plan)
 - technology: software, tools, frameworks, languages, databases, hardware (PostgreSQL, Docker, React, MRI machine)
 - task: specific work items, tickets, TODOs (fix bug #123, deploy v2, quarterly review)
@@ -71,23 +71,23 @@ Choosing between similar types:
 
 ## Example
 
-Input: "Talked to Minh about the GoClaw migration. He'll handle the database schema changes by Friday. The team uses PostgreSQL with pgvector. I wrote the migration guide yesterday."
+Input: "Talked to Minh about the VBPClaw migration. He'll handle the database schema changes by Friday. The team uses PostgreSQL with pgvector. I wrote the migration guide yesterday."
 
 Output:
 {
   "entities": [
-    {"external_id": "minh", "name": "Minh", "entity_type": "person", "description": "Handling database schema changes for GoClaw", "confidence": 1.0},
-    {"external_id": "goclaw", "name": "GoClaw", "entity_type": "project", "description": "Project undergoing migration", "confidence": 1.0},
-    {"external_id": "goclaw-migration", "name": "GoClaw Migration", "entity_type": "task", "description": "Database migration task, deadline Friday", "confidence": 1.0},
+    {"external_id": "minh", "name": "Minh", "entity_type": "person", "description": "Handling database schema changes for VBPClaw", "confidence": 1.0},
+    {"external_id": "vbpclaw", "name": "VBPClaw", "entity_type": "project", "description": "Project undergoing migration", "confidence": 1.0},
+    {"external_id": "vbpclaw-migration", "name": "VBPClaw Migration", "entity_type": "task", "description": "Database migration task, deadline Friday", "confidence": 1.0},
     {"external_id": "postgresql", "name": "PostgreSQL", "entity_type": "technology", "description": "Database used with pgvector extension", "confidence": 1.0},
     {"external_id": "pgvector", "name": "pgvector", "entity_type": "technology", "description": "PostgreSQL extension for vector embeddings", "confidence": 0.8},
-    {"external_id": "migration-guide", "name": "Migration Guide", "entity_type": "document", "description": "Guide for the GoClaw database migration", "confidence": 1.0}
+    {"external_id": "migration-guide", "name": "Migration Guide", "entity_type": "document", "description": "Guide for the VBPClaw database migration", "confidence": 1.0}
   ],
   "relations": [
-    {"source_entity_id": "minh", "relation_type": "assigned_to", "target_entity_id": "goclaw-migration", "confidence": 1.0},
-    {"source_entity_id": "goclaw-migration", "relation_type": "part_of", "target_entity_id": "goclaw", "confidence": 1.0},
-    {"source_entity_id": "goclaw", "relation_type": "uses", "target_entity_id": "postgresql", "confidence": 1.0},
+    {"source_entity_id": "minh", "relation_type": "assigned_to", "target_entity_id": "vbpclaw-migration", "confidence": 1.0},
+    {"source_entity_id": "vbpclaw-migration", "relation_type": "part_of", "target_entity_id": "vbpclaw", "confidence": 1.0},
+    {"source_entity_id": "vbpclaw", "relation_type": "uses", "target_entity_id": "postgresql", "confidence": 1.0},
     {"source_entity_id": "postgresql", "relation_type": "integrates_with", "target_entity_id": "pgvector", "confidence": 0.8},
-    {"source_entity_id": "migration-guide", "relation_type": "references", "target_entity_id": "goclaw-migration", "confidence": 1.0}
+    {"source_entity_id": "migration-guide", "relation_type": "references", "target_entity_id": "vbpclaw-migration", "confidence": 1.0}
   ]
 }`

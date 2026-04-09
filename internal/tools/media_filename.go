@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/nextlevelbuilder/goclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
 )
 
 var nonAlphanumRe = regexp.MustCompile(`[^a-z0-9]+`)

@@ -1,4 +1,4 @@
-# GoClaw Gateway
+# VBPClaw Gateway
 
 PostgreSQL multi-tenant AI agent gateway with WebSocket RPC + HTTP API.
 
@@ -60,7 +60,7 @@ ui/web/                       React SPA (pnpm, Vite, Tailwind, Radix UI)
 - **Agent loop:** `RunRequest` → think→act→observe → `RunResult`. Events: `run.started`, `run.completed`, `chunk`, `tool.call`, `tool.result`. Auto-summarization at >85% context (token-based only)
 - **Context propagation:** `store.WithAgentType(ctx)`, `store.WithUserID(ctx)`, `store.WithAgentID(ctx)`, `store.WithLocale(ctx)`
 - **WebSocket protocol (v3):** Frame types `req`/`res`/`event`. First request must be `connect`
-- **Config:** JSON5 at `GOCLAW_CONFIG` env. Secrets in `.env.local` or env vars, never in config.json
+- **Config:** JSON5 at `VBPCLAW_CONFIG` env. Secrets in `.env.local` or env vars, never in config.json
 - **Security:** Rate limiting, input guard (detection-only), CORS, shell deny patterns, SSRF protection, path traversal prevention, AES-256-GCM encryption. All security logs: `slog.Warn("security.*")`
 - **Telegram formatting:** LLM output → `SanitizeAssistantContent()` → `markdownToTelegramHTML()` → `chunkHTML()` → `sendHTML()`. Tables rendered as ASCII in `<pre>` tags
 - **i18n:** Web UI uses `i18next` with namespace-split locale files in `ui/web/src/i18n/locales/{lang}/`. Backend uses `internal/i18n` message catalog with `i18n.T(locale, key, args...)`. Locale propagated via `store.WithLocale(ctx)` — WS `connect` param `locale`, HTTP `Accept-Language` header. Supported: en (default), vi, zh. New user-facing strings: add key to `internal/i18n/keys.go`, add translations to all 3 catalog files. New UI strings: add key to all 3 locale dirs. Bootstrap templates (SOUL.md, etc.) stay English-only (LLM consumption).
@@ -68,8 +68,8 @@ ui/web/                       React SPA (pnpm, Vite, Tailwind, Radix UI)
 ## Running
 
 ```bash
-go build -o goclaw . && ./goclaw onboard && source .env.local && ./goclaw
-./goclaw migrate up                 # DB migrations
+go build -o vbpclaw . && ./vbpclaw onboard && source .env.local && ./vbpclaw
+./vbpclaw migrate up                 # DB migrations
 go test -v ./tests/integration/     # Integration tests
 
 cd ui/web && pnpm install && pnpm dev   # Web dashboard (dev)
@@ -86,10 +86,10 @@ make desktop-dmg VERSION=0.1.0               # Create .dmg installer (macOS only
 - **Build tag:** `//go:build sqliteonly` — desktop binary includes only SQLite, no PostgreSQL
 - **Edition system:** `internal/edition/edition.go` — `Lite` preset auto-selected for SQLite backend. Check `edition.Current()` for feature limits
 - **Entry point:** `ui/desktop/main.go` + `ui/desktop/app.go` — Wails bindings, embedded gateway
-- **Secrets:** OS keyring (`go-keyring`) with file fallback at `~/.goclaw/secrets/`
-- **Data dir:** `~/.goclaw/data/` (SQLite DB, configs)
-- **Workspace:** `~/.goclaw/workspace/` (agent files, team workspace)
-- **Port:** 18790 (localhost only), configurable via `GOCLAW_PORT`
+- **Secrets:** OS keyring (`go-keyring`) with file fallback at `~/.vbpclaw/secrets/`
+- **Data dir:** `~/.vbpclaw/data/` (SQLite DB, configs)
+- **Workspace:** `~/.vbpclaw/workspace/` (agent files, team workspace)
+- **Port:** 18790 (localhost only), configurable via `VBPCLAW_PORT`
 - **WS params:** All WS method params use **camelCase** (`teamId`, `taskId`, `sessionKey`) — match Go struct `json:"..."` tags
 - **Version:** `cmd.Version` set via `-ldflags` at build time. Frontend calls `wails.getVersion()`
 - **Auto-update:** `internal/updater/updater.go` checks GitHub Releases for `lite-v*` tags. Frontend `UpdateBanner` shows notification

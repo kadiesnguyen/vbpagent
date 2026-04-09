@@ -4,14 +4,14 @@ export function SplashScreen({ ready }: { ready: boolean }) {
     <div className="h-dvh flex flex-col items-center justify-center canvas-bg select-none animate-fade-in">
       {/* Logo with gentle pulse */}
       <img
-        src="/goclaw-icon.svg"
-        alt="GoClaw"
+        src="/vbpclaw-icon.svg"
+        alt="VBPClaw"
         className="h-20 w-20 mb-6 animate-pulse"
         style={{ animationDuration: '2s' }}
       />
 
       {/* App name */}
-      <h1 className="text-2xl font-bold text-text-primary mb-1 tracking-tight">GoClaw</h1>
+      <h1 className="text-2xl font-bold text-text-primary mb-1 tracking-tight">VBPClaw</h1>
       <p className="text-sm text-text-muted mb-8">Desktop AI Gateway</p>
 
       {/* Status */}

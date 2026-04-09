@@ -1,5 +1,5 @@
 # Base docker-compose — shared service definition.
-# Pre-built images: ghcr.io/nextlevelbuilder/goclaw (also on Docker Hub: digitop/goclaw)
+# Pre-built images: ghcr.io/nextlevelbuilder/goclaw (also on Docker Hub: digitop/vbpclaw)
 #
 # The default `latest` image includes an embedded web dashboard (no separate nginx needed).
 # Web UI is served at the same port as the API (default: 18790).
@@ -23,35 +23,41 @@
 # With Claude CLI:    add -f docker-compose.claude-cli.yml
 
 services:
-  goclaw:
+  vbpclaw:
     image: ghcr.io/nextlevelbuilder/goclaw:latest
     build:
-      context: ${GOCLAW_DIR:-.}
+      context: ${VBPCLAW_DIR:-.}
       dockerfile: Dockerfile
       args:
         ENABLE_OTEL: "${ENABLE_OTEL:-false}"
         ENABLE_EMBEDUI: "${ENABLE_EMBEDUI:-true}"  # set to false when using WITH_WEB_NGINX
         ENABLE_PYTHON: "${ENABLE_PYTHON:-true}"
         ENABLE_FULL_SKILLS: "${ENABLE_FULL_SKILLS:-false}"
-        VERSION: "${GOCLAW_VERSION:-dev}"
-    # Uncomment to test update UI: GOCLAW_VERSION=v1.0.0
+        VERSION: "${VBPCLAW_VERSION:-dev}"
+    # Uncomment to test update UI: VBPCLAW_VERSION=v1.0.0
     ports:
-      - "${GOCLAW_PORT:-18790}:18790"
+      - "${VBPCLAW_PORT:-18790}:18790"
     env_file:
       - path: .env
         required: false
     environment:
-      - GOCLAW_HOST=0.0.0.0
-      - GOCLAW_PORT=18790
-      - GOCLAW_CONFIG=/app/data/config.json
-      - GOCLAW_GATEWAY_TOKEN=${GOCLAW_GATEWAY_TOKEN:-}
-      - GOCLAW_ENCRYPTION_KEY=${GOCLAW_ENCRYPTION_KEY:-}
-      - GOCLAW_SKILLS_DIR=/app/data/skills
+      - VBPCLAW_HOST=0.0.0.0
+      - VBPCLAW_PORT=18790
+      - VBPCLAW_CONFIG=/app/data/config.json
+      - VBPCLAW_GATEWAY_TOKEN=${VBPCLAW_GATEWAY_TOKEN:-}
+      - VBPCLAW_ENCRYPTION_KEY=${VBPCLAW_ENCRYPTION_KEY:-}
+      - VBPCLAW_SKILLS_DIR=/app/data/skills
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - RAPIDAPI_KEY=${RAPIDAPI_KEY:-}
+      - TIKTOK_RAPIDAPI_KEY=${TIKTOK_RAPIDAPI_KEY:-}
+      - BRAVE_SEARCH_API_KEY=${BRAVE_SEARCH_API_KEY:-}
+      - BRAVE_ANSWERS_API_KEY=${BRAVE_ANSWERS_API_KEY:-}
       # Debug
-      - GOCLAW_TRACE_VERBOSE=${GOCLAW_TRACE_VERBOSE:-0}
+      - VBPCLAW_TRACE_VERBOSE=${VBPCLAW_TRACE_VERBOSE:-0}
     volumes:
-      - goclaw-data:/app/data
-      - goclaw-workspace:/app/workspace
+      - vbpclaw-data:/app/data
+      - vbpclaw-workspace:/app/workspace
+      - telegram-bot-api-data:/var/lib/telegram-bot-api:ro
     extra_hosts:
       - "host.docker.internal:host-gateway"
     security_opt:
@@ -73,14 +79,21 @@ services:
           pids: 200
     networks:
       - default
-      - goclaw-net
+      - vbpclaw-net
     restart: unless-stopped
 
 volumes:
-  goclaw-data:
-  goclaw-workspace:
+  vbpclaw-data:
+    external: true
+    name: vbpclaw_vbpclaw-data
+  vbpclaw-workspace:
+    external: true
+    name: vbpclaw_vbpclaw-workspace
+  telegram-bot-api-data:
+    external: true
+    name: vbpclaw_telegram-bot-api-data
 
 networks:
-  goclaw-net:
-    name: goclaw-net
+  vbpclaw-net:
+    name: vbpclaw-net
     driver: bridge

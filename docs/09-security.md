@@ -87,7 +87,7 @@ type PathDenyable interface {
 }
 ```
 
-All four filesystem tools (`read_file`, `write_file`, `list_files`, `edit`) implement `PathDenyable`. The agent loop calls `DenyPaths(".goclaw")` at startup to prevent agents from accessing internal data directories. `list_files` additionally filters denied directories from output entirely -- the agent does not see denied paths in directory listings.
+All four filesystem tools (`read_file`, `write_file`, `list_files`, `edit`) implement `PathDenyable`. The agent loop calls `DenyPaths(".vbpclaw")` at startup to prevent agents from accessing internal data directories. `list_files` additionally filters denied directories from output entirely -- the agent does not see denied paths in directory listings.
 
 #### Credentialed Exec Security
 
@@ -126,7 +126,7 @@ All four filesystem tools (`read_file`, `write_file`, `list_files`, `edit`) impl
 
 | Level | Scope | Directory Pattern |
 |-------|-------|------------------|
-| Per-agent | Each agent gets its own base directory | `~/.goclaw/{agent-key}-workspace/` |
+| Per-agent | Each agent gets its own base directory | `~/.vbpclaw/{agent-key}-workspace/` |
 | Per-user | Each user gets a subdirectory within the agent workspace | `{agent-workspace}/user_{sanitized_id}/` |
 
 The workspace is injected into tools via `WithToolWorkspace(ctx)` context injection. Tools read the workspace from context at execution time (fallback to the struct field for backward compatibility). User IDs are sanitized: anything outside `[a-zA-Z0-9_-]` becomes an underscore (`group:telegram:-1001234` → `group_telegram_-1001234`).
@@ -135,10 +135,10 @@ The workspace is injected into tools via `WithToolWorkspace(ctx)` context inject
 
 | Component | User | Scope | Socket |
 |-----------|------|-------|--------|
-| Main app | goclaw (1000) | All operations except system packages | N/A |
-| pkg-helper | root | System package (apk) install/uninstall only | `/tmp/pkg.sock` (0660 root:goclaw) |
+| Main app | vbpclaw (1000) | All operations except system packages | N/A |
+| pkg-helper | root | System package (apk) install/uninstall only | `/tmp/pkg.sock` (0660 root:vbpclaw) |
 
-The pkg-helper is started in `docker-entrypoint.sh` *before* privileges are dropped to goclaw. The main app connects to the Unix socket to request apk operations. System packages are persisted to `/app/data/.runtime/apk-packages` so they survive container recreation. Python and npm packages are installed directly by the goclaw user to writable runtime directories (`$PIP_TARGET`, `$NPM_CONFIG_PREFIX`).
+The pkg-helper is started in `docker-entrypoint.sh` *before* privileges are dropped to vbpclaw. The main app connects to the Unix socket to request apk operations. System packages are persisted to `/app/data/.runtime/apk-packages` so they survive container recreation. Python and npm packages are installed directly by the vbpclaw user to writable runtime directories (`$PIP_TARGET`, `$NPM_CONFIG_PREFIX`).
 
 **Docker sandbox** -- Container-based isolation for shell command execution:
 
@@ -159,15 +159,15 @@ The pkg-helper is started in `docker-entrypoint.sh` *before* privileges are drop
 
 ## 2. Docker Entrypoint & Runtime Configuration
 
-GoClaw runs in a non-root container with three privilege levels:
+VBPClaw runs in a non-root container with three privilege levels:
 
 **Phase 1: Root (docker-entrypoint.sh)**
 - Re-install persisted system packages from `/app/data/.runtime/apk-packages`
 - Start `pkg-helper` (root-privileged service listening on `/tmp/pkg.sock`)
 - Set up Python and Node.js runtime directories with proper env vars
 
-**Phase 2: Drop to goclaw user (su-exec)**
-- Main app runs as `goclaw` (UID 1000) via `su-exec goclaw /app/goclaw`
+**Phase 2: Drop to vbpclaw user (su-exec)**
+- Main app runs as `vbpclaw` (UID 1000) via `su-exec goclaw /app/goclaw`
 - All agent operations execute in this context
 - System package requests are delegated to pkg-helper via Unix socket
 
@@ -196,16 +196,16 @@ Docker-compose.yml mounts data volume at `/app/data`, which contains:
 | Path | Owner | Purpose |
 |------|-------|---------|
 | `/app/data/.runtime/apk-packages` | 0666 (rw-rw-rw-) | Persisted apk package list, written by pkg-helper |
-| `/app/data/.runtime/pip` | goclaw | Python packages installed via pip install --target |
-| `/app/data/.runtime/npm-global` | goclaw | npm packages installed globally to prefix |
-| `/app/data/.runtime/pip-cache` | goclaw | pip cache directory |
-| `/tmp/pkg.sock` | 0660 (rw-rw----) | Unix socket: owner root, group goclaw |
+| `/app/data/.runtime/pip` | vbpclaw | Python packages installed via pip install --target |
+| `/app/data/.runtime/npm-global` | vbpclaw | npm packages installed globally to prefix |
+| `/app/data/.runtime/pip-cache` | vbpclaw | pip cache directory |
+| `/tmp/pkg.sock` | 0660 (rw-rw----) | Unix socket: owner root, group vbpclaw |
 
 ---
 
 ## 3. Encryption
 
-AES-256-GCM encryption for secrets stored in PostgreSQL. Key provided via `GOCLAW_ENCRYPTION_KEY` environment variable.
+AES-256-GCM encryption for secrets stored in PostgreSQL. Key provided via `VBPCLAW_ENCRYPTION_KEY` environment variable.
 
 | What's Encrypted | Table | Column |
 |-----------------|-------|--------|
@@ -347,7 +347,7 @@ API keys are generated and stored securely.
 
 | Mechanism | Detail |
 |-----------|--------|
-| Format | `goclaw_<32 hex chars>` (48 chars total) |
+| Format | `vbpclaw_<32 hex chars>` (48 chars total) |
 | Key generation | 16 random bytes → hex-encoded, generated via `crypto.GenerateAPIKey()` |
 | Storage | SHA-256 hash stored in database (`api_keys.hash`), never the raw key. Raw key shown once at creation. |
 | Comparison | Timing-safe comparison via `crypto/subtle.ConstantTimeCompare` (not standard `==`) prevents timing attacks. Display prefix: first 8 hex chars of random part (e.g., `1a2b3c4d...`) |
@@ -429,7 +429,7 @@ Browser pairing allows web UI clients to authenticate without full admin credent
 | Code TTL | 60 minutes; expired codes are auto-pruned from database |
 | Paired device TTL | 30 days; provides defense-in-depth expiry (paired devices auto-cleaned if unused) |
 | Pending limit | Max 3 pending pairing requests per account; prevents spam/enumeration |
-| HTTP access | Paired browsers access HTTP APIs via `X-GoClaw-Sender-Id` header (requires `channel=browser`). Fail-closed: `IsPaired()` check blocks unpaired sessions. Logs failed HTTP pairing auth attempts for security monitoring. |
+| HTTP access | Paired browsers access HTTP APIs via `X-VBPClaw-Sender-Id` header (requires `channel=browser`). Fail-closed: `IsPaired()` check blocks unpaired sessions. Logs failed HTTP pairing auth attempts for security monitoring. |
 | Approval flow | Requires WebSocket `device.pair.approve` method from authenticated admin session, triggered by `pairing.approve` command. Admin approval adds sender to `paired_devices` table with `paired_by` audit field. |
 | Stale session fix | Uses `useRef` (not `useState`) for senderID in browser pairing form to prevent stale closure. Auto-kick after pairing: `RequireAuth` now accepts senderID for paired browser sessions (skips logout). |
 

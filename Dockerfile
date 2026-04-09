@@ -49,7 +49,7 @@ RUN set -eux; \
     fi; \
     if [ -n "$TAGS" ]; then TAGS="-tags $TAGS"; fi; \
     CGO_ENABLED=0 GOOS=linux \
-    go build -ldflags="-s -w -X github.com/nextlevelbuilder/goclaw/cmd.Version=${VERSION}" \
+    go build -ldflags="-s -w -X github.com/nextlevelbuilder/vbpclaw/cmd.Version=${VERSION}" \
     ${TAGS} -o /out/goclaw . && \
     CGO_ENABLED=0 GOOS=linux \
     go build -ldflags="-s -w" -o /out/pkg-helper ./cmd/pkg-helper
@@ -67,21 +67,22 @@ ARG ENABLE_CLAUDE_CLI=false
 # ENABLE_FULL_SKILLS=true pre-installs all skill deps (larger image, no on-demand install needed).
 # Otherwise, skill packages are installed on-demand via the admin UI.
 RUN set -eux; \
-    apk add --no-cache ca-certificates wget su-exec; \
+    apk add --no-cache ca-certificates wget su-exec docker-cli; \
+    sed -i 's/^ping:x:999:/docker:x:999:/' /etc/group; \
     if [ "$ENABLE_SANDBOX" = "true" ]; then \
-        apk add --no-cache docker-cli; \
+        true; \
     fi; \
     if [ "$ENABLE_FULL_SKILLS" = "true" ]; then \
         apk add --no-cache python3 py3-pip nodejs npm pandoc github-cli poppler-utils bash; \
         pip3 install --no-cache-dir --break-system-packages \
             pypdf openpyxl pandas python-pptx markitdown defusedxml lxml \
-            pdfplumber pdf2image anthropic; \
+            pdfplumber pdf2image anthropic openai; \
         npm install -g --cache /tmp/npm-cache docx pptxgenjs; \
         rm -rf /tmp/npm-cache /root/.cache /var/cache/apk/*; \
     else \
         if [ "$ENABLE_PYTHON" = "true" ]; then \
-            apk add --no-cache python3 py3-pip; \
-            pip3 install --no-cache-dir --break-system-packages edge-tts; \
+            apk add --no-cache python3 py3-pip ffmpeg; \
+            pip3 install --no-cache-dir --break-system-packages edge-tts openai uv; \
         fi; \
         if [ "$ENABLE_NODE" = "true" ] || [ "$ENABLE_CLAUDE_CLI" = "true" ]; then \
             apk add --no-cache nodejs npm; \
@@ -93,7 +94,7 @@ RUN set -eux; \
     fi
 
 # Non-root user
-RUN adduser -D -u 1000 -h /app goclaw
+RUN adduser -D -u 1000 -h /app vbpclaw && addgroup vbpclaw docker
 WORKDIR /app
 
 # Copy binary, migrations, and bundled skills
@@ -123,18 +124,18 @@ RUN chmod +x /app/docker-entrypoint.sh && \
 
 # Create data directories.
 # .runtime has split ownership: root owns the dir (so pkg-helper can write apk-packages),
-# while pip/npm subdirs are goclaw-owned (runtime installs by the app process).
+# while pip/npm subdirs are vbpclaw-owned (runtime installs by the app process).
 # Symlink .claude → data volume so Claude CLI credentials persist across container recreates.
 RUN mkdir -p /app/workspace /app/data/.runtime/pip /app/data/.runtime/npm-global/lib \
-        /app/data/.runtime/pip-cache /app/data/.claude /app/skills /app/tsnet-state /app/.goclaw \
+        /app/data/.runtime/pip-cache /app/data/.claude /app/skills /app/tsnet-state /app/.vbpclaw \
     && ln -s /app/data/.claude /app/.claude \
     && touch /app/data/.runtime/apk-packages \
-    && chown -R goclaw:goclaw /app/workspace /app/skills /app/tsnet-state /app/.goclaw \
-    && chown goclaw:goclaw /app/bundled-skills /app/data \
-    && chown root:goclaw /app/data/.runtime /app/data/.runtime/apk-packages \
+    && chown -R vbpclaw:vbpclaw /app/workspace /app/skills /app/tsnet-state /app/.vbpclaw \
+    && chown vbpclaw:vbpclaw /app/bundled-skills /app/data \
+    && chown root:vbpclaw /app/data/.runtime /app/data/.runtime/apk-packages \
     && chmod 0750 /app/data/.runtime \
     && chmod 0640 /app/data/.runtime/apk-packages \
-    && chown -R goclaw:goclaw /app/data/.runtime/pip /app/data/.runtime/npm-global /app/data/.runtime/pip-cache /app/data/.claude
+    && chown -R vbpclaw:vbpclaw /app/data/.runtime/pip /app/data/.runtime/npm-global /app/data/.runtime/pip-cache /app/data/.claude
 
 # Default environment
 ENV GOCLAW_CONFIG=/app/config.json \
@@ -146,7 +147,7 @@ ENV GOCLAW_CONFIG=/app/config.json \
     GOCLAW_PORT=18790
 
 # Entrypoint runs as root to install persisted packages and start pkg-helper,
-# then drops to goclaw user via su-exec before starting the app.
+# then drops to vbpclaw user via su-exec before starting the app.
 
 EXPOSE 18790
 

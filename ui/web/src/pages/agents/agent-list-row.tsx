@@ -47,7 +47,7 @@ export function AgentListRow({ agent, ownerName, onClick, onResummon, onDelete }
       {/* Status */}
       <div className="hidden shrink-0 sm:block">
         {agent.status === "summoning" ? (
-          <Badge variant="outline" className="animate-pulse border-orange-400 text-orange-600 dark:text-orange-400">
+          <Badge variant="outline" className="animate-pulse border-blue-400 text-blue-600 dark:text-blue-400">
             {t("card.summoning")}
           </Badge>
         ) : agent.status === "summon_failed" ? (
@@ -68,7 +68,7 @@ export function AgentListRow({ agent, ownerName, onClick, onResummon, onDelete }
         {selfEvolve && (
           <Tooltip>
             <TooltipTrigger asChild>
-              <Badge className="bg-orange-100 text-[11px] text-orange-700 hover:bg-orange-100 dark:bg-orange-900/30 dark:text-orange-300">
+              <Badge className="bg-blue-100 text-[11px] text-blue-700 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-300">
                 <Sparkles className="mr-0.5 h-3 w-3" />
                 {t("card.evolving")}
               </Badge>

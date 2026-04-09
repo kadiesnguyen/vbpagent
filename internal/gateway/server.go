@@ -16,17 +16,17 @@ import (
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 
-	"github.com/nextlevelbuilder/goclaw/internal/agent"
-	"github.com/nextlevelbuilder/goclaw/internal/bus"
-	"github.com/nextlevelbuilder/goclaw/internal/config"
-	httpapi "github.com/nextlevelbuilder/goclaw/internal/http"
-	mcpbridge "github.com/nextlevelbuilder/goclaw/internal/mcp"
-	"github.com/nextlevelbuilder/goclaw/internal/webui"
-	"github.com/nextlevelbuilder/goclaw/internal/permissions"
-	"github.com/nextlevelbuilder/goclaw/internal/providers"
-	"github.com/nextlevelbuilder/goclaw/internal/store"
-	"github.com/nextlevelbuilder/goclaw/internal/tools"
-	"github.com/nextlevelbuilder/goclaw/pkg/protocol"
+	"github.com/nextlevelbuilder/vbpclaw/internal/agent"
+	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
+	"github.com/nextlevelbuilder/vbpclaw/internal/config"
+	httpapi "github.com/nextlevelbuilder/vbpclaw/internal/http"
+	mcpbridge "github.com/nextlevelbuilder/vbpclaw/internal/mcp"
+	"github.com/nextlevelbuilder/vbpclaw/internal/webui"
+	"github.com/nextlevelbuilder/vbpclaw/internal/permissions"
+	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/tools"
+	"github.com/nextlevelbuilder/vbpclaw/pkg/protocol"
 )
 
 // Server is the main gateway server handling WebSocket and HTTP connections.
@@ -177,7 +177,7 @@ func (s *Server) BuildMux() *http.ServeMux {
 		}
 	}
 
-	// MCP bridge: expose GoClaw tools to Claude CLI via streamable-http.
+	// MCP bridge: expose VBPClaw tools to Claude CLI via streamable-http.
 	// Only listens on localhost (CLI runs on the same machine).
 	// Protected by gateway token; disabled when no token is configured to
 	// prevent unauthenticated tool invocations if port is exposed.
@@ -192,7 +192,7 @@ func (s *Server) BuildMux() *http.ServeMux {
 			mux.HandleFunc("/mcp/bridge", func(w http.ResponseWriter, _ *http.Request) {
 				w.Header().Set("Content-Type", "application/json")
 				w.WriteHeader(http.StatusForbidden)
-				_, _ = w.Write([]byte(`{"error":"mcp bridge disabled: set GOCLAW_GATEWAY_TOKEN to enable"}`))
+				_, _ = w.Write([]byte(`{"error":"mcp bridge disabled: set VBPCLAW_GATEWAY_TOKEN to enable"}`))
 			})
 		}
 	}
@@ -298,7 +298,7 @@ func (s *Server) Start(ctx context.Context) error {
 
 	// Wrap with CORS for desktop dev mode (Wails serves frontend on different port).
 	var handler http.Handler = mux
-	if os.Getenv("GOCLAW_DESKTOP") == "1" {
+	if os.Getenv("VBPCLAW_DESKTOP") == "1" {
 		handler = desktopCORS(mux)
 	}
 
@@ -640,12 +640,12 @@ func StartTestServer(s *Server, ctx context.Context) (addr string, start func())
 }
 
 // desktopCORS wraps a handler with permissive CORS headers for desktop dev mode.
-// Only active when GOCLAW_DESKTOP=1 (set by desktop app.go).
+// Only active when VBPCLAW_DESKTOP=1 (set by desktop app.go).
 func desktopCORS(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS")
-		w.Header().Set("Access-Control-Allow-Headers", "Authorization, Content-Type, X-GoClaw-Tenant-Id, X-GoClaw-User-Id")
+		w.Header().Set("Access-Control-Allow-Headers", "Authorization, Content-Type, X-VBPClaw-Tenant-Id, X-VBPClaw-User-Id")
 		if r.Method == "OPTIONS" {
 			w.WriteHeader(http.StatusNoContent)
 			return

@@ -10,12 +10,12 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/nextlevelbuilder/goclaw/internal/bootstrap"
-	"github.com/nextlevelbuilder/goclaw/internal/config"
-	"github.com/nextlevelbuilder/goclaw/internal/gateway"
-	"github.com/nextlevelbuilder/goclaw/internal/i18n"
-	"github.com/nextlevelbuilder/goclaw/internal/store"
-	"github.com/nextlevelbuilder/goclaw/pkg/protocol"
+	"github.com/nextlevelbuilder/vbpclaw/internal/bootstrap"
+	"github.com/nextlevelbuilder/vbpclaw/internal/config"
+	"github.com/nextlevelbuilder/vbpclaw/internal/gateway"
+	"github.com/nextlevelbuilder/vbpclaw/internal/i18n"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/pkg/protocol"
 )
 
 // --- agents.create ---
@@ -82,7 +82,7 @@ func (m *AgentsMethods) handleCreate(ctx context.Context, client *gateway.Client
 			return
 		}
 
-		// Resolve owner: use first provided ID so external provisioning tools (e.g. goclaw-wizards)
+		// Resolve owner: use first provided ID so external provisioning tools (e.g. vbpclaw-wizards)
 		// can set a real user as owner at creation time. Falls back to "system" for backward compat.
 		ownerID := "system"
 		if len(params.OwnerIDs) > 0 && params.OwnerIDs[0] != "" {

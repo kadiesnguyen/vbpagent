@@ -4,7 +4,7 @@
 #   docker compose -f docker-compose.yml -f docker-compose.postgres.yml -f docker-compose.browser.yml up -d --build
 #
 # The Chrome sidecar exposes CDP (Chrome DevTools Protocol) on port 9222.
-# GoClaw connects to it automatically via GOCLAW_BROWSER_REMOTE_URL.
+# VBPClaw connects to it automatically via VBPCLAW_BROWSER_REMOTE_URL.
 
 services:
   chrome:
@@ -18,7 +18,7 @@ services:
       - --disable-dev-shm-usage
     ports:
       - "${CHROME_CDP_PORT:-9222}:9222"
-    shm_size: 2gb
+    shm_size: 512m
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:9222/json/version >/dev/null 2>&1"]
       interval: 5s
@@ -27,13 +27,13 @@ services:
     deploy:
       resources:
         limits:
-          memory: 2G
+          memory: 1G
           cpus: '2.0'
     restart: unless-stopped
 
-  goclaw:
+  vbpclaw:
     environment:
-      - GOCLAW_BROWSER_REMOTE_URL=ws://chrome:9222
+      - VBPCLAW_BROWSER_REMOTE_URL=ws://chrome:9222
     depends_on:
       chrome:
         condition: service_healthy

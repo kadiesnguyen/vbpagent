@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="../_statics/goclaw.png" alt="GoClaw" />
+  <img src="../_statics/vbpclaw.png" alt="VBPClaw" />
 </p>
 
-<h1 align="center">GoClaw</h1>
+<h1 align="center">VBPClaw</h1>
 
 <p align="center"><strong>Enterprise AI Agent Platform</strong></p>
 
@@ -12,8 +12,8 @@ Single binary. Production-tested. Agents that orchestrate for you.
 </p>
 
 <p align="center">
-  <a href="https://docs.goclaw.sh">ডকুমেন্টেশন</a> •
-  <a href="https://docs.goclaw.sh/#quick-start">দ্রুত শুরু</a> •
+  <a href="https://docs.vbpclaw.sh">ডকুমেন্টেশন</a> •
+  <a href="https://docs.vbpclaw.sh/#quick-start">দ্রুত শুরু</a> •
   <a href="https://x.com/nlb_io">Twitter / X</a>
 </p>
 
@@ -28,7 +28,7 @@ Single binary. Production-tested. Agents that orchestrate for you.
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="License: MIT" />
 </p>
 
-**GoClaw** হলো একটি মাল্টি-এজেন্ট AI গেটওয়ে যা LLM-কে আপনার টুলস, চ্যানেল এবং ডেটার সাথে সংযুক্ত করে — একটি একক Go বাইনারি হিসেবে স্থাপন করা হয়, কোনো রানটাইম নির্ভরতা ছাড়াই। এটি ২০+ LLM প্রদানকারীর মাধ্যমে সম্পূর্ণ মাল্টি-টেন্যান্ট আইসোলেশন সহ এজেন্ট টিম এবং ইন্টার-এজেন্ট ডেলিগেশন পরিচালনা করে।
+**VBPClaw** হলো একটি মাল্টি-এজেন্ট AI গেটওয়ে যা LLM-কে আপনার টুলস, চ্যানেল এবং ডেটার সাথে সংযুক্ত করে — একটি একক Go বাইনারি হিসেবে স্থাপন করা হয়, কোনো রানটাইম নির্ভরতা ছাড়াই। এটি ২০+ LLM প্রদানকারীর মাধ্যমে সম্পূর্ণ মাল্টি-টেন্যান্ট আইসোলেশন সহ এজেন্ট টিম এবং ইন্টার-এজেন্ট ডেলিগেশন পরিচালনা করে।
 
 [OpenClaw](https://github.com/openclaw/openclaw)-এর একটি Go পোর্ট, উন্নত নিরাপত্তা, মাল্টি-টেন্যান্ট PostgreSQL এবং প্রোডাকশন-গ্রেড পর্যবেক্ষণযোগ্যতা সহ।
 
@@ -80,7 +80,7 @@ Single binary. Production-tested. Agents that orchestrate for you.
 
 ## Claw ইকোসিস্টেম
 
-|                 | OpenClaw        | ZeroClaw | PicoClaw | **GoClaw**                              |
+|                 | OpenClaw        | ZeroClaw | PicoClaw | **VBPClaw**                              |
 | --------------- | --------------- | -------- | -------- | --------------------------------------- |
 | ভাষা            | TypeScript      | Rust     | Go       | **Go**                                  |
 | বাইনারি সাইজ   | 28 MB + Node.js | 3.4 MB   | ~8 MB    | **~25 MB** (বেস) / **~36 MB** (+ OTel) |
@@ -89,7 +89,7 @@ Single binary. Production-tested. Agents that orchestrate for you.
 | স্টার্টআপ      | > 5 s           | < 10 ms  | < 1 s    | **< 1 s**                               |
 | লক্ষ্য হার্ডওয়্যার | $599+ Mac Mini  | $10 edge | $10 edge | **$5 VPS+**                             |
 
-| ফিচার                      | OpenClaw                             | ZeroClaw                                     | PicoClaw                              | **GoClaw**                     |
+| ফিচার                      | OpenClaw                             | ZeroClaw                                     | PicoClaw                              | **VBPClaw**                     |
 | -------------------------- | ------------------------------------ | -------------------------------------------- | ------------------------------------- | ------------------------------ |
 | মাল্টি-টেন্যান্ট (PostgreSQL) | —                                    | —                                            | —                                     | ✅                             |
 | MCP ইন্টিগ্রেশন            | — (ACP ব্যবহার করে)                 | —                                            | —                                     | ✅ (stdio/SSE/streamable-http) |
@@ -110,7 +110,7 @@ Single binary. Production-tested. Agents that orchestrate for you.
 ## আর্কিটেকচার
 
 <p align="center">
-  <img src="../_statics/architecture.jpg" alt="GoClaw Architecture" width="800" />
+  <img src="../_statics/architecture.jpg" alt="VBPClaw Architecture" width="800" />
 </p>
 
 ## দ্রুত শুরু
@@ -120,10 +120,10 @@ Single binary. Production-tested. Agents that orchestrate for you.
 ### সোর্স থেকে
 
 ```bash
-git clone https://github.com/nextlevelbuilder/goclaw.git && cd goclaw
+git clone https://github.com/nextlevelbuilder/vbpclaw.git && cd vbpclaw
 make build
-./goclaw onboard        # Interactive setup wizard
-source .env.local && ./goclaw
+./vbpclaw onboard        # Interactive setup wizard
+source .env.local && ./vbpclaw
 ```
 
 ### Docker-এর সাথে
@@ -132,20 +132,20 @@ source .env.local && ./goclaw
 # Generate .env with auto-generated secrets
 chmod +x prepare-env.sh && ./prepare-env.sh
 
-# Add at least one GOCLAW_*_API_KEY to .env, then:
+# Add at least one VBPCLAW_*_API_KEY to .env, then:
 make up
 
 # Web Dashboard at http://localhost:18790
 # Health check: curl http://localhost:18790/health
 ```
 
-`GOCLAW_*_API_KEY` এনভায়রনমেন্ট ভেরিয়েবল সেট করা থাকলে, গেটওয়ে ইন্টারেক্টিভ প্রম্পট ছাড়াই স্বয়ংক্রিয়ভাবে অনবোর্ড হয় — প্রদানকারী সনাক্ত করে, মাইগ্রেশন চালায়, এবং ডিফল্ট ডেটা সিড করে।
+`VBPCLAW_*_API_KEY` এনভায়রনমেন্ট ভেরিয়েবল সেট করা থাকলে, গেটওয়ে ইন্টারেক্টিভ প্রম্পট ছাড়াই স্বয়ংক্রিয়ভাবে অনবোর্ড হয় — প্রদানকারী সনাক্ত করে, মাইগ্রেশন চালায়, এবং ডিফল্ট ডেটা সিড করে।
 
-> বিল্ড ভেরিয়েন্ট (OTel, Tailscale, Redis), Docker ইমেজ ট্যাগ এবং কম্পোজ ওভারলের জন্য, [ডেপ্লয়মেন্ট গাইড](https://docs.goclaw.sh/#deploy-docker-compose) দেখুন।
+> বিল্ড ভেরিয়েন্ট (OTel, Tailscale, Redis), Docker ইমেজ ট্যাগ এবং কম্পোজ ওভারলের জন্য, [ডেপ্লয়মেন্ট গাইড](https://docs.vbpclaw.sh/#deploy-docker-compose) দেখুন।
 
 ## মাল্টি-এজেন্ট অর্কেস্ট্রেশন
 
-GoClaw এজেন্ট টিম এবং ইন্টার-এজেন্ট ডেলিগেশন সাপোর্ট করে — প্রতিটি এজেন্ট তার নিজস্ব পরিচয়, টুলস, LLM প্রদানকারী এবং কনটেক্সট ফাইল নিয়ে চলে।
+VBPClaw এজেন্ট টিম এবং ইন্টার-এজেন্ট ডেলিগেশন সাপোর্ট করে — প্রতিটি এজেন্ট তার নিজস্ব পরিচয়, টুলস, LLM প্রদানকারী এবং কনটেক্সট ফাইল নিয়ে চলে।
 
 ### এজেন্ট ডেলিগেশন
 
@@ -170,7 +170,7 @@ GoClaw এজেন্ট টিম এবং ইন্টার-এজেন্
 - **টিম মেলবক্স** — ডাইরেক্ট পিয়ার-টু-পিয়ার মেসেজিং এবং ব্রডকাস্ট
 - **টুলস**: টাস্ক ম্যানেজমেন্টের জন্য `team_tasks`, মেলবক্সের জন্য `team_message`
 
-> ডেলিগেশনের বিস্তারিত, অনুমতি লিংক এবং কনকারেন্সি নিয়ন্ত্রণের জন্য, [এজেন্ট টিম ডকস](https://docs.goclaw.sh/#teams-what-are-teams) দেখুন।
+> ডেলিগেশনের বিস্তারিত, অনুমতি লিংক এবং কনকারেন্সি নিয়ন্ত্রণের জন্য, [এজেন্ট টিম ডকস](https://docs.vbpclaw.sh/#teams-what-are-teams) দেখুন।
 
 ## বিল্ট-ইন টুলস
 
@@ -214,19 +214,19 @@ GoClaw এজেন্ট টিম এবং ইন্টার-এজেন্
 
 ## ডকুমেন্টেশন
 
-সম্পূর্ণ ডকুমেন্টেশন **[docs.goclaw.sh](https://docs.goclaw.sh)**-এ পাওয়া যাবে — অথবা [`goclaw-docs/`](https://github.com/nextlevelbuilder/goclaw-docs)-এ সোর্স ব্রাউজ করুন।
+সম্পূর্ণ ডকুমেন্টেশন **[docs.vbpclaw.sh](https://docs.vbpclaw.sh)**-এ পাওয়া যাবে — অথবা [`vbpclaw-docs/`](https://github.com/nextlevelbuilder/vbpclaw-docs)-এ সোর্স ব্রাউজ করুন।
 
 | বিভাগ | বিষয়বস্তু |
 |---------|--------|
-| [শুরু করা](https://docs.goclaw.sh/#what-is-goclaw) | ইনস্টলেশন, দ্রুত শুরু, কনফিগারেশন, ওয়েব ড্যাশবোর্ড ট্যুর |
-| [মূল ধারণাসমূহ](https://docs.goclaw.sh/#how-goclaw-works) | এজেন্ট লুপ, সেশন, টুলস, মেমরি, মাল্টি-টেন্যান্সি |
-| [এজেন্ট](https://docs.goclaw.sh/#creating-agents) | এজেন্ট তৈরি, কনটেক্সট ফাইল, ব্যক্তিত্ব, শেয়ারিং ও অ্যাক্সেস |
-| [প্রদানকারী](https://docs.goclaw.sh/#providers-overview) | Anthropic, OpenAI, OpenRouter, Gemini, DeepSeek, +১৫ আরও |
-| [চ্যানেল](https://docs.goclaw.sh/#channels-overview) | Telegram, Discord, Slack, Feishu, Zalo, WhatsApp, WebSocket |
-| [এজেন্ট টিম](https://docs.goclaw.sh/#teams-what-are-teams) | টিম, টাস্ক বোর্ড, মেসেজিং, ডেলিগেশন ও হ্যান্ডঅফ |
-| [উন্নত](https://docs.goclaw.sh/#custom-tools) | কাস্টম টুলস, MCP, স্কিল, ক্রন, স্যান্ডবক্স, হুকস, RBAC |
-| [ডেপ্লয়মেন্ট](https://docs.goclaw.sh/#deploy-docker-compose) | Docker Compose, ডেটাবেস, নিরাপত্তা, পর্যবেক্ষণযোগ্যতা, Tailscale |
-| [রেফারেন্স](https://docs.goclaw.sh/#cli-commands) | CLI কমান্ড, REST API, WebSocket প্রোটোকল, এনভায়রনমেন্ট ভেরিয়েবল |
+| [শুরু করা](https://docs.vbpclaw.sh/#what-is-vbpclaw) | ইনস্টলেশন, দ্রুত শুরু, কনফিগারেশন, ওয়েব ড্যাশবোর্ড ট্যুর |
+| [মূল ধারণাসমূহ](https://docs.vbpclaw.sh/#how-vbpclaw-works) | এজেন্ট লুপ, সেশন, টুলস, মেমরি, মাল্টি-টেন্যান্সি |
+| [এজেন্ট](https://docs.vbpclaw.sh/#creating-agents) | এজেন্ট তৈরি, কনটেক্সট ফাইল, ব্যক্তিত্ব, শেয়ারিং ও অ্যাক্সেস |
+| [প্রদানকারী](https://docs.vbpclaw.sh/#providers-overview) | Anthropic, OpenAI, OpenRouter, Gemini, DeepSeek, +১৫ আরও |
+| [চ্যানেল](https://docs.vbpclaw.sh/#channels-overview) | Telegram, Discord, Slack, Feishu, Zalo, WhatsApp, WebSocket |
+| [এজেন্ট টিম](https://docs.vbpclaw.sh/#teams-what-are-teams) | টিম, টাস্ক বোর্ড, মেসেজিং, ডেলিগেশন ও হ্যান্ডঅফ |
+| [উন্নত](https://docs.vbpclaw.sh/#custom-tools) | কাস্টম টুলস, MCP, স্কিল, ক্রন, স্যান্ডবক্স, হুকস, RBAC |
+| [ডেপ্লয়মেন্ট](https://docs.vbpclaw.sh/#deploy-docker-compose) | Docker Compose, ডেটাবেস, নিরাপত্তা, পর্যবেক্ষণযোগ্যতা, Tailscale |
+| [রেফারেন্স](https://docs.vbpclaw.sh/#cli-commands) | CLI কমান্ড, REST API, WebSocket প্রোটোকল, এনভায়রনমেন্ট ভেরিয়েবল |
 
 ## পরীক্ষা
 
@@ -241,7 +241,7 @@ go test -v ./tests/integration/ -timeout 120s    # Integration tests (requires r
 
 ## কৃতজ্ঞতা
 
-GoClaw মূল [OpenClaw](https://github.com/openclaw/openclaw) প্রকল্পের উপর ভিত্তি করে তৈরি। এই Go পোর্টকে অনুপ্রাণিত করা আর্কিটেকচার ও দৃষ্টিভঙ্গির জন্য আমরা কৃতজ্ঞ।
+VBPClaw মূল [OpenClaw](https://github.com/openclaw/openclaw) প্রকল্পের উপর ভিত্তি করে তৈরি। এই Go পোর্টকে অনুপ্রাণিত করা আর্কিটেকচার ও দৃষ্টিভঙ্গির জন্য আমরা কৃতজ্ঞ।
 
 ## লাইসেন্স
 

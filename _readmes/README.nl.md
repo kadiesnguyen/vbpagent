@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="../_statics/goclaw.png" alt="GoClaw" />
+  <img src="../_statics/vbpclaw.png" alt="VBPClaw" />
 </p>
 
-<h1 align="center">GoClaw</h1>
+<h1 align="center">VBPClaw</h1>
 
 <p align="center"><strong>Enterprise AI Agent Platform</strong></p>
 
@@ -12,8 +12,8 @@ Single binary. Production-tested. Agents that orchestrate for you.
 </p>
 
 <p align="center">
-  <a href="https://docs.goclaw.sh">Documentatie</a> •
-  <a href="https://docs.goclaw.sh/#quick-start">Snel starten</a> •
+  <a href="https://docs.vbpclaw.sh">Documentatie</a> •
+  <a href="https://docs.vbpclaw.sh/#quick-start">Snel starten</a> •
   <a href="https://x.com/nlb_io">Twitter / X</a>
 </p>
 
@@ -28,7 +28,7 @@ Single binary. Production-tested. Agents that orchestrate for you.
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="License: MIT" />
 </p>
 
-**GoClaw** is een multi-agent AI gateway die LLM's verbindt met uw tools, kanalen en gegevens — uitgerold als één enkel Go-binary zonder runtime-afhankelijkheden. Het orkestreert agentteams en inter-agent-delegatie via 20+ LLM-providers met volledige multi-tenant isolatie.
+**VBPClaw** is een multi-agent AI gateway die LLM's verbindt met uw tools, kanalen en gegevens — uitgerold als één enkel Go-binary zonder runtime-afhankelijkheden. Het orkestreert agentteams en inter-agent-delegatie via 20+ LLM-providers met volledige multi-tenant isolatie.
 
 Een Go-port van [OpenClaw](https://github.com/openclaw/openclaw) met verbeterde beveiliging, multi-tenant PostgreSQL en productieklare observeerbaarheid.
 
@@ -80,7 +80,7 @@ Een Go-port van [OpenClaw](https://github.com/openclaw/openclaw) met verbeterde 
 
 ## Claw-ecosysteem
 
-|                 | OpenClaw        | ZeroClaw | PicoClaw | **GoClaw**                              |
+|                 | OpenClaw        | ZeroClaw | PicoClaw | **VBPClaw**                              |
 | --------------- | --------------- | -------- | -------- | --------------------------------------- |
 | Taal            | TypeScript      | Rust     | Go       | **Go**                                  |
 | Binary-grootte  | 28 MB + Node.js | 3,4 MB   | ~8 MB    | **~25 MB** (basis) / **~36 MB** (+ OTel) |
@@ -89,7 +89,7 @@ Een Go-port van [OpenClaw](https://github.com/openclaw/openclaw) met verbeterde 
 | Opstartijd      | > 5 s           | < 10 ms  | < 1 s    | **< 1 s**                               |
 | Doelhardware    | $599+ Mac Mini  | $10 edge | $10 edge | **$5 VPS+**                             |
 
-| Functie                         | OpenClaw                             | ZeroClaw                                     | PicoClaw                              | **GoClaw**                     |
+| Functie                         | OpenClaw                             | ZeroClaw                                     | PicoClaw                              | **VBPClaw**                     |
 | ------------------------------- | ------------------------------------ | -------------------------------------------- | ------------------------------------- | ------------------------------ |
 | Multi-tenant (PostgreSQL)       | —                                    | —                                            | —                                     | ✅                             |
 | MCP-integratie                  | — (gebruikt ACP)                     | —                                            | —                                     | ✅ (stdio/SSE/streamable-http) |
@@ -110,7 +110,7 @@ Een Go-port van [OpenClaw](https://github.com/openclaw/openclaw) met verbeterde 
 ## Architectuur
 
 <p align="center">
-  <img src="../_statics/architecture.jpg" alt="GoClaw Architecture" width="800" />
+  <img src="../_statics/architecture.jpg" alt="VBPClaw Architecture" width="800" />
 </p>
 
 ## Snel starten
@@ -120,10 +120,10 @@ Een Go-port van [OpenClaw](https://github.com/openclaw/openclaw) met verbeterde 
 ### Vanuit broncode
 
 ```bash
-git clone https://github.com/nextlevelbuilder/goclaw.git && cd goclaw
+git clone https://github.com/nextlevelbuilder/vbpclaw.git && cd vbpclaw
 make build
-./goclaw onboard        # Interactieve installatiewizard
-source .env.local && ./goclaw
+./vbpclaw onboard        # Interactieve installatiewizard
+source .env.local && ./vbpclaw
 ```
 
 ### Met Docker
@@ -132,20 +132,20 @@ source .env.local && ./goclaw
 # Genereer .env met automatisch gegenereerde geheimen
 chmod +x prepare-env.sh && ./prepare-env.sh
 
-# Voeg minimaal één GOCLAW_*_API_KEY toe aan .env, dan:
+# Voeg minimaal één VBPCLAW_*_API_KEY toe aan .env, dan:
 make up
 
 # Webdashboard op http://localhost:18790
 # Statuscontrole: curl http://localhost:18790/health
 ```
 
-Wanneer `GOCLAW_*_API_KEY`-omgevingsvariabelen zijn ingesteld, voert de gateway automatisch de installatie uit zonder interactieve aanwijzingen — detecteert de provider, voert migraties uit en seeded standaardgegevens.
+Wanneer `VBPCLAW_*_API_KEY`-omgevingsvariabelen zijn ingesteld, voert de gateway automatisch de installatie uit zonder interactieve aanwijzingen — detecteert de provider, voert migraties uit en seeded standaardgegevens.
 
-> Voor buildvarianten (OTel, Tailscale, Redis), Docker-imagetags en compose-overlays, zie de [Implementatiegids](https://docs.goclaw.sh/#deploy-docker-compose).
+> Voor buildvarianten (OTel, Tailscale, Redis), Docker-imagetags en compose-overlays, zie de [Implementatiegids](https://docs.vbpclaw.sh/#deploy-docker-compose).
 
 ## Multi-agent orkestratie
 
-GoClaw ondersteunt agentteams en inter-agent-delegatie — elke agent draait met een eigen identiteit, tools, LLM-provider en contextbestanden.
+VBPClaw ondersteunt agentteams en inter-agent-delegatie — elke agent draait met een eigen identiteit, tools, LLM-provider en contextbestanden.
 
 ### Agent-delegatie
 
@@ -170,7 +170,7 @@ Agents communiceren via expliciete **rechtenkoppelingen** met richtingscontrole 
 - **Team-postvak** — Directe peer-to-peer berichten en uitzendboodschappen
 - **Tools**: `team_tasks` voor taakbeheer, `team_message` voor het postvak
 
-> Voor delegatiedetails, rechtenkoppelingen en gelijktijdigheidscontrole, zie de [Agentteams-documentatie](https://docs.goclaw.sh/#teams-what-are-teams).
+> Voor delegatiedetails, rechtenkoppelingen en gelijktijdigheidscontrole, zie de [Agentteams-documentatie](https://docs.vbpclaw.sh/#teams-what-are-teams).
 
 ## Ingebouwde tools
 
@@ -214,19 +214,19 @@ Agents communiceren via expliciete **rechtenkoppelingen** met richtingscontrole 
 
 ## Documentatie
 
-Volledige documentatie op **[docs.goclaw.sh](https://docs.goclaw.sh)** — of blader door de broncode in [`goclaw-docs/`](https://github.com/nextlevelbuilder/goclaw-docs)
+Volledige documentatie op **[docs.vbpclaw.sh](https://docs.vbpclaw.sh)** — of blader door de broncode in [`vbpclaw-docs/`](https://github.com/nextlevelbuilder/vbpclaw-docs)
 
 | Sectie | Onderwerpen |
 |--------|-------------|
-| [Aan de slag](https://docs.goclaw.sh/#what-is-goclaw) | Installatie, Snel starten, Configuratie, Rondleiding webdashboard |
-| [Kernconcepten](https://docs.goclaw.sh/#how-goclaw-works) | Agent-loop, Sessies, Tools, Geheugen, Multi-tenancy |
-| [Agents](https://docs.goclaw.sh/#creating-agents) | Agents aanmaken, Contextbestanden, Persoonlijkheid, Delen & Toegang |
-| [Providers](https://docs.goclaw.sh/#providers-overview) | Anthropic, OpenAI, OpenRouter, Gemini, DeepSeek, +15 meer |
-| [Kanalen](https://docs.goclaw.sh/#channels-overview) | Telegram, Discord, Slack, Feishu, Zalo, WhatsApp, WebSocket |
-| [Agentteams](https://docs.goclaw.sh/#teams-what-are-teams) | Teams, Taakbord, Berichten, Delegatie & Overdracht |
-| [Geavanceerd](https://docs.goclaw.sh/#custom-tools) | Aangepaste tools, MCP, Vaardigheden, Cron, Sandbox, Hooks, RBAC |
-| [Implementatie](https://docs.goclaw.sh/#deploy-docker-compose) | Docker Compose, Database, Beveiliging, Observeerbaarheid, Tailscale |
-| [Referentie](https://docs.goclaw.sh/#cli-commands) | CLI-opdrachten, REST API, WebSocket Protocol, Omgevingsvariabelen |
+| [Aan de slag](https://docs.vbpclaw.sh/#what-is-vbpclaw) | Installatie, Snel starten, Configuratie, Rondleiding webdashboard |
+| [Kernconcepten](https://docs.vbpclaw.sh/#how-vbpclaw-works) | Agent-loop, Sessies, Tools, Geheugen, Multi-tenancy |
+| [Agents](https://docs.vbpclaw.sh/#creating-agents) | Agents aanmaken, Contextbestanden, Persoonlijkheid, Delen & Toegang |
+| [Providers](https://docs.vbpclaw.sh/#providers-overview) | Anthropic, OpenAI, OpenRouter, Gemini, DeepSeek, +15 meer |
+| [Kanalen](https://docs.vbpclaw.sh/#channels-overview) | Telegram, Discord, Slack, Feishu, Zalo, WhatsApp, WebSocket |
+| [Agentteams](https://docs.vbpclaw.sh/#teams-what-are-teams) | Teams, Taakbord, Berichten, Delegatie & Overdracht |
+| [Geavanceerd](https://docs.vbpclaw.sh/#custom-tools) | Aangepaste tools, MCP, Vaardigheden, Cron, Sandbox, Hooks, RBAC |
+| [Implementatie](https://docs.vbpclaw.sh/#deploy-docker-compose) | Docker Compose, Database, Beveiliging, Observeerbaarheid, Tailscale |
+| [Referentie](https://docs.vbpclaw.sh/#cli-commands) | CLI-opdrachten, REST API, WebSocket Protocol, Omgevingsvariabelen |
 
 ## Testen
 
@@ -241,7 +241,7 @@ Zie [CHANGELOG.md](CHANGELOG.md) voor gedetailleerde functiestatus, inclusief wa
 
 ## Dankbetuigingen
 
-GoClaw is gebouwd op het originele [OpenClaw](https://github.com/openclaw/openclaw)-project. We zijn dankbaar voor de architectuur en visie die deze Go-port hebben geïnspireerd.
+VBPClaw is gebouwd op het originele [OpenClaw](https://github.com/openclaw/openclaw)-project. We zijn dankbaar voor de architectuur en visie die deze Go-port hebben geïnspireerd.
 
 ## Licentie
 
