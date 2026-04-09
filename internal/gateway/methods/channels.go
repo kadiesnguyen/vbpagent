@@ -26,16 +26,28 @@ func (m *ChannelsMethods) Register(router *gateway.MethodRouter) {
 }
 
 func (m *ChannelsMethods) handleList(_ context.Context, client *gateway.Client, req *protocol.RequestFrame) {
+	// Channels are system-level resources — only visible to master tenant callers.
+	if client.TenantID() != store.MasterTenantID {
+		client.SendResponse(protocol.NewOKResponse(req.ID, map[string]any{
+			"channels": []string{},
+		}))
+		return
+	}
 	enabled := m.manager.GetEnabledChannels()
-
 	client.SendResponse(protocol.NewOKResponse(req.ID, map[string]any{
 		"channels": enabled,
 	}))
 }
 
 func (m *ChannelsMethods) handleStatus(_ context.Context, client *gateway.Client, req *protocol.RequestFrame) {
+	// Channels are system-level resources — only visible to master tenant callers.
+	if client.TenantID() != store.MasterTenantID {
+		client.SendResponse(protocol.NewOKResponse(req.ID, map[string]any{
+			"channels": map[string]any{},
+		}))
+		return
+	}
 	status := m.manager.GetStatus()
-
 	client.SendResponse(protocol.NewOKResponse(req.ID, map[string]any{
 		"channels": status,
 	}))

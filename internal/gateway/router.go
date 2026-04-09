@@ -156,7 +156,21 @@ func (r *MethodRouter) handleConnect(ctx context.Context, client *Client, req *p
 				client.SendResponse(protocol.NewErrorResponse(req.ID, errCode, "tenant access revoked"))
 				return
 			}
+			// If no hint was provided and user landed on MasterTenantID,
+			// auto-resolve from tenant membership so users don't leak into master.
+			if hint == "" && tid == store.MasterTenantID && params.UserID != "" && r.tenantStore != nil {
+				if resolved, err := r.tenantStore.ResolveUserTenant(ctx, params.UserID); err == nil && resolved != uuid.Nil {
+					tid = resolved
+				}
+			}
 			client.tenantID = tid
+
+			// Map tenant-level role to permissions.Role instead of hardcoded RoleAdmin.
+			if client.tenantID != uuid.Nil && client.tenantID != store.MasterTenantID && params.UserID != "" {
+				if tRole, err := r.getUserTenantRole(ctx, client.tenantID, params.UserID); err == nil && tRole != "" {
+					client.role = tenantRoleToPermission(tRole)
+				}
+			}
 		}
 		r.sendConnectResponse(ctx, client, req.ID)
 		return
@@ -257,10 +271,22 @@ func (r *MethodRouter) handleConnect(ctx context.Context, client *Client, req *p
 					r.applyTenantScope(ctx, client, hint)
 				}
 			}
+			// Auto-resolve tenant from membership if still unscoped.
+			if client.tenantID == uuid.Nil && params.UserID != "" && r.tenantStore != nil {
+				if resolved, err := r.tenantStore.ResolveUserTenant(ctx, params.UserID); err == nil && resolved != uuid.Nil {
+					client.tenantID = resolved
+				}
+			}
 			if client.tenantID == uuid.Nil {
 				client.tenantID = store.MasterTenantID
 			}
+			// Map tenant-level role instead of hardcoded RoleAdmin.
 			client.role = permissions.RoleAdmin
+			if client.tenantID != store.MasterTenantID && params.UserID != "" {
+				if tRole, err := r.getUserTenantRole(ctx, client.tenantID, params.UserID); err == nil && tRole != "" {
+					client.role = tenantRoleToPermission(tRole)
+				}
+			}
 			slog.Info("browser pairing authenticated", "sender_id", params.SenderID, "client", client.id, "tenant_id", client.tenantID, "role", client.role)
 			r.sendConnectResponse(ctx, client, req.ID)
 			return
@@ -348,6 +374,21 @@ func isOwnerID(userID string, ownerIDs []string) bool {
 		return userID == "system"
 	}
 	return slices.Contains(ownerIDs, userID)
+}
+
+// tenantRoleToPermission maps a tenant-level role to a permissions.Role.
+// Tenant "owner"/"admin" → RoleAdmin, "operator"/"member" → RoleOperator, "viewer" → RoleViewer.
+func tenantRoleToPermission(tenantRole string) permissions.Role {
+	switch tenantRole {
+	case store.TenantRoleOwner, store.TenantRoleAdmin:
+		return permissions.RoleAdmin
+	case store.TenantRoleOperator, store.TenantRoleMember:
+		return permissions.RoleOperator
+	case store.TenantRoleViewer:
+		return permissions.RoleViewer
+	default:
+		return permissions.RoleViewer
+	}
 }
 
 // resolveTenantHint resolves a tenant slug/UUID hint to a UUID with membership validation.
@@ -443,7 +484,7 @@ func (r *MethodRouter) handleHealth(ctx context.Context, client *Client, req *pr
 		}
 	}
 
-	// Connected clients list
+	// Connected clients list — filtered to the requesting client's tenant.
 	type clientInfo struct {
 		ID          string `json:"id"`
 		RemoteAddr  string `json:"remoteAddr"`
@@ -451,9 +492,15 @@ func (r *MethodRouter) handleHealth(ctx context.Context, client *Client, req *pr
 		Role        string `json:"role"`
 		ConnectedAt string `json:"connectedAt"`
 	}
+	callerTenantID := client.TenantID()
+	callerIsMaster := callerTenantID == store.MasterTenantID
 	clients := s.ClientList()
 	clientList := make([]clientInfo, 0, len(clients))
 	for _, c := range clients {
+		// Non-master callers only see clients in the same tenant.
+		if !callerIsMaster && c.TenantID() != callerTenantID {
+			continue
+		}
 		clientList = append(clientList, clientInfo{
 			ID:          c.ID(),
 			RemoteAddr:  c.RemoteAddr(),

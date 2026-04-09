@@ -31,14 +31,16 @@ export function StepAgent({ provider, model, onComplete, onBack, existingAgent }
 
   const isEditing = !!existingAgent;
 
-  // Default to first preset (Fox Spirit)
-  const defaultPreset = agentPresets[0];
+  // Pick a random preset for new agents so each agent gets a unique personality by default
+  const initialPresetIdx = (!existingAgent && agentPresets.length > 0)
+    ? Math.floor(Math.random() * agentPresets.length)
+    : null;
+
   const [description, setDescription] = useState(
-    existingAgent?.other_config?.description as string ?? defaultPreset?.prompt ?? "",
+    existingAgent?.other_config?.description as string ??
+    (initialPresetIdx !== null ? agentPresets[initialPresetIdx]?.prompt : "") ?? "",
   );
-  const [selectedPresetIdx, setSelectedPresetIdx] = useState<number | null>(
-    existingAgent ? null : 0,
-  );
+  const [selectedPresetIdx, setSelectedPresetIdx] = useState<number | null>(initialPresetIdx);
   const [selfEvolve, setSelfEvolve] = useState(
     !!(existingAgent?.other_config?.self_evolve),
   );
@@ -57,19 +59,18 @@ export function StepAgent({ provider, model, onComplete, onBack, existingAgent }
     if (selectedPresetIdx !== null && agentPresets[selectedPresetIdx]) {
       return agentPresets[selectedPresetIdx].label;
     }
-    return "Fox Spirit";
+    return "";
   }, [existingAgent, selectedPresetIdx, agentPresets]);
 
   const agentKey = useMemo(() => {
-    const slug = slugify(displayName);
-    return slug || "fox-spirit";
+    return slugify(displayName) || "agent";
   }, [displayName]);
 
   const selectedEmoji = useMemo(() => {
     if (selectedPresetIdx !== null && agentPresets[selectedPresetIdx]) {
       return agentPresets[selectedPresetIdx].emoji;
     }
-    return "🦊";
+    return undefined;
   }, [selectedPresetIdx, agentPresets]);
 
   const providerLabel = useMemo(() => {
@@ -126,7 +127,7 @@ export function StepAgent({ provider, model, onComplete, onBack, existingAgent }
       const otherConfig: Record<string, unknown> = {};
       if (description.trim()) otherConfig.description = description.trim();
       if (selfEvolve) otherConfig.self_evolve = true;
-      if (selectedEmoji) otherConfig.emoji = selectedEmoji;
+      if (selectedEmoji !== undefined) otherConfig.emoji = selectedEmoji;
 
       if (isEditing) {
         const patch: Partial<AgentData> = {

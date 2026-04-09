@@ -187,7 +187,20 @@ func resolveAuthWithBearer(r *http.Request, bearer string) authResult {
 			if !allowed {
 				return authResult{}
 			}
+			// If no tenant hint was provided and user landed on MasterTenantID,
+			// auto-resolve from tenant membership so users don't leak into master.
+			if tenantVal == "" && tenantID == store.MasterTenantID && userID != "" && pkgTenantCache != nil {
+				if resolved, err := pkgTenantCache.store.ResolveUserTenant(r.Context(), userID); err == nil && resolved != uuid.Nil {
+					tenantID = resolved
+				}
+			}
 			res.TenantID = tenantID
+			// Map tenant-level role instead of hardcoded RoleAdmin.
+			if res.TenantID != uuid.Nil && res.TenantID != store.MasterTenantID && userID != "" && pkgTenantCache != nil {
+				if tRole, err := pkgTenantCache.store.GetUserRole(r.Context(), res.TenantID, userID); err == nil && tRole != "" {
+					res.Role = httpTenantRoleToPermission(tRole)
+				}
+			}
 		}
 		if res.TenantID == uuid.Nil {
 			res.TenantID = store.MasterTenantID
@@ -230,8 +243,22 @@ func resolveAuthWithBearer(r *http.Request, bearer string) authResult {
 					tenantID = scoped
 				}
 			}
+			// Auto-resolve tenant from membership if still on master.
+			userID := extractUserID(r)
+			if tenantID == store.MasterTenantID && userID != "" && pkgTenantCache != nil {
+				if resolved, err := pkgTenantCache.store.ResolveUserTenant(r.Context(), userID); err == nil && resolved != uuid.Nil {
+					tenantID = resolved
+				}
+			}
+			// Map tenant-level role instead of hardcoded RoleAdmin.
+			pairingRole := permissions.RoleAdmin
+			if tenantID != store.MasterTenantID && userID != "" && pkgTenantCache != nil {
+				if tRole, err := pkgTenantCache.store.GetUserRole(r.Context(), tenantID, userID); err == nil && tRole != "" {
+					pairingRole = httpTenantRoleToPermission(tRole)
+				}
+			}
 			return authResult{
-				Role:          permissions.RoleAdmin,
+				Role:          pairingRole,
 				Authenticated: true,
 				TenantID:      tenantID,
 				TenantSlug:    resolveTenantSlug(r.Context(), tenantID),
@@ -305,6 +332,21 @@ func resolveTenantHint(ctx context.Context, hint, userID string) (uuid.UUID, boo
 		return uuid.Nil, false
 	}
 	return tid, true
+}
+
+// httpTenantRoleToPermission maps a tenant-level role to a permissions.Role.
+// Tenant "owner"/"admin" → RoleAdmin, "operator"/"member" → RoleOperator, "viewer" → RoleViewer.
+func httpTenantRoleToPermission(tenantRole string) permissions.Role {
+	switch tenantRole {
+	case store.TenantRoleOwner, store.TenantRoleAdmin:
+		return permissions.RoleAdmin
+	case store.TenantRoleOperator, store.TenantRoleMember:
+		return permissions.RoleOperator
+	case store.TenantRoleViewer:
+		return permissions.RoleViewer
+	default:
+		return permissions.RoleViewer
+	}
 }
 
 // httpMinRole returns the minimum role required for an HTTP endpoint based on HTTP method.

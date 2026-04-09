@@ -301,13 +301,15 @@ func (h *AgentsHandler) handleUpdate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Only owner can update
+	// Only owner can update (tenant admin/owner may also update any agent in their tenant)
 	ag, err := h.agents.GetByID(r.Context(), id)
 	if err != nil {
 		writeError(w, http.StatusNotFound, protocol.ErrNotFound, i18n.T(locale, i18n.MsgNotFound, "agent", id.String()))
 		return
 	}
-	if userID != "" && ag.OwnerID != userID && !h.isOwnerUser(userID) {
+	role := store.RoleFromContext(r.Context())
+	isTenantAdmin := role == string(permissions.RoleAdmin) || role == string(permissions.RoleOwner)
+	if userID != "" && ag.OwnerID != userID && !h.isOwnerUser(userID) && !isTenantAdmin {
 		writeError(w, http.StatusForbidden, protocol.ErrUnauthorized, i18n.T(locale, i18n.MsgOwnerOnly, "update agent"))
 		return
 	}
@@ -429,13 +431,15 @@ func (h *AgentsHandler) handleDelete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Only owner can delete
+	// Only owner can delete (tenant admin/owner may also delete any agent in their tenant)
 	ag, err := h.agents.GetByID(r.Context(), id)
 	if err != nil {
 		writeError(w, http.StatusNotFound, protocol.ErrNotFound, i18n.T(locale, i18n.MsgNotFound, "agent", id.String()))
 		return
 	}
-	if userID != "" && ag.OwnerID != userID && !h.isOwnerUser(userID) {
+	deleteRole := store.RoleFromContext(r.Context())
+	isTenantAdmin := deleteRole == string(permissions.RoleAdmin) || deleteRole == string(permissions.RoleOwner)
+	if userID != "" && ag.OwnerID != userID && !h.isOwnerUser(userID) && !isTenantAdmin {
 		writeError(w, http.StatusForbidden, protocol.ErrUnauthorized, i18n.T(locale, i18n.MsgOwnerOnly, "delete agent"))
 		return
 	}
