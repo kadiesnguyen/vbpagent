@@ -1,0 +1,63 @@
+# Google Workspace MCP overlay
+# Usage: docker compose -f docker-compose.yml -f docker-compose.postgres.yml -f docker-compose.google-workspace.yml up -d --build
+#
+# Required env vars (set in .env):
+#   GOOGLE_CLIENT_ID     — OAuth 2.0 Client ID (Desktop app type)
+#   GOOGLE_CLIENT_SECRET — OAuth 2.0 Client Secret
+
+services:
+  google-workspace-mcp:
+    build:
+      context: ./mcp-server/google-workspace
+      dockerfile: Dockerfile
+    image: vbpclaw/google-workspace-mcp:latest
+    environment:
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET:-}
+      - WORKSPACE_DIR=/app/workspace
+    volumes:
+      - google-workspace-data:/data
+      - vbpclaw-workspace:/app/workspace:ro
+    networks:
+      - vbpclaw-net
+    restart: unless-stopped
+    mem_limit: 1536m
+    mem_reservation: 128m
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3100/mcp', r => process.exit(r.statusCode < 500 ? 0 : 1)).on('error', () => process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  oauth-service:
+    build:
+      context: ./mcp-server/oauth-service
+      dockerfile: Dockerfile
+    image: vbpclaw/oauth-service:latest
+    environment:
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET:-}
+      - REDIRECT_URI=https://vbpagent.com/oauth/callback
+      - PORT=9876
+    volumes:
+      - google-workspace-data:/data
+    ports:
+      - "127.0.0.1:9876:9876"
+    networks:
+      - vbpclaw-net
+    restart: unless-stopped
+    mem_limit: 256m
+    mem_reservation: 32m
+
+  vbpclaw:
+    depends_on:
+      - google-workspace-mcp
+      - oauth-service
+
+volumes:
+  google-workspace-data:
+    external: true
+    name: vbpclaw_google-workspace-data
+  vbpclaw-workspace:
+    external: true
+    name: vbpclaw_vbpclaw-workspace

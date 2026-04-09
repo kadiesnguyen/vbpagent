@@ -10,7 +10,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/nextlevelbuilder/goclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
 )
 
 const (
@@ -152,16 +152,37 @@ func (s *PGPairingStore) RevokePairing(ctx context.Context, senderID, channel st
 }
 
 func (s *PGPairingStore) IsPaired(ctx context.Context, senderID, channel string) (bool, error) {
-	tid := tenantIDForInsert(ctx)
-	var count int64
-	err := s.db.QueryRowContext(ctx,
-		"SELECT COUNT(*) FROM paired_devices WHERE sender_id = $1 AND channel = $2 AND tenant_id = $3 AND (expires_at IS NULL OR expires_at > NOW())",
-		senderID, channel, tid,
-	).Scan(&count)
+	d, err := s.GetPairedDevice(ctx, senderID, channel)
 	if err != nil {
-		return false, fmt.Errorf("pairing check query: %w", err)
+		return false, err
 	}
-	return count > 0, nil
+	return d != nil, nil
+}
+
+// GetPairedDevice performs a cross-tenant lookup for the given sender+channel.
+// Returns the device (including its tenant_id) or nil if not found/expired.
+func (s *PGPairingStore) GetPairedDevice(ctx context.Context, senderID, channel string) (*store.PairedDeviceData, error) {
+	var d store.PairedDeviceData
+	var pairedAt time.Time
+	var metaJSON []byte
+	err := s.db.QueryRowContext(ctx,
+		`SELECT sender_id, channel, chat_id, paired_by, paired_at, COALESCE(metadata, '{}'), tenant_id
+		 FROM paired_devices
+		 WHERE sender_id = $1 AND channel = $2 AND (expires_at IS NULL OR expires_at > NOW())
+		 LIMIT 1`,
+		senderID, channel,
+	).Scan(&d.SenderID, &d.Channel, &d.ChatID, &d.PairedBy, &pairedAt, &metaJSON, &d.TenantID)
+	if err == sql.ErrNoRows {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, fmt.Errorf("pairing check query: %w", err)
+	}
+	d.PairedAt = pairedAt.UnixMilli()
+	if len(metaJSON) > 0 {
+		json.Unmarshal(metaJSON, &d.Metadata)
+	}
+	return &d, nil
 }
 
 func (s *PGPairingStore) ListPending(ctx context.Context) []store.PairingRequestData {

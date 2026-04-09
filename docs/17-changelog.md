@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to GoClaw Gateway are documented here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+All notable changes to VBPClaw Gateway are documented here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
@@ -31,15 +31,15 @@ All notable changes to GoClaw Gateway are documented here. Format follows [Keep 
 - **Input validation**: Regex + MaxBytesReader (4096 bytes) for package names to prevent injection
 
 #### Docker Security Hardening (2026-03-17)
-- **Privilege separation**: Entrypoint drops privileges to non-root goclaw user after installing packages
-- **pkg-helper service**: Started as root, listens on Unix socket with 0660 permissions (root:goclaw group)
+- **Privilege separation**: Entrypoint drops privileges to non-root vbpclaw user after installing packages
+- **pkg-helper service**: Started as root, listens on Unix socket with 0660 permissions (root:vbpclaw group)
 - **Runtime directories**: Python and Node.js packages install to writable `/app/data/.runtime` directories
 - **su-exec integration**: Used instead of USER directive for cleaner privilege transition
 - **Docker capabilities**: Added SETUID/SETGID/CHOWN/DAC_OVERRIDE for pkg-helper and user switching
 - **Environment variables**: PIP_TARGET, NPM_CONFIG_PREFIX, PYTHONPATH configured for runtime installs
 
 #### Auth Fix (2026-03-17)
-- **Empty gateway token handling**: When GOCLAW_GATEWAY_TOKEN is empty (dev/single-user mode), all requests get admin role
+- **Empty gateway token handling**: When VBPCLAW_GATEWAY_TOKEN is empty (dev/single-user mode), all requests get admin role
 - **CLI credentials access**: Admin-only endpoints (/v1/cli-credentials) now accessible in dev mode
 
 #### Team Workspace Improvements (2026-03-16)
@@ -76,7 +76,7 @@ All notable changes to GoClaw Gateway are documented here. Format follows [Keep 
 
 #### Internationalization (i18n) Expansion (2026-03-15)
 - **Complete web UI localization**: Full internationalization for en/vi/zh across all UI components
-- **Config centralization**: Centralized hardcoded ~/.goclaw paths via config resolution
+- **Config centralization**: Centralized hardcoded ~/.vbpclaw paths via config resolution
 - **Channel DM streaming**: Enable DM streaming by default with i18n field support
 
 #### Provider Enhancements (2026-03-14 - 2026-03-16)
@@ -131,7 +131,7 @@ All notable changes to GoClaw Gateway are documented here. Format follows [Keep 
 
 - **Docker entrypoint**: Reimplemented for privilege separation with pkg-helper lifecycle management
 - **Team workspace refactor**: Removed legacy `workspace_read`/`workspace_write` tools in favor of file tools for team workspace
-- **Config hardcoding**: Centralized ~/goclaw paths via config resolution instead of hardcoded values
+- **Config hardcoding**: Centralized ~/vbpclaw paths via config resolution instead of hardcoded values
 - **Workspace media files**: Preserve workspace media files during subtree lazy-loading
 
 ### Fixed
@@ -193,7 +193,7 @@ All notable changes to GoClaw Gateway are documented here. Format follows [Keep 
 
 ### v1.0.0 and Earlier
 
-- Initial release of GoClaw Gateway with Anthropic and OpenAI-compatible providers
+- Initial release of VBPClaw Gateway with Anthropic and OpenAI-compatible providers
 - WebSocket RPC v3 protocol and HTTP API
 - PostgreSQL multi-tenant backend with pgvector embeddings
 - Agent loop with think→act→observe cycle

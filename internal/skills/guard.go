@@ -23,7 +23,7 @@ type guardRule struct {
 // Focus: shell injection, destructive ops, obfuscated payloads, credential exfil,
 // path traversal, SQL injection, privilege escalation.
 //
-// Not exhaustive — GoClaw's exec tool has its own runtime deny-list.
+// Not exhaustive — VBPClaw's exec tool has its own runtime deny-list.
 // This scanner runs BEFORE the file is written, blocking poisoned skills at creation time.
 var skillGuardRules = []guardRule{
 	// --- Destructive shell operations ---
@@ -47,7 +47,7 @@ var skillGuardRules = []guardRule{
 	{regexp.MustCompile(`(?i)/etc/shadow\b`),                        "shadow password file access"},
 	{regexp.MustCompile(`(?i)\.ssh/id_rsa`),                         "private SSH key access"},
 	{regexp.MustCompile(`(?i)AWS_SECRET_ACCESS_KEY`),                "AWS credential reference"},
-	{regexp.MustCompile(`(?i)GOCLAW_DB_URL\b`),                     "GoClaw database credential"},
+	{regexp.MustCompile(`(?i)VBPCLAW_DB_URL\b`),                     "VBPClaw database credential"},
 	{regexp.MustCompile(`(?i)(curl|wget)\s+\S+.*\$\{?(HOME|USER|PASS|KEY|SECRET|TOKEN)`), "env var exfiltration via HTTP"},
 
 	// --- Path traversal ---

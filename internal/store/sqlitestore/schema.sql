@@ -1,4 +1,4 @@
--- GoClaw SQLite Schema (auto-translated from PG migrations 000001-000029)
+-- VBPClaw SQLite Schema (auto-translated from PG migrations 000001-000029)
 --
 -- Translation rules applied:
 --   UUID          → TEXT (36-char string)

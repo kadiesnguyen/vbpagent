@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="../_statics/goclaw.png" alt="GoClaw" />
+  <img src="../_statics/vbpclaw.png" alt="VBPClaw" />
 </p>
 
-<h1 align="center">GoClaw</h1>
+<h1 align="center">VBPClaw</h1>
 
 <p align="center"><strong>Enterprise AI Agent Platform</strong></p>
 
@@ -12,8 +12,8 @@ Single binary. Production-tested. Agents that orchestrate for you.
 </p>
 
 <p align="center">
-  <a href="https://docs.goclaw.sh">Documentație</a> •
-  <a href="https://docs.goclaw.sh/#quick-start">Pornire Rapidă</a> •
+  <a href="https://docs.vbpclaw.sh">Documentație</a> •
+  <a href="https://docs.vbpclaw.sh/#quick-start">Pornire Rapidă</a> •
   <a href="https://x.com/nlb_io">Twitter / X</a>
 </p>
 
@@ -28,7 +28,7 @@ Single binary. Production-tested. Agents that orchestrate for you.
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="License: MIT" />
 </p>
 
-**GoClaw** este un gateway AI multi-agent care conectează LLM-uri la instrumentele, canalele și datele tale — implementat ca un singur binar Go fără dependențe de rulare. Orchestrează echipe de agenți și delegare inter-agent prin 20+ furnizori LLM cu izolare completă multi-tenant.
+**VBPClaw** este un gateway AI multi-agent care conectează LLM-uri la instrumentele, canalele și datele tale — implementat ca un singur binar Go fără dependențe de rulare. Orchestrează echipe de agenți și delegare inter-agent prin 20+ furnizori LLM cu izolare completă multi-tenant.
 
 Un port Go al [OpenClaw](https://github.com/openclaw/openclaw) cu securitate îmbunătățită, PostgreSQL multi-tenant și observabilitate la nivel de producție.
 
@@ -80,7 +80,7 @@ Un port Go al [OpenClaw](https://github.com/openclaw/openclaw) cu securitate îm
 
 ## Ecosistemul Claw
 
-|                 | OpenClaw        | ZeroClaw | PicoClaw | **GoClaw**                              |
+|                 | OpenClaw        | ZeroClaw | PicoClaw | **VBPClaw**                              |
 | --------------- | --------------- | -------- | -------- | --------------------------------------- |
 | Limbaj          | TypeScript      | Rust     | Go       | **Go**                                  |
 | Dimensiune binar | 28 MB + Node.js | 3.4 MB   | ~8 MB    | **~25 MB** (de bază) / **~36 MB** (+ OTel) |
@@ -89,7 +89,7 @@ Un port Go al [OpenClaw](https://github.com/openclaw/openclaw) cu securitate îm
 | Pornire         | > 5 s           | < 10 ms  | < 1 s    | **< 1 s**                               |
 | Hardware țintă  | Mac Mini $599+  | edge $10 | edge $10 | **VPS $5+**                             |
 
-| Funcționalitate               | OpenClaw                             | ZeroClaw                                     | PicoClaw                              | **GoClaw**                     |
+| Funcționalitate               | OpenClaw                             | ZeroClaw                                     | PicoClaw                              | **VBPClaw**                     |
 | ----------------------------- | ------------------------------------ | -------------------------------------------- | ------------------------------------- | ------------------------------ |
 | Multi-tenant (PostgreSQL)     | —                                    | —                                            | —                                     | ✅                             |
 | Integrare MCP                 | — (folosește ACP)                    | —                                            | —                                     | ✅ (stdio/SSE/streamable-http) |
@@ -110,7 +110,7 @@ Un port Go al [OpenClaw](https://github.com/openclaw/openclaw) cu securitate îm
 ## Arhitectură
 
 <p align="center">
-  <img src="../_statics/architecture.jpg" alt="GoClaw Architecture" width="800" />
+  <img src="../_statics/architecture.jpg" alt="VBPClaw Architecture" width="800" />
 </p>
 
 ## Pornire Rapidă
@@ -120,10 +120,10 @@ Un port Go al [OpenClaw](https://github.com/openclaw/openclaw) cu securitate îm
 ### Din Sursă
 
 ```bash
-git clone https://github.com/nextlevelbuilder/goclaw.git && cd goclaw
+git clone https://github.com/nextlevelbuilder/vbpclaw.git && cd vbpclaw
 make build
-./goclaw onboard        # Asistent interactiv de configurare
-source .env.local && ./goclaw
+./vbpclaw onboard        # Asistent interactiv de configurare
+source .env.local && ./vbpclaw
 ```
 
 ### Cu Docker
@@ -132,20 +132,20 @@ source .env.local && ./goclaw
 # Generează .env cu secrete auto-generate
 chmod +x prepare-env.sh && ./prepare-env.sh
 
-# Adaugă cel puțin un GOCLAW_*_API_KEY în .env, apoi:
+# Adaugă cel puțin un VBPCLAW_*_API_KEY în .env, apoi:
 make up
 
 # Tablou de bord web la http://localhost:18790
 # Verificare stare: curl http://localhost:18790/health
 ```
 
-Când variabilele de mediu `GOCLAW_*_API_KEY` sunt setate, gateway-ul se configurează automat fără prompturi interactive — detectează furnizorul, rulează migrările și inițializează datele implicite.
+Când variabilele de mediu `VBPCLAW_*_API_KEY` sunt setate, gateway-ul se configurează automat fără prompturi interactive — detectează furnizorul, rulează migrările și inițializează datele implicite.
 
-> Pentru variante de build (OTel, Tailscale, Redis), etichete imagini Docker și suprapuneri compose, consultați [Ghidul de Implementare](https://docs.goclaw.sh/#deploy-docker-compose).
+> Pentru variante de build (OTel, Tailscale, Redis), etichete imagini Docker și suprapuneri compose, consultați [Ghidul de Implementare](https://docs.vbpclaw.sh/#deploy-docker-compose).
 
 ## Orchestrare Multi-Agent
 
-GoClaw suportă echipe de agenți și delegare inter-agent — fiecare agent rulează cu propria identitate, instrumente, furnizor LLM și fișiere de context.
+VBPClaw suportă echipe de agenți și delegare inter-agent — fiecare agent rulează cu propria identitate, instrumente, furnizor LLM și fișiere de context.
 
 ### Delegare Agent
 
@@ -170,7 +170,7 @@ Agenții comunică prin **linkuri de permisiune** explicite cu control direcțio
 - **Cutie poștală echipă** — Mesagerie directă peer-to-peer și transmisii
 - **Instrumente**: `team_tasks` pentru gestionarea sarcinilor, `team_message` pentru cutia poștală
 
-> Pentru detalii despre delegare, linkuri de permisiune și control concurență, consultați [documentația Echipe de Agenți](https://docs.goclaw.sh/#teams-what-are-teams).
+> Pentru detalii despre delegare, linkuri de permisiune și control concurență, consultați [documentația Echipe de Agenți](https://docs.vbpclaw.sh/#teams-what-are-teams).
 
 ## Instrumente Integrate
 
@@ -214,19 +214,19 @@ Agenții comunică prin **linkuri de permisiune** explicite cu control direcțio
 
 ## Documentație
 
-Documentație completă la **[docs.goclaw.sh](https://docs.goclaw.sh)** — sau parcurge sursa în [`goclaw-docs/`](https://github.com/nextlevelbuilder/goclaw-docs)
+Documentație completă la **[docs.vbpclaw.sh](https://docs.vbpclaw.sh)** — sau parcurge sursa în [`vbpclaw-docs/`](https://github.com/nextlevelbuilder/vbpclaw-docs)
 
 | Secțiune | Subiecte |
 |---------|--------|
-| [Începere](https://docs.goclaw.sh/#what-is-goclaw) | Instalare, Pornire Rapidă, Configurare, Tur Tablou de Bord Web |
-| [Concepte de Bază](https://docs.goclaw.sh/#how-goclaw-works) | Bucla Agent, Sesiuni, Instrumente, Memorie, Multi-Tenant |
-| [Agenți](https://docs.goclaw.sh/#creating-agents) | Creare Agenți, Fișiere Context, Personalitate, Partajare și Acces |
-| [Furnizori](https://docs.goclaw.sh/#providers-overview) | Anthropic, OpenAI, OpenRouter, Gemini, DeepSeek, +15 alții |
-| [Canale](https://docs.goclaw.sh/#channels-overview) | Telegram, Discord, Slack, Feishu, Zalo, WhatsApp, WebSocket |
-| [Echipe de Agenți](https://docs.goclaw.sh/#teams-what-are-teams) | Echipe, Panou Sarcini, Mesagerie, Delegare și Handoff |
-| [Avansat](https://docs.goclaw.sh/#custom-tools) | Instrumente Personalizate, MCP, Skill-uri, Cron, Sandbox, Hook-uri, RBAC |
-| [Implementare](https://docs.goclaw.sh/#deploy-docker-compose) | Docker Compose, Bază de Date, Securitate, Observabilitate, Tailscale |
-| [Referință](https://docs.goclaw.sh/#cli-commands) | Comenzi CLI, REST API, Protocol WebSocket, Variabile de Mediu |
+| [Începere](https://docs.vbpclaw.sh/#what-is-vbpclaw) | Instalare, Pornire Rapidă, Configurare, Tur Tablou de Bord Web |
+| [Concepte de Bază](https://docs.vbpclaw.sh/#how-vbpclaw-works) | Bucla Agent, Sesiuni, Instrumente, Memorie, Multi-Tenant |
+| [Agenți](https://docs.vbpclaw.sh/#creating-agents) | Creare Agenți, Fișiere Context, Personalitate, Partajare și Acces |
+| [Furnizori](https://docs.vbpclaw.sh/#providers-overview) | Anthropic, OpenAI, OpenRouter, Gemini, DeepSeek, +15 alții |
+| [Canale](https://docs.vbpclaw.sh/#channels-overview) | Telegram, Discord, Slack, Feishu, Zalo, WhatsApp, WebSocket |
+| [Echipe de Agenți](https://docs.vbpclaw.sh/#teams-what-are-teams) | Echipe, Panou Sarcini, Mesagerie, Delegare și Handoff |
+| [Avansat](https://docs.vbpclaw.sh/#custom-tools) | Instrumente Personalizate, MCP, Skill-uri, Cron, Sandbox, Hook-uri, RBAC |
+| [Implementare](https://docs.vbpclaw.sh/#deploy-docker-compose) | Docker Compose, Bază de Date, Securitate, Observabilitate, Tailscale |
+| [Referință](https://docs.vbpclaw.sh/#cli-commands) | Comenzi CLI, REST API, Protocol WebSocket, Variabile de Mediu |
 
 ## Testare
 
@@ -241,7 +241,7 @@ Consultați [CHANGELOG.md](CHANGELOG.md) pentru starea detaliată a funcționali
 
 ## Mulțumiri
 
-GoClaw este construit pe baza proiectului original [OpenClaw](https://github.com/openclaw/openclaw). Suntem recunoscători pentru arhitectura și viziunea care au inspirat acest port Go.
+VBPClaw este construit pe baza proiectului original [OpenClaw](https://github.com/openclaw/openclaw). Suntem recunoscători pentru arhitectura și viziunea care au inspirat acest port Go.
 
 ## Licență
 

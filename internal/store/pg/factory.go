@@ -3,8 +3,8 @@ package pg
 import (
 	"fmt"
 
-	"github.com/nextlevelbuilder/goclaw/internal/config"
-	"github.com/nextlevelbuilder/goclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/config"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
 )
 
 // NewPGStores creates all stores backed by Postgres.

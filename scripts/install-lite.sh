@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
-# GoClaw Lite (Desktop) installer — downloads the latest .app from GitHub Releases.
+# VBPClaw Lite (Desktop) installer — downloads the latest .app from GitHub Releases.
 #
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/nextlevelbuilder/goclaw/main/scripts/install-lite.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/nextlevelbuilder/vbpclaw/main/scripts/install-lite.sh | bash
 #   curl -fsSL ... | bash -s -- --version lite-v0.1.0
 #
 # macOS only. Windows users: download .zip from GitHub Releases.
 
 set -euo pipefail
 
-REPO="nextlevelbuilder/goclaw"
+REPO="nextlevelbuilder/vbpclaw"
 INSTALL_DIR="/Applications"
 VERSION=""
 
@@ -19,7 +19,7 @@ while [[ $# -gt 0 ]]; do
     --version) VERSION="$2"; shift 2 ;;
     --help|-h)
       echo "Usage: install-lite.sh [--version lite-v1.0.0]"
-      echo "  Downloads and installs GoClaw Lite desktop app to /Applications/"
+      echo "  Downloads and installs VBPClaw Lite desktop app to /Applications/"
       exit 0
       ;;
     *) echo "Unknown option: $1"; exit 1 ;;
@@ -58,10 +58,10 @@ if [[ -z "$VERSION" ]]; then
 fi
 
 SEMVER="${VERSION#lite-v}"
-echo "→ Installing GoClaw Lite v${SEMVER} (${ARCH})..."
+echo "→ Installing VBPClaw Lite v${SEMVER} (${ARCH})..."
 
 # ── Download ──
-ASSET="goclaw-lite-${SEMVER}-darwin-${ARCH}.tar.gz"
+ASSET="vbpclaw-lite-${SEMVER}-darwin-${ARCH}.tar.gz"
 URL="https://github.com/$REPO/releases/download/$VERSION/$ASSET"
 TMPDIR=$(mktemp -d)
 trap 'rm -rf "$TMPDIR"' EXIT
@@ -77,26 +77,26 @@ fi
 echo "→ Extracting..."
 tar xzf "$TMPDIR/$ASSET" -C "$TMPDIR"
 
-if [[ ! -d "$TMPDIR/goclaw-lite.app" ]]; then
-  echo "❌ Archive does not contain goclaw-lite.app"
+if [[ ! -d "$TMPDIR/vbpclaw-lite.app" ]]; then
+  echo "❌ Archive does not contain vbpclaw-lite.app"
   exit 1
 fi
 
 # ── Install ──
-TARGET="$INSTALL_DIR/goclaw-lite.app"
+TARGET="$INSTALL_DIR/vbpclaw-lite.app"
 if [[ -d "$TARGET" ]]; then
   echo "→ Removing existing installation..."
   rm -rf "$TARGET"
 fi
 
 echo "→ Installing to $TARGET..."
-cp -R "$TMPDIR/goclaw-lite.app" "$TARGET"
+cp -R "$TMPDIR/vbpclaw-lite.app" "$TARGET"
 
 # Remove quarantine attribute (unsigned app)
 xattr -rd com.apple.quarantine "$TARGET" 2>/dev/null || true
 
 echo ""
-echo "✅ GoClaw Lite v${SEMVER} installed to $TARGET"
+echo "✅ VBPClaw Lite v${SEMVER} installed to $TARGET"
 echo ""
-echo "→ Launching GoClaw Lite..."
+echo "→ Launching VBPClaw Lite..."
 open "$TARGET"

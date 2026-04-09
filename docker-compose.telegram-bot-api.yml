@@ -1,0 +1,28 @@
+services:
+  telegram-bot-api:
+    image: ghcr.io/bots-house/docker-telegram-bot-api:latest
+    restart: unless-stopped
+    user: "1000:1000"
+    entrypoint: ["/bin/sh", "-c", "exec /usr/local/bin/telegram-bot-api --local --api-id=$TELEGRAM_API_ID --api-hash=$TELEGRAM_API_HASH --http-port=8081 --dir=/var/lib/telegram-bot-api --temp-dir=/var/lib/telegram-bot-api/tmp"]
+    environment:
+      - TELEGRAM_API_ID=${TELEGRAM_API_ID}
+      - TELEGRAM_API_HASH=${TELEGRAM_API_HASH}
+    volumes:
+      - telegram-bot-api-data:/var/lib/telegram-bot-api
+    ports:
+      - "127.0.0.1:8081:8081"
+    networks:
+      - vbpclaw-net
+    healthcheck:
+      test: ["CMD-SHELL", "echo '' | nc -w2 127.0.0.1 8081 && exit 0 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    mem_limit: 512m
+    mem_reservation: 64m
+
+volumes:
+  telegram-bot-api-data:
+    external: true
+    name: vbpclaw_telegram-bot-api-data

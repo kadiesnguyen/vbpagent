@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/nextlevelbuilder/goclaw/internal/bus"
+	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
 )
 
 // downloadMessageResource downloads a message attachment (image, file, audio, video, sticker).

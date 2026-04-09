@@ -11,8 +11,8 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/nextlevelbuilder/goclaw/internal/crypto"
-	"github.com/nextlevelbuilder/goclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/crypto"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
 )
 
 // SQLiteProviderStore implements store.ProviderStore backed by SQLite.

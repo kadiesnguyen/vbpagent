@@ -11,7 +11,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/nextlevelbuilder/goclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
 )
 
 // SQLiteSnapshotStore implements store.SnapshotStore backed by SQLite.
@@ -45,9 +45,9 @@ func (s *SQLiteSnapshotStore) UpsertSnapshots(ctx context.Context, snapshots []s
 }
 
 func (s *SQLiteSnapshotStore) upsertBatch(ctx context.Context, snapshots []store.UsageSnapshot) error {
-	tenantID := store.TenantIDFromContext(ctx)
-	if tenantID == uuid.Nil {
-		tenantID = store.MasterTenantID
+	ctxTenantID := store.TenantIDFromContext(ctx)
+	if ctxTenantID == uuid.Nil {
+		ctxTenantID = store.MasterTenantID
 	}
 
 	placeholderRow := "(" + strings.Repeat("?, ", snapshotFieldCount-1) + "?)"
@@ -55,6 +55,10 @@ func (s *SQLiteSnapshotStore) upsertBatch(ctx context.Context, snapshots []store
 	var args []any
 
 	for i, snap := range snapshots {
+		rowTenantID := snap.TenantID
+		if rowTenantID == uuid.Nil {
+			rowTenantID = ctxTenantID
+		}
 		vals[i] = placeholderRow
 		args = append(args,
 			snap.BucketHour, nilUUID(snap.AgentID), snap.Provider, snap.Model, snap.Channel,
@@ -62,7 +66,7 @@ func (s *SQLiteSnapshotStore) upsertBatch(ctx context.Context, snapshots []store
 			snap.TotalCost, snap.RequestCount, snap.LLMCallCount, snap.ToolCallCount,
 			snap.ErrorCount, snap.UniqueUsers, snap.AvgDurationMS,
 			snap.MemoryDocs, snap.MemoryChunks, snap.KGEntities, snap.KGRelations,
-			tenantID,
+			rowTenantID,
 		)
 	}
 

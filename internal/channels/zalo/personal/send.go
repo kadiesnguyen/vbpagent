@@ -6,10 +6,10 @@ import (
 	"log/slog"
 	"strings"
 
-	"github.com/nextlevelbuilder/goclaw/internal/bus"
-	"github.com/nextlevelbuilder/goclaw/internal/channels/typing"
-	"github.com/nextlevelbuilder/goclaw/internal/channels/zalo"
-	"github.com/nextlevelbuilder/goclaw/internal/channels/zalo/personal/protocol"
+	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
+	"github.com/nextlevelbuilder/vbpclaw/internal/channels/typing"
+	"github.com/nextlevelbuilder/vbpclaw/internal/channels/zalo"
+	"github.com/nextlevelbuilder/vbpclaw/internal/channels/zalo/personal/protocol"
 )
 
 const maxTextLength = 2000

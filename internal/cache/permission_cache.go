@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/nextlevelbuilder/goclaw/internal/bus"
+	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
 )
 
 // agentAccessEntry caches agent access check results.

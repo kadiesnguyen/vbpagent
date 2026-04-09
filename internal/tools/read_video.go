@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/nextlevelbuilder/goclaw/internal/providers"
+	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
 )
 
 // --- Context helpers for media video ---

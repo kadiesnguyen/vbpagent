@@ -9,7 +9,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/nextlevelbuilder/goclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
 )
 
 // PGSnapshotStore implements store.SnapshotStore backed by Postgres.
@@ -40,14 +40,19 @@ func (s *PGSnapshotStore) UpsertSnapshots(ctx context.Context, snapshots []store
 }
 
 func (s *PGSnapshotStore) upsertBatch(ctx context.Context, snapshots []store.UsageSnapshot) error {
-	tenantID := store.TenantIDFromContext(ctx)
-	if tenantID == uuid.Nil {
-		tenantID = store.MasterTenantID
+	ctxTenantID := store.TenantIDFromContext(ctx)
+	if ctxTenantID == uuid.Nil {
+		ctxTenantID = store.MasterTenantID
 	}
 
 	var vals []string
 	var args []any
 	for i, snap := range snapshots {
+		// Per-row tenant: use snap.TenantID if set by aggregator; fall back to context tenant.
+		rowTenantID := snap.TenantID
+		if rowTenantID == uuid.Nil {
+			rowTenantID = ctxTenantID
+		}
 		base := i * snapshotFieldCount
 		placeholders := make([]string, snapshotFieldCount)
 		for j := range snapshotFieldCount {
@@ -60,7 +65,7 @@ func (s *PGSnapshotStore) upsertBatch(ctx context.Context, snapshots []store.Usa
 			snap.TotalCost, snap.RequestCount, snap.LLMCallCount, snap.ToolCallCount,
 			snap.ErrorCount, snap.UniqueUsers, snap.AvgDurationMS,
 			snap.MemoryDocs, snap.MemoryChunks, snap.KGEntities, snap.KGRelations,
-			tenantID,
+			rowTenantID,
 		)
 	}
 

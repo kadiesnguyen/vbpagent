@@ -1,6 +1,6 @@
 {
   "onboarding": {
-    "welcome": "GoClaw Setup",
+    "welcome": "VBPClaw Setup",
     "welcomeDesc": "Let's get your gateway up and running",
     "providerStep": "Configure Provider",
     "providerStepDesc": "Select an AI provider and enter your credentials.",
@@ -60,7 +60,7 @@
     "teams": "Nhóm"
   },
   "about": {
-    "title": "GoClaw Lite",
+    "title": "VBPClaw Lite",
     "subtitle": "Desktop Edition",
     "version": "Version",
     "edition": "Edition",
@@ -152,7 +152,7 @@
     "createFailed": "Failed to create"
   },
   "update": {
-    "available": "GoClaw Lite v{{version}} đã có bản mới",
+    "available": "VBPClaw Lite v{{version}} đã có bản mới",
     "now": "Cập nhật ngay",
     "downloading": "Đang tải bản cập nhật...",
     "ready": "Đã cài đặt! Khởi động lại để áp dụng.",

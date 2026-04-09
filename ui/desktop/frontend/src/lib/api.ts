@@ -1,4 +1,4 @@
-// HTTP API client for GoClaw REST endpoints
+// HTTP API client for VBPClaw REST endpoints
 
 class ApiError extends Error {
   constructor(
@@ -22,11 +22,11 @@ class ApiClient {
 
   private headers(extra?: Record<string, string>): Record<string, string> {
     // Send locale for i18n error messages from backend
-    const lang = typeof localStorage !== 'undefined' ? localStorage.getItem('goclaw:language') : null
+    const lang = typeof localStorage !== 'undefined' ? localStorage.getItem('vbpclaw:language') : null
     return {
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
-      'X-GoClaw-User-Id': 'system',
+      'X-VBPClaw-User-Id': 'system',
       ...(lang ? { 'Accept-Language': lang } : {}),
       ...extra,
     }
@@ -127,7 +127,7 @@ class ApiClient {
       method: 'PUT',
       headers: {
         Authorization: `Bearer ${this.token}`,
-        'X-GoClaw-User-Id': 'system',
+        'X-VBPClaw-User-Id': 'system',
       },
     })
     if (!res.ok) {
@@ -149,7 +149,7 @@ class ApiClient {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${this.token}`,
-        'X-GoClaw-User-Id': 'system',
+        'X-VBPClaw-User-Id': 'system',
       },
       body: form,
     })

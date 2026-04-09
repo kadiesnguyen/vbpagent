@@ -1,4 +1,4 @@
-module github.com/nextlevelbuilder/goclaw
+module github.com/nextlevelbuilder/vbpclaw
 
 go 1.26.0
 

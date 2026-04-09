@@ -125,7 +125,7 @@ flowchart LR
     end
 ```
 
-`GOCLAW_ENCRYPTION_KEY` accepts three formats:
+`VBPCLAW_ENCRYPTION_KEY` accepts three formats:
 - **Hex**: 64 characters (decoded to 32 bytes)
 - **Base64**: 44 characters (decoded to 32 bytes)
 - **Raw**: 32 characters (32 bytes direct)
@@ -545,10 +545,10 @@ flowchart TD
 
 | Key | Type | Purpose |
 |-----|------|---------|
-| `goclaw_user_id` | string | External user ID (e.g., Telegram user ID) |
-| `goclaw_agent_id` | uuid.UUID | Agent UUID |
-| `goclaw_agent_type` | string | Agent type: `"open"` or `"predefined"` |
-| `goclaw_sender_id` | string | Original individual sender ID (in group chats, `user_id` is group-scoped but `sender_id` preserves the actual person) |
+| `vbpclaw_user_id` | string | External user ID (e.g., Telegram user ID) |
+| `vbpclaw_agent_id` | uuid.UUID | Agent UUID |
+| `vbpclaw_agent_type` | string | Agent type: `"open"` or `"predefined"` |
+| `vbpclaw_sender_id` | string | Original individual sender ID (in group chats, `user_id` is group-scoped but `sender_id` preserves the actual person) |
 
 ### Tool Context Keys
 

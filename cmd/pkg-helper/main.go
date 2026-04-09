@@ -21,10 +21,10 @@ import (
 
 const socketPath = "/tmp/pkg.sock"
 
-// goclawGID is the group ID of the goclaw process.
-// Persist files and sockets are chowned to root:goclaw so the
+// vbpclawGID is the group ID of the vbpclaw process.
+// Persist files and sockets are chowned to root:vbpclaw so the
 // unprivileged app process (uid 1000, gid 1000) can read them.
-const goclawGID = 1000
+const vbpclawGID = 1000
 
 // validPkgName allows alphanumeric, hyphens, underscores, dots, @, / (scoped npm).
 // Rejects names starting with - to prevent argument injection.
@@ -56,11 +56,11 @@ func main() {
 	}
 	defer listener.Close()
 
-	// Socket permissions: owner root, group goclaw (gid 1000), mode 0660.
+	// Socket permissions: owner root, group vbpclaw (gid 1000), mode 0660.
 	// Chown requires CAP_CHOWN; if missing (misconfigured container), warn but continue
 	// since umask already set restrictive permissions.
 	if os.Getuid() == 0 {
-		if err := os.Chown(socketPath, 0, goclawGID); err != nil {
+		if err := os.Chown(socketPath, 0, vbpclawGID); err != nil {
 			slog.Warn("pkg-helper: chown socket failed (missing CAP_CHOWN?)", "error", err)
 		}
 	}
@@ -199,9 +199,9 @@ func persistAdd(pkg string) {
 	}
 	defer f.Close()
 	fmt.Fprintln(f, pkg)
-	// Ensure group ownership allows the goclaw process to read the file.
+	// Ensure group ownership allows the vbpclaw process to read the file.
 	if created {
-		if err := os.Chown(listFile, 0, goclawGID); err != nil {
+		if err := os.Chown(listFile, 0, vbpclawGID); err != nil {
 			slog.Warn("pkg-helper: chown persist file failed", "file", listFile, "error", err)
 		}
 	}
@@ -234,10 +234,10 @@ func persistRemove(pkg string) {
 		os.Remove(tmpFile) //nolint:errcheck
 		return
 	}
-	// Restore group ownership so the goclaw process (gid 1000) can read the file.
+	// Restore group ownership so the vbpclaw process (gid 1000) can read the file.
 	// Without this, the renamed file inherits root:root from the temp file,
 	// causing ListInstalledPackages to return nil for system packages.
-	if err := os.Chown(listFile, 0, goclawGID); err != nil {
+	if err := os.Chown(listFile, 0, vbpclawGID); err != nil {
 		slog.Warn("pkg-helper: chown persist file failed", "file", listFile, "error", err)
 	}
 }
@@ -251,7 +251,7 @@ func apkListFile() string {
 }
 
 // ensurePersistDir ensures the apk persist file's parent directory is writable by root.
-// On existing volumes the directory may be goclaw-owned (from older images); fix ownership
+// On existing volumes the directory may be vbpclaw-owned (from older images); fix ownership
 // using CAP_CHOWN so pkg-helper can create/write the persist file.
 func ensurePersistDir() {
 	dir := filepath.Dir(apkListFile())
@@ -264,10 +264,10 @@ func ensurePersistDir() {
 		return
 	}
 
-	// Try to fix ownership to root:goclaw (gid 1000) if not already root-owned.
+	// Try to fix ownership to root:vbpclaw (gid 1000) if not already root-owned.
 	// CAP_CHOWN is available even when CAP_DAC_OVERRIDE is dropped.
 	if stat, ok := fi.Sys().(*syscall.Stat_t); ok && stat.Uid != 0 {
-		if err := os.Chown(dir, 0, goclawGID); err != nil {
+		if err := os.Chown(dir, 0, vbpclawGID); err != nil {
 			slog.Warn("pkg-helper: cannot fix persist dir ownership", "dir", dir, "error", err)
 		} else {
 			os.Chmod(dir, 0750) //nolint:errcheck

@@ -11,12 +11,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/nextlevelbuilder/goclaw/internal/channels"
-	"github.com/nextlevelbuilder/goclaw/internal/channels/media"
-	"github.com/nextlevelbuilder/goclaw/internal/channels/typing"
-	"github.com/nextlevelbuilder/goclaw/internal/channels/zalo/personal/protocol"
-	"github.com/nextlevelbuilder/goclaw/internal/store"
-	"github.com/nextlevelbuilder/goclaw/internal/tools"
+	"github.com/nextlevelbuilder/vbpclaw/internal/channels"
+	"github.com/nextlevelbuilder/vbpclaw/internal/channels/media"
+	"github.com/nextlevelbuilder/vbpclaw/internal/channels/typing"
+	"github.com/nextlevelbuilder/vbpclaw/internal/channels/zalo/personal/protocol"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/tools"
 )
 
 func (c *Channel) handleMessage(msg protocol.Message) {
@@ -257,7 +257,7 @@ func downloadFile(ctx context.Context, fileURL string) (string, error) {
 		ext = ".bin"
 	}
 
-	tmpFile, err := os.CreateTemp("", "goclaw_zca_*"+ext)
+	tmpFile, err := os.CreateTemp("", "vbpclaw_zca_*"+ext)
 	if err != nil {
 		return "", fmt.Errorf("create temp: %w", err)
 	}

@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  /* GoClaw Brand — OKLCH values from web dashboard */
+  /* VBPClaw Brand — OKLCH values from web dashboard */
 
   /* Dark mode defaults (primary build) */
   --color-surface-primary: oklch(0.15 0.02 45);

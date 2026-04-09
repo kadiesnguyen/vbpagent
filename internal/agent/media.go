@@ -11,9 +11,9 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/nextlevelbuilder/goclaw/internal/bus"
-	"github.com/nextlevelbuilder/goclaw/internal/media"
-	"github.com/nextlevelbuilder/goclaw/internal/providers"
+	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
+	"github.com/nextlevelbuilder/vbpclaw/internal/media"
+	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
 )
 
 // maxImageBytes is the safety limit for reading image files (10MB).
@@ -213,12 +213,20 @@ func (l *Loop) enrichAudioIDs(messages []providers.Message, refs []providers.Med
 			continue
 		}
 		idAttr := fmt.Sprintf(" id=%q", ref.ID)
+		pathAttr := ""
+		if ref.Path != "" {
+			pathAttr = fmt.Sprintf(" path=%q", ref.Path)
+		}
+		attrs := []string{idAttr}
+		if pathAttr != "" {
+			attrs = append(attrs, pathAttr)
+		}
 
 		var replaced bool
 		content, replaced = replaceFirstMediaTag(content, "<media:audio", func(tag string) bool {
 			return !tagHasAttr(tag, "id")
 		}, func(tag string) string {
-			return appendTagAttrs(tag, idAttr)
+			return appendTagAttrs(tag, attrs...)
 		})
 		if replaced {
 			continue
@@ -227,7 +235,7 @@ func (l *Loop) enrichAudioIDs(messages []providers.Message, refs []providers.Med
 		content, _ = replaceFirstMediaTag(content, "<media:voice", func(tag string) bool {
 			return !tagHasAttr(tag, "id")
 		}, func(tag string) string {
-			return appendTagAttrs(tag, idAttr)
+			return appendTagAttrs(tag, attrs...)
 		})
 	}
 	messages[lastIdx].Content = content
@@ -256,11 +264,15 @@ func (l *Loop) enrichVideoIDs(messages []providers.Message, refs []providers.Med
 			continue
 		}
 		idAttr := fmt.Sprintf(" id=%q", ref.ID)
+		attrs := []string{idAttr}
+		if ref.Path != "" {
+			attrs = append(attrs, fmt.Sprintf(" path=%q", ref.Path))
+		}
 
 		content, _ = replaceFirstMediaTag(content, "<media:video", func(tag string) bool {
 			return !tagHasAttr(tag, "id")
 		}, func(tag string) string {
-			return appendTagAttrs(tag, idAttr)
+			return appendTagAttrs(tag, attrs...)
 		})
 	}
 	messages[lastIdx].Content = content

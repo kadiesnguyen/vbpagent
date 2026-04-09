@@ -3,7 +3,7 @@ package permissions
 import (
 	"testing"
 
-	"github.com/nextlevelbuilder/goclaw/pkg/protocol"
+	"github.com/nextlevelbuilder/vbpclaw/pkg/protocol"
 )
 
 // --- Role hierarchy ---

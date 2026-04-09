@@ -86,7 +86,7 @@ export function AgentHeader({ agent, heartbeat, onBack, onDelete, onAdvanced, on
                 <TooltipTrigger asChild>
                   <Badge
                     variant={selfEvolve ? "default" : "outline"}
-                    className={`text-[10px] ${selfEvolve ? "bg-orange-100 text-orange-700 hover:bg-orange-100 dark:bg-orange-900/30 dark:text-orange-300" : "text-muted-foreground"}`}
+                    className={`text-[10px] ${selfEvolve ? "bg-blue-100 text-blue-700 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-300" : "text-muted-foreground"}`}
                   >
                     <Sparkles className="h-2.5 w-2.5 sm:mr-0.5" />
                     <span className="hidden sm:inline">{selfEvolve ? t("detail.evolving") : t("detail.static")}</span>

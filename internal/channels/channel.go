@@ -2,7 +2,7 @@
 // Channels connect external platforms (Telegram, Discord, Slack, etc.) to the agent runtime
 // via the message bus.
 //
-// Adapted from PicoClaw's pkg/channels with GoClaw-specific additions:
+// Adapted from PicoClaw's pkg/channels with VBPClaw-specific additions:
 // - DM/Group policies (pairing, allowlist, open, disabled)
 // - Mention gating for group chats
 // - Rich MsgContext metadata
@@ -16,8 +16,8 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/nextlevelbuilder/goclaw/internal/bus"
-	"github.com/nextlevelbuilder/goclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
 )
 
 // InternalChannels are system channels excluded from outbound dispatch.

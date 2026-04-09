@@ -2,7 +2,7 @@
 
 ## 1. Overview
 
-GoClaw is an AI agent gateway written in Go. It exposes a WebSocket RPC (v3) interface and an OpenAI-compatible HTTP API for orchestrating LLM-powered agents. The system uses PostgreSQL as its storage backend with full multi-tenant isolation, per-user context files, encrypted credentials, agent delegation, teams, and LLM call tracing.
+VBPClaw is an AI agent gateway written in Go. It exposes a WebSocket RPC (v3) interface and an OpenAI-compatible HTTP API for orchestrating LLM-powered agents. The system uses PostgreSQL as its storage backend with full multi-tenant isolation, per-user context files, encrypted credentials, agent delegation, teams, and LLM call tracing.
 
 ## 2. Component Diagram
 
@@ -137,16 +137,16 @@ flowchart TD
 
 ## 4. Multi-Tenant Identity Model
 
-GoClaw uses the **Identity Propagation** pattern (also known as **Trusted Subsystem**). It does not implement authentication or authorization — instead, it trusts the upstream service that authenticates with the gateway token to provide accurate user identity.
+VBPClaw uses the **Identity Propagation** pattern (also known as **Trusted Subsystem**). It does not implement authentication or authorization — instead, it trusts the upstream service that authenticates with the gateway token to provide accurate user identity.
 
 ```mermaid
 flowchart LR
     subgraph "Upstream Service (trusted)"
         AUTH["Authenticate end-user"]
-        HDR["Set X-GoClaw-User-Id header<br/>or user_id in WS connect"]
+        HDR["Set X-VBPClaw-User-Id header<br/>or user_id in WS connect"]
     end
 
-    subgraph "GoClaw Gateway"
+    subgraph "VBPClaw Gateway"
         EXTRACT["Extract user_id<br/>(opaque, VARCHAR 255)"]
         CTX["store.WithUserID(ctx)"]
         SCOPE["Per-user scoping:<br/>sessions, context files,<br/>memory, traces, agent shares"]
@@ -162,13 +162,13 @@ flowchart LR
 
 | Entry Point | How user_id is provided | Enforcement |
 |-------------|------------------------|-------------|
-| HTTP API | `X-GoClaw-User-Id` header | Required |
+| HTTP API | `X-VBPClaw-User-Id` header | Required |
 | WebSocket | `user_id` field in `connect` handshake | Required |
 | Channels | Derived from platform sender ID (e.g., Telegram user ID) | Automatic |
 
 ### Compound User ID Convention
 
-The `user_id` field is **opaque** to GoClaw — it does not interpret or validate the format. For multi-tenant deployments, the recommended convention is:
+The `user_id` field is **opaque** to VBPClaw — it does not interpret or validate the format. For multi-tenant deployments, the recommended convention is:
 
 ```
 tenant.{tenantId}.user.{userId}
@@ -302,10 +302,10 @@ flowchart TD
 
 | Lane | Concurrency | Env Override | Purpose |
 |------|:-----------:|-------------|---------|
-| `main` | 30 | `GOCLAW_LANE_MAIN` | Primary user chat sessions |
-| `subagent` | 50 | `GOCLAW_LANE_SUBAGENT` | Spawned subagents |
-| `team` | 100 | `GOCLAW_LANE_TEAM` | Agent team/delegation executions |
-| `cron` | 30 | `GOCLAW_LANE_CRON` | Scheduled cron jobs |
+| `main` | 30 | `VBPCLAW_LANE_MAIN` | Primary user chat sessions |
+| `subagent` | 50 | `VBPCLAW_LANE_SUBAGENT` | Spawned subagents |
+| `team` | 100 | `VBPCLAW_LANE_TEAM` | Agent team/delegation executions |
+| `cron` | 30 | `VBPCLAW_LANE_CRON` | Scheduled cron jobs |
 
 ### Session Queue Concurrency
 
@@ -354,13 +354,13 @@ Configuration is loaded from a JSON5 file with environment variable overlay. Sec
 ```mermaid
 flowchart TD
     A{Config path?} -->|--config flag| B[CLI flag path]
-    A -->|GOCLAW_CONFIG env| C[Env var path]
+    A -->|VBPCLAW_CONFIG env| C[Env var path]
     A -->|default| D["config.json"]
 
     B & C & D --> LOAD["config.Load()"]
     LOAD --> S1["1. Set defaults"]
     S1 --> S2["2. Parse JSON5"]
-    S2 --> S3["3. Env var overlay<br/>(GOCLAW_*_API_KEY)"]
+    S2 --> S3["3. Env var overlay<br/>(VBPCLAW_*_API_KEY)"]
     S3 --> S4["4. Apply computed defaults<br/>(context pruning, etc.)"]
     S4 --> READY[Config ready]
 ```
@@ -378,7 +378,7 @@ flowchart TD
 ### Secret Handling
 
 - Secrets exist only in env vars or `.env.local` -- never in `config.json`.
-- `GOCLAW_POSTGRES_DSN` is tagged `json:"-"` and cannot be read from the config file.
+- `VBPCLAW_POSTGRES_DSN` is tagged `json:"-"` and cannot be read from the config file.
 - `MaskedCopy()` replaces API keys with `"***"` when returning config over WebSocket.
 - `StripSecrets()` removes secrets before writing config to disk.
 - Config hot-reload via `fsnotify` watcher with 300ms debounce.

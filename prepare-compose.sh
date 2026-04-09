@@ -4,7 +4,7 @@ set -euo pipefail
 
 SCRIPT="${BASH_SOURCE[0]}"
 SCRIPT_DIR="$(cd "$(dirname "${SCRIPT}")" && pwd)"
-ENV_FILE="${GOCLAW_ENV_FILE:-$SCRIPT_DIR/.env}"
+ENV_FILE="${VBPCLAW_ENV_FILE:-$SCRIPT_DIR/.env}"
 
 loud() {
   [[ "${QUIET:-false}" != true ]] && echo "$@"
@@ -63,10 +63,10 @@ update_env() {
   fi
 }
 
-# Update .env with COMPOSE_FILE and GOCLAW_DIR
+# Update .env with COMPOSE_FILE and VBPCLAW_DIR
 if [[ -f "$ENV_FILE" ]]; then
   update_env "COMPOSE_FILE" "$COMPOSE_FILE"
-  update_env "GOCLAW_DIR" "$SCRIPT_DIR"
+  update_env "VBPCLAW_DIR" "$SCRIPT_DIR"
   loud "COMPOSE_FILE updated in $ENV_FILE"
   loud "  COMPOSE_FILE=$COMPOSE_FILE"
 else

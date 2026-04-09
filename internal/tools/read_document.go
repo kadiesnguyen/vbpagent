@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/nextlevelbuilder/goclaw/internal/providers"
+	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
 )
 
 // textReadableMIMEs are MIME types whose content can be returned directly without LLM analysis.
@@ -45,8 +45,8 @@ func MediaDocRefsFromCtx(ctx context.Context) []providers.MediaRef {
 
 // --- ReadDocumentTool ---
 
-// documentMaxBytes is the max file size for document analysis (20MB).
-const documentMaxBytes = 20 * 1024 * 1024
+// documentMaxBytes is the max file size for document analysis (100MB).
+const documentMaxBytes = 100 * 1024 * 1024
 
 // documentProviderPriority is the order in which providers are tried for document analysis.
 // Gemini has best native PDF support (50MB, 258 tokens/page).

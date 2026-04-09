@@ -7,9 +7,9 @@ import (
 	"fmt"
 )
 
-const apiKeyPrefix = "goclaw_"
+const apiKeyPrefix = "vbpclaw_"
 
-// GenerateAPIKey creates a new API key with format "goclaw_<32hex>".
+// GenerateAPIKey creates a new API key with format "vbpclaw_<32hex>".
 // Returns the raw key (show once), its SHA-256 hash, and 8-char display prefix.
 func GenerateAPIKey() (raw, hash, displayPrefix string, err error) {
 	b := make([]byte, 16) // 16 bytes = 32 hex chars

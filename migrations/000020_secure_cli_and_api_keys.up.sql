@@ -1,5 +1,5 @@
 -- Secure CLI binaries: credential injection for exec tool (Direct Exec Mode).
--- Admin maps binary -> env vars; GoClaw auto-injects into child process.
+-- Admin maps binary -> env vars; VBPClaw auto-injects into child process.
 CREATE TABLE secure_cli_binaries (
     id              UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     binary_name     TEXT NOT NULL,                          -- display name: "gh", "gcloud"

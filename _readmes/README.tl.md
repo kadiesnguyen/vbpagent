@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="../_statics/goclaw.png" alt="GoClaw" />
+  <img src="../_statics/vbpclaw.png" alt="VBPClaw" />
 </p>
 
-<h1 align="center">GoClaw</h1>
+<h1 align="center">VBPClaw</h1>
 
 <p align="center"><strong>Enterprise AI Agent Platform</strong></p>
 
@@ -12,8 +12,8 @@ Single binary. Production-tested. Agents that orchestrate for you.
 </p>
 
 <p align="center">
-  <a href="https://docs.goclaw.sh">Dokumentasyon</a> •
-  <a href="https://docs.goclaw.sh/#quick-start">Mabilis na Simula</a> •
+  <a href="https://docs.vbpclaw.sh">Dokumentasyon</a> •
+  <a href="https://docs.vbpclaw.sh/#quick-start">Mabilis na Simula</a> •
   <a href="https://x.com/nlb_io">Twitter / X</a>
 </p>
 
@@ -28,7 +28,7 @@ Single binary. Production-tested. Agents that orchestrate for you.
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="License: MIT" />
 </p>
 
-Ang **GoClaw** ay isang multi-agent AI gateway na nagkokonekta ng mga LLM sa iyong mga kasangkapan, channel, at datos — na inilunsad bilang isang Go binary na walang runtime dependencies. Inooorkestra nito ang mga agent team at inter-agent delegation sa 20+ LLM provider na may ganap na multi-tenant isolation.
+Ang **VBPClaw** ay isang multi-agent AI gateway na nagkokonekta ng mga LLM sa iyong mga kasangkapan, channel, at datos — na inilunsad bilang isang Go binary na walang runtime dependencies. Inooorkestra nito ang mga agent team at inter-agent delegation sa 20+ LLM provider na may ganap na multi-tenant isolation.
 
 Isang Go port ng [OpenClaw](https://github.com/openclaw/openclaw) na may pinahusay na seguridad, multi-tenant PostgreSQL, at production-grade observability.
 
@@ -80,7 +80,7 @@ Isang Go port ng [OpenClaw](https://github.com/openclaw/openclaw) na may pinahus
 
 ## Claw Ecosystem
 
-|                 | OpenClaw        | ZeroClaw | PicoClaw | **GoClaw**                              |
+|                 | OpenClaw        | ZeroClaw | PicoClaw | **VBPClaw**                              |
 | --------------- | --------------- | -------- | -------- | --------------------------------------- |
 | Wika            | TypeScript      | Rust     | Go       | **Go**                                  |
 | Laki ng binary  | 28 MB + Node.js | 3.4 MB   | ~8 MB    | **~25 MB** (base) / **~36 MB** (+ OTel) |
@@ -89,7 +89,7 @@ Isang Go port ng [OpenClaw](https://github.com/openclaw/openclaw) na may pinahus
 | Pagsisimula     | > 5 s           | < 10 ms  | < 1 s    | **< 1 s**                               |
 | Target hardware | $599+ Mac Mini  | $10 edge | $10 edge | **$5 VPS+**                             |
 
-| Tampok                     | OpenClaw                             | ZeroClaw                                     | PicoClaw                              | **GoClaw**                     |
+| Tampok                     | OpenClaw                             | ZeroClaw                                     | PicoClaw                              | **VBPClaw**                     |
 | -------------------------- | ------------------------------------ | -------------------------------------------- | ------------------------------------- | ------------------------------ |
 | Multi-tenant (PostgreSQL)  | —                                    | —                                            | —                                     | ✅                             |
 | MCP integration            | — (gumagamit ng ACP)                 | —                                            | —                                     | ✅ (stdio/SSE/streamable-http) |
@@ -110,7 +110,7 @@ Isang Go port ng [OpenClaw](https://github.com/openclaw/openclaw) na may pinahus
 ## Arkitektura
 
 <p align="center">
-  <img src="../_statics/architecture.jpg" alt="GoClaw Architecture" width="800" />
+  <img src="../_statics/architecture.jpg" alt="VBPClaw Architecture" width="800" />
 </p>
 
 ## Mabilis na Simula
@@ -120,10 +120,10 @@ Isang Go port ng [OpenClaw](https://github.com/openclaw/openclaw) na may pinahus
 ### Mula sa Source
 
 ```bash
-git clone https://github.com/nextlevelbuilder/goclaw.git && cd goclaw
+git clone https://github.com/nextlevelbuilder/vbpclaw.git && cd vbpclaw
 make build
-./goclaw onboard        # Interactive setup wizard
-source .env.local && ./goclaw
+./vbpclaw onboard        # Interactive setup wizard
+source .env.local && ./vbpclaw
 ```
 
 ### Gamit ang Docker
@@ -132,20 +132,20 @@ source .env.local && ./goclaw
 # Gumawa ng .env na may auto-generated na mga lihim
 chmod +x prepare-env.sh && ./prepare-env.sh
 
-# Magdagdag ng kahit isang GOCLAW_*_API_KEY sa .env, pagkatapos:
+# Magdagdag ng kahit isang VBPCLAW_*_API_KEY sa .env, pagkatapos:
 make up
 
 # Web Dashboard sa http://localhost:18790
 # Health check: curl http://localhost:18790/health
 ```
 
-Kapag nakatakda ang mga environment variable na `GOCLAW_*_API_KEY`, ang gateway ay awtomatikong mag-onboard nang walang interactive na mga tanong — nakikita ang provider, nagpapatakbo ng mga migration, at naglalagay ng default na datos.
+Kapag nakatakda ang mga environment variable na `VBPCLAW_*_API_KEY`, ang gateway ay awtomatikong mag-onboard nang walang interactive na mga tanong — nakikita ang provider, nagpapatakbo ng mga migration, at naglalagay ng default na datos.
 
-> Para sa mga variant ng build (OTel, Tailscale, Redis), mga Docker image tag, at compose overlay, tingnan ang [Gabay sa Deployment](https://docs.goclaw.sh/#deploy-docker-compose).
+> Para sa mga variant ng build (OTel, Tailscale, Redis), mga Docker image tag, at compose overlay, tingnan ang [Gabay sa Deployment](https://docs.vbpclaw.sh/#deploy-docker-compose).
 
 ## Multi-Agent Orkestrasyon
 
-Sinusuportahan ng GoClaw ang mga agent team at inter-agent delegation — ang bawat agent ay tumatakbo gamit ang sariling pagkakakilanlan, kasangkapan, LLM provider, at context file.
+Sinusuportahan ng VBPClaw ang mga agent team at inter-agent delegation — ang bawat agent ay tumatakbo gamit ang sariling pagkakakilanlan, kasangkapan, LLM provider, at context file.
 
 ### Delegasyon ng Agent
 
@@ -170,7 +170,7 @@ Ang mga agent ay nakikipag-ugnayan sa pamamagitan ng malinaw na **mga link ng pa
 - **Mailbox ng team** — Direktang peer-to-peer na pagmemensahe at mga broadcast
 - **Mga Kasangkapan**: `team_tasks` para sa pamamahala ng gawain, `team_message` para sa mailbox
 
-> Para sa mga detalye ng delegasyon, mga link ng pahintulot, at kontrol ng concurrency, tingnan ang [dokumentasyon ng Mga Agent Team](https://docs.goclaw.sh/#teams-what-are-teams).
+> Para sa mga detalye ng delegasyon, mga link ng pahintulot, at kontrol ng concurrency, tingnan ang [dokumentasyon ng Mga Agent Team](https://docs.vbpclaw.sh/#teams-what-are-teams).
 
 ## Mga Built-in na Kasangkapan
 
@@ -214,19 +214,19 @@ Ang mga agent ay nakikipag-ugnayan sa pamamagitan ng malinaw na **mga link ng pa
 
 ## Dokumentasyon
 
-Buong dokumentasyon sa **[docs.goclaw.sh](https://docs.goclaw.sh)** — o i-browse ang source sa [`goclaw-docs/`](https://github.com/nextlevelbuilder/goclaw-docs)
+Buong dokumentasyon sa **[docs.vbpclaw.sh](https://docs.vbpclaw.sh)** — o i-browse ang source sa [`vbpclaw-docs/`](https://github.com/nextlevelbuilder/vbpclaw-docs)
 
 | Seksyon | Mga Paksa |
 |---------|-----------|
-| [Pagsisimula](https://docs.goclaw.sh/#what-is-goclaw) | Pag-install, Mabilis na Simula, Konfiguraksyon, Pagsasaliksik sa Web Dashboard |
-| [Mga Pangunahing Konsepto](https://docs.goclaw.sh/#how-goclaw-works) | Agent Loop, Mga Session, Mga Kasangkapan, Memorya, Multi-Tenancy |
-| [Mga Agent](https://docs.goclaw.sh/#creating-agents) | Paglikha ng Mga Agent, Mga Context File, Personalidad, Pagbabahagi at Access |
-| [Mga Provider](https://docs.goclaw.sh/#providers-overview) | Anthropic, OpenAI, OpenRouter, Gemini, DeepSeek, +15 pa |
-| [Mga Channel](https://docs.goclaw.sh/#channels-overview) | Telegram, Discord, Slack, Feishu, Zalo, WhatsApp, WebSocket |
-| [Mga Agent Team](https://docs.goclaw.sh/#teams-what-are-teams) | Mga Team, Task Board, Pagmemensahe, Delegasyon at Handoff |
-| [Advanced](https://docs.goclaw.sh/#custom-tools) | Mga Custom na Kasangkapan, MCP, Mga Skill, Cron, Sandbox, Hooks, RBAC |
-| [Deployment](https://docs.goclaw.sh/#deploy-docker-compose) | Docker Compose, Database, Seguridad, Observability, Tailscale |
-| [Sanggunian](https://docs.goclaw.sh/#cli-commands) | Mga CLI Command, REST API, WebSocket Protocol, Mga Environment Variable |
+| [Pagsisimula](https://docs.vbpclaw.sh/#what-is-vbpclaw) | Pag-install, Mabilis na Simula, Konfiguraksyon, Pagsasaliksik sa Web Dashboard |
+| [Mga Pangunahing Konsepto](https://docs.vbpclaw.sh/#how-vbpclaw-works) | Agent Loop, Mga Session, Mga Kasangkapan, Memorya, Multi-Tenancy |
+| [Mga Agent](https://docs.vbpclaw.sh/#creating-agents) | Paglikha ng Mga Agent, Mga Context File, Personalidad, Pagbabahagi at Access |
+| [Mga Provider](https://docs.vbpclaw.sh/#providers-overview) | Anthropic, OpenAI, OpenRouter, Gemini, DeepSeek, +15 pa |
+| [Mga Channel](https://docs.vbpclaw.sh/#channels-overview) | Telegram, Discord, Slack, Feishu, Zalo, WhatsApp, WebSocket |
+| [Mga Agent Team](https://docs.vbpclaw.sh/#teams-what-are-teams) | Mga Team, Task Board, Pagmemensahe, Delegasyon at Handoff |
+| [Advanced](https://docs.vbpclaw.sh/#custom-tools) | Mga Custom na Kasangkapan, MCP, Mga Skill, Cron, Sandbox, Hooks, RBAC |
+| [Deployment](https://docs.vbpclaw.sh/#deploy-docker-compose) | Docker Compose, Database, Seguridad, Observability, Tailscale |
+| [Sanggunian](https://docs.vbpclaw.sh/#cli-commands) | Mga CLI Command, REST API, WebSocket Protocol, Mga Environment Variable |
 
 ## Pagsusuri
 
@@ -241,7 +241,7 @@ Tingnan ang [CHANGELOG.md](CHANGELOG.md) para sa detalyadong katayuan ng mga tam
 
 ## Mga Pagkilala
 
-Ang GoClaw ay itinayo batay sa orihinal na proyektong [OpenClaw](https://github.com/openclaw/openclaw). Nagpapasalamat kami sa arkitektura at bisyon na nagbigay-inspirasyon sa Go port na ito.
+Ang VBPClaw ay itinayo batay sa orihinal na proyektong [OpenClaw](https://github.com/openclaw/openclaw). Nagpapasalamat kami sa arkitektura at bisyon na nagbigay-inspirasyon sa Go port na ito.
 
 ## Lisensya
 

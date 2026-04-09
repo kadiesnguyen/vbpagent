@@ -117,7 +117,7 @@ function ExtractorChainForm({ tool, onSave, onClose }: { tool: BuiltinToolData; 
                   <input
                     value={ext.base_url ?? ''}
                     onChange={(e) => updateExtractor(i, { base_url: e.target.value })}
-                    placeholder="https://fetch.goclaw.sh/"
+                    placeholder="https://fetch.vbpclaw.sh/"
                     className="w-full bg-surface-tertiary border border-border rounded-lg px-3 py-1.5 font-mono text-base md:text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-1 focus:ring-accent"
                   />
                 </div>

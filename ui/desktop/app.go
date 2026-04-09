@@ -15,8 +15,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/nextlevelbuilder/goclaw/cmd"
-	"github.com/nextlevelbuilder/goclaw/internal/updater"
+	"github.com/nextlevelbuilder/vbpclaw/cmd"
+	"github.com/nextlevelbuilder/vbpclaw/internal/updater"
 	wailsRuntime "github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
@@ -41,7 +41,7 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 
 	// Resolve port from env or use default.
-	if p := os.Getenv("GOCLAW_PORT"); p != "" {
+	if p := os.Getenv("VBPCLAW_PORT"); p != "" {
 		fmt.Sscanf(p, "%d", &a.gatewayPort)
 	}
 
@@ -54,22 +54,22 @@ func (a *App) startup(ctx context.Context) {
 	a.gatewayToken = gwToken
 
 	// Set env vars consumed by the embedded gateway.
-	os.Setenv("GOCLAW_ENCRYPTION_KEY", encKey)
-	os.Setenv("GOCLAW_GATEWAY_TOKEN", gwToken)
-	os.Setenv("GOCLAW_STORAGE_BACKEND", "sqlite")
-	os.Setenv("GOCLAW_DESKTOP", "1")
+	os.Setenv("VBPCLAW_ENCRYPTION_KEY", encKey)
+	os.Setenv("VBPCLAW_GATEWAY_TOKEN", gwToken)
+	os.Setenv("VBPCLAW_STORAGE_BACKEND", "sqlite")
+	os.Setenv("VBPCLAW_DESKTOP", "1")
 	// Bind to localhost only — desktop has no reason to expose on LAN.
-	if os.Getenv("GOCLAW_HOST") == "" {
-		os.Setenv("GOCLAW_HOST", "127.0.0.1")
+	if os.Getenv("VBPCLAW_HOST") == "" {
+		os.Setenv("VBPCLAW_HOST", "127.0.0.1")
 	}
 	slog.Info("desktop secrets configured", "token_len", len(gwToken), "token_prefix", gwToken[:min(8, len(gwToken))])
 
 	// Ensure data directory exists.
-	dataDir := os.Getenv("GOCLAW_DATA_DIR")
+	dataDir := os.Getenv("VBPCLAW_DATA_DIR")
 	if dataDir == "" {
 		home, _ := os.UserHomeDir()
-		dataDir = home + "/.goclaw/data"
-		os.Setenv("GOCLAW_DATA_DIR", dataDir)
+		dataDir = home + "/.vbpclaw/data"
+		os.Setenv("VBPCLAW_DATA_DIR", dataDir)
 	}
 	os.MkdirAll(dataDir, 0755)
 
@@ -262,10 +262,10 @@ func (a *App) checkAndEmitUpdate() {
 
 // GetDataDir returns the path to the data directory containing the SQLite database.
 func (a *App) GetDataDir() string {
-	dir := os.Getenv("GOCLAW_DATA_DIR")
+	dir := os.Getenv("VBPCLAW_DATA_DIR")
 	if dir == "" {
 		home, _ := os.UserHomeDir()
-		dir = home + "/.goclaw/data"
+		dir = home + "/.vbpclaw/data"
 	}
 	return dir
 }
@@ -292,7 +292,7 @@ func (a *App) startGateway() {
 // so we delete first, then restart the app cleanly.
 func (a *App) ResetDatabase() error {
 	dataDir := a.GetDataDir()
-	dbPath := filepath.Join(dataDir, "goclaw.db")
+	dbPath := filepath.Join(dataDir, "vbpclaw.db")
 
 	// Delete DB + WAL/SHM (works on Unix even while file is open).
 	for _, suffix := range []string{"", "-wal", "-shm"} {

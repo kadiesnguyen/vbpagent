@@ -52,7 +52,7 @@ import zhDesktop from './locales/zh/desktop.json'
 import zhTeams from './locales/zh/teams.json'
 import zhChannels from './locales/zh/channels.json'
 
-const STORAGE_KEY = 'goclaw:language'
+const STORAGE_KEY = 'vbpclaw:language'
 
 function getInitialLanguage(): string {
   const stored = localStorage.getItem(STORAGE_KEY)

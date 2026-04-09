@@ -3,7 +3,7 @@ package agent
 import (
 	"context"
 
-	"github.com/nextlevelbuilder/goclaw/internal/providers"
+	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
 )
 
 // Agent is the core abstraction for an AI agent execution loop.

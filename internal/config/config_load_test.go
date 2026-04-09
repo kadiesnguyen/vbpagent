@@ -94,7 +94,7 @@ func TestLoad_EnvVarOverrides(t *testing.T) {
 	os.WriteFile(cfgPath, []byte(`{"gateway":{"port":8080}}`), 0644)
 
 	// Env override should win
-	t.Setenv("GOCLAW_PORT", "7777")
+	t.Setenv("VBPCLAW_PORT", "7777")
 
 	cfg, err := Load(cfgPath)
 	if err != nil {
@@ -106,7 +106,7 @@ func TestLoad_EnvVarOverrides(t *testing.T) {
 }
 
 func TestLoad_EnvVarOverrides_InvalidPort(t *testing.T) {
-	t.Setenv("GOCLAW_PORT", "not-a-number")
+	t.Setenv("VBPCLAW_PORT", "not-a-number")
 
 	cfg, err := Load("/nonexistent/path")
 	if err != nil {
@@ -121,7 +121,7 @@ func TestLoad_EnvVarOverrides_InvalidPort(t *testing.T) {
 // --- Env var for API keys ---
 
 func TestLoad_EnvVarAPIKeys(t *testing.T) {
-	t.Setenv("GOCLAW_ANTHROPIC_API_KEY", "sk-test-key")
+	t.Setenv("VBPCLAW_ANTHROPIC_API_KEY", "sk-test-key")
 
 	cfg, err := Load("/nonexistent/path")
 	if err != nil {
@@ -167,7 +167,7 @@ func TestLoad_AllowedOrigins_JSON5(t *testing.T) {
 // --- Allowed origins from env var ---
 
 func TestLoad_AllowedOrigins_EnvVar(t *testing.T) {
-	t.Setenv("GOCLAW_ALLOWED_ORIGINS", " https://a.com , https://b.com ")
+	t.Setenv("VBPCLAW_ALLOWED_ORIGINS", " https://a.com , https://b.com ")
 
 	cfg, err := Load("/nonexistent/path")
 	if err != nil {
@@ -187,7 +187,7 @@ func TestLoad_AllowedOrigins_EnvVar_OverridesFile(t *testing.T) {
 	os.WriteFile(cfgPath, []byte(`{"gateway":{"allowed_origins":["https://file.com"]}}`), 0644)
 
 	// Env var should override file value
-	t.Setenv("GOCLAW_ALLOWED_ORIGINS", "https://env.com")
+	t.Setenv("VBPCLAW_ALLOWED_ORIGINS", "https://env.com")
 
 	cfg, err := Load(cfgPath)
 	if err != nil {
@@ -237,7 +237,7 @@ func TestFlexibleStringSlice_EmptyArray(t *testing.T) {
 // --- Owner IDs parsing ---
 
 func TestLoad_OwnerIDsParsing(t *testing.T) {
-	t.Setenv("GOCLAW_OWNER_IDS", " alice , bob , charlie ")
+	t.Setenv("VBPCLAW_OWNER_IDS", " alice , bob , charlie ")
 
 	cfg, err := Load("/nonexistent/path")
 	if err != nil {
@@ -252,7 +252,7 @@ func TestLoad_OwnerIDsParsing(t *testing.T) {
 }
 
 func TestLoad_OwnerIDsEmpty(t *testing.T) {
-	t.Setenv("GOCLAW_OWNER_IDS", "")
+	t.Setenv("VBPCLAW_OWNER_IDS", "")
 
 	cfg, err := Load("/nonexistent/path")
 	if err != nil {

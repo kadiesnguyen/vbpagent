@@ -14,13 +14,13 @@ import (
 )
 
 const (
-	serviceName = "goclaw-desktop"
+	serviceName = "vbpclaw-desktop"
 	keyEncKey   = "encryption_key"
 	keyGwToken  = "gateway_token"
 )
 
 // EnsureSecrets retrieves or generates the encryption key and gateway token.
-// Primary storage: OS keyring. Fallback: file-based storage in ~/.goclaw/secrets/.
+// Primary storage: OS keyring. Fallback: file-based storage in ~/.vbpclaw/secrets/.
 func EnsureSecrets() (encKey, gwToken string, err error) {
 	encKey, err = getOrCreateSecret(keyEncKey, 32)
 	if err != nil {
@@ -70,7 +70,7 @@ func generateHex(numBytes int) string {
 
 func secretsDir() string {
 	home, _ := os.UserHomeDir()
-	dir := filepath.Join(home, ".goclaw", "secrets")
+	dir := filepath.Join(home, ".vbpclaw", "secrets")
 	os.MkdirAll(dir, 0700)
 	return dir
 }

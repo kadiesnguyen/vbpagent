@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/nextlevelbuilder/goclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
 )
 
 // PGBuiltinToolStore implements store.BuiltinToolStore backed by Postgres.

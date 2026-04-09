@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/lib/pq"
-	"github.com/nextlevelbuilder/goclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
 )
 
 // Traverse walks the knowledge graph from startEntityID up to maxDepth hops

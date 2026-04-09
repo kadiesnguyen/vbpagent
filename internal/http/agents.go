@@ -11,14 +11,14 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/nextlevelbuilder/goclaw/internal/bootstrap"
-	"github.com/nextlevelbuilder/goclaw/internal/bus"
-	"github.com/nextlevelbuilder/goclaw/internal/config"
-	"github.com/nextlevelbuilder/goclaw/internal/i18n"
-	"github.com/nextlevelbuilder/goclaw/internal/permissions"
-	"github.com/nextlevelbuilder/goclaw/internal/providers"
-	"github.com/nextlevelbuilder/goclaw/internal/store"
-	"github.com/nextlevelbuilder/goclaw/pkg/protocol"
+	"github.com/nextlevelbuilder/vbpclaw/internal/bootstrap"
+	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
+	"github.com/nextlevelbuilder/vbpclaw/internal/config"
+	"github.com/nextlevelbuilder/vbpclaw/internal/i18n"
+	"github.com/nextlevelbuilder/vbpclaw/internal/permissions"
+	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/pkg/protocol"
 )
 
 // AgentsHandler handles agent CRUD and sharing endpoints.
@@ -30,15 +30,15 @@ type AgentsHandler struct {
 	tracingStore     store.TracingStore
 	memoryStore      store.MemoryStore         // for import (nil = disabled)
 	kgStore          store.KnowledgeGraphStore // for import (nil = disabled)
-	defaultWorkspace string                   // default workspace path template (e.g. "~/.goclaw/workspace")
-	dataDir          string                   // resolved data directory (e.g. "~/.goclaw/data") — for team workspace export
+	defaultWorkspace string                   // default workspace path template (e.g. "~/.vbpclaw/workspace")
+	dataDir          string                   // resolved data directory (e.g. "~/.vbpclaw/data") — for team workspace export
 	msgBus           *bus.MessageBus          // for cache invalidation events (nil = no events)
 	summoner         *AgentSummoner           // LLM-based agent setup (nil = disabled)
 	isOwner          func(string) bool        // checks if user ID is a system owner (nil = no owners configured)
 }
 
 // NewAgentsHandler creates a handler for agent management endpoints.
-// isOwner is a function that checks if a user ID is in GOCLAW_OWNER_IDS (nil = disabled).
+// isOwner is a function that checks if a user ID is in VBPCLAW_OWNER_IDS (nil = disabled).
 func NewAgentsHandler(agents store.AgentStore, providers store.ProviderStore, providerReg *providers.Registry, db *sql.DB, tracing store.TracingStore, defaultWorkspace string, msgBus *bus.MessageBus, summoner *AgentSummoner, isOwner func(string) bool) *AgentsHandler {
 	return &AgentsHandler{
 		agents:           agents,

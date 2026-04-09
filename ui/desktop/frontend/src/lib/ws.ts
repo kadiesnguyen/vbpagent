@@ -1,4 +1,4 @@
-// WebSocket v3 client for GoClaw gateway RPC protocol
+// WebSocket v3 client for VBPClaw gateway RPC protocol
 
 export type FrameType = 'req' | 'res' | 'event'
 
@@ -90,7 +90,7 @@ export class WsClient {
         token: this.token,
         user_id: 'system',
         sender_id: 'desktop',
-        locale: localStorage.getItem('goclaw:language') || navigator.language.split('-')[0] || 'en',
+        locale: localStorage.getItem('vbpclaw:language') || navigator.language.split('-')[0] || 'en',
         protocol_version: 3,
       },
     })

@@ -19,11 +19,11 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/nextlevelbuilder/goclaw/internal/config"
-	"github.com/nextlevelbuilder/goclaw/internal/i18n"
-	"github.com/nextlevelbuilder/goclaw/internal/store"
-	"github.com/nextlevelbuilder/goclaw/internal/store/pg"
-	"github.com/nextlevelbuilder/goclaw/pkg/protocol"
+	"github.com/nextlevelbuilder/vbpclaw/internal/config"
+	"github.com/nextlevelbuilder/vbpclaw/internal/i18n"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store/pg"
+	"github.com/nextlevelbuilder/vbpclaw/pkg/protocol"
 )
 
 const maxExportSize = 500 << 20 // 500MB
@@ -240,7 +240,7 @@ func (h *AgentsHandler) handleExportSSE(w http.ResponseWriter, r *http.Request, 
 		return
 	}
 
-	tmpFile, err := os.CreateTemp("", "goclaw-export-*.tar.gz")
+	tmpFile, err := os.CreateTemp("", "vbpclaw-export-*.tar.gz")
 	if err != nil {
 		sendSSE(w, flusher, "error", ProgressEvent{Phase: "init", Status: "error", Detail: "failed to create temp file"})
 		return
@@ -288,7 +288,7 @@ func (h *AgentsHandler) writeExportArchive(ctx context.Context, w io.Writer, ag 
 
 	manifest := &ExportManifest{
 		Version:    1,
-		Format:     "goclaw-agent-export",
+		Format:     "vbpclaw-agent-export",
 		ExportedAt: time.Now().UTC().Format(time.RFC3339),
 		ExportedBy: store.UserIDFromContext(ctx),
 		AgentKey:   ag.AgentKey,

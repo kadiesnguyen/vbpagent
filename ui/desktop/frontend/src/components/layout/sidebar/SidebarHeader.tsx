@@ -26,10 +26,10 @@ export function SidebarHeader() {
     <div className="pt-6 px-3 pb-2 space-y-2">
       {/* Logo + version */}
       <div className="flex items-center gap-2.5 px-1">
-        <img src="/goclaw-icon.svg" alt="GoClaw" className="h-7 w-7" />
+        <img src="/vbpclaw-icon.svg" alt="VBPClaw" className="h-7 w-7" />
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5">
-            <span className="text-base font-semibold text-text-primary">GoClaw</span>
+            <span className="text-base font-semibold text-text-primary">VBPClaw</span>
             <button
               onClick={() => setEditionOpen(true)}
               className="text-[10px] font-medium bg-accent/15 text-accent px-1.5 py-0.5 rounded hover:bg-accent/25 transition-colors cursor-pointer"

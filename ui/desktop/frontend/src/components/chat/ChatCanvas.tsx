@@ -127,7 +127,7 @@ function EmptyState({ agentName, onSuggestion }: { agentName?: string; onSuggest
   const suggestions = t('chat.suggestions', { returnObjects: true }) as string[]
   return (
     <div className="flex flex-col items-center justify-center text-center py-20">
-      <img src="/goclaw-icon.svg" alt="GoClaw" className="h-14 w-14 mb-5 opacity-30" />
+      <img src="/vbpclaw-icon.svg" alt="VBPClaw" className="h-14 w-14 mb-5 opacity-30" />
       <h2 className="text-lg font-medium text-text-primary mb-1">
         {agentName
           ? t('chat.emptyTitle', { name: agentName })

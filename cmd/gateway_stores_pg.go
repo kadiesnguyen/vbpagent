@@ -7,11 +7,11 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/nextlevelbuilder/goclaw/internal/bus"
-	"github.com/nextlevelbuilder/goclaw/internal/config"
-	"github.com/nextlevelbuilder/goclaw/internal/store"
-	"github.com/nextlevelbuilder/goclaw/internal/store/pg"
-	"github.com/nextlevelbuilder/goclaw/internal/tracing"
+	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
+	"github.com/nextlevelbuilder/vbpclaw/internal/config"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store/pg"
+	"github.com/nextlevelbuilder/vbpclaw/internal/tracing"
 )
 
 // setupStoresAndTracing creates PG stores, tracing collector, snapshot worker, and wires cron config.
@@ -22,7 +22,7 @@ func setupStoresAndTracing(
 	msgBus *bus.MessageBus,
 ) (*store.Stores, *tracing.Collector, *tracing.SnapshotWorker) {
 	if cfg.Database.PostgresDSN == "" {
-		slog.Error("GOCLAW_POSTGRES_DSN is required. Set it in your environment or .env.local file.")
+		slog.Error("VBPCLAW_POSTGRES_DSN is required. Set it in your environment or .env.local file.")
 		os.Exit(1)
 	}
 
@@ -33,7 +33,7 @@ func setupStoresAndTracing(
 
 	storeCfg := store.StoreConfig{
 		PostgresDSN:      cfg.Database.PostgresDSN,
-		EncryptionKey:    os.Getenv("GOCLAW_ENCRYPTION_KEY"),
+		EncryptionKey:    os.Getenv("VBPCLAW_ENCRYPTION_KEY"),
 		SkillsStorageDir: filepath.Join(dataDir, "skills-store"),
 	}
 	pgStores, pgErr := pg.NewPGStores(storeCfg)

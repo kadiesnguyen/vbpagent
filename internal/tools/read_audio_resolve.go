@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/nextlevelbuilder/goclaw/internal/providers"
+	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
 )
 
 // resolveAudioFile finds the audio file path from context MediaRefs.
@@ -106,24 +106,26 @@ func (t *ReadAudioTool) callProvider(ctx context.Context, cp credentialProvider,
 		}
 	}
 
-	// Other providers: try standard Chat API with base64 audio as image_url (best effort).
+	// Other providers: try standard Chat API with audio described as text (best effort).
+	// NOTE: We do NOT send audio as Images — providers reject non-image MIME types in
+	// the images field. Instead, inform the model that audio is present but cannot be
+	// decoded via this provider path.
 	p, err := t.registry.Get(ctx, providerName)
 	if err != nil {
 		return nil, nil, fmt.Errorf("provider %q not available: %w", providerName, err)
 	}
 
-	slog.Info("read_audio: using chat API fallback", "provider", providerName, "model", model, "size", len(data))
+	slog.Info("read_audio: using chat API fallback (no audio data)", "provider", providerName, "model", model)
 	resp, err := p.Chat(ctx, providers.ChatRequest{
 		Messages: []providers.Message{
 			{
 				Role:    "user",
-				Content: prompt,
-				Images:  []providers.ImageContent{{MimeType: mime, Data: base64.StdEncoding.EncodeToString(data)}},
+				Content: fmt.Sprintf("[Audio file (%s, %d bytes) — transcription not supported by this provider. %s]", mime, len(data), prompt),
 			},
 		},
 		Model: model,
 		Options: map[string]any{
-			"max_tokens":  16384,
+			"max_tokens":  1024,
 			"temperature": 0.2,
 		},
 	})
@@ -135,13 +137,20 @@ func (t *ReadAudioTool) callProvider(ctx context.Context, cp credentialProvider,
 
 // openaiAudioCall sends audio to OpenAI using the input_audio content part.
 func openaiAudioCall(ctx context.Context, apiKey, baseURL, model, prompt string, data []byte, mime string) (*providers.ChatResponse, error) {
-	// Determine format from MIME (OpenAI supports: wav, mp3).
+	// Determine format from MIME.
+	// gpt-4o-audio-preview input_audio supports: mp3, mp4, mpeg, mpga, m4a, ogg, wav, webm.
 	format := "mp3"
 	switch {
 	case strings.Contains(mime, "wav"):
 		format = "wav"
 	case strings.Contains(mime, "mp3"), strings.Contains(mime, "mpeg"):
 		format = "mp3"
+	case strings.Contains(mime, "ogg"), strings.Contains(mime, "opus"):
+		format = "ogg"
+	case strings.Contains(mime, "mp4"), strings.Contains(mime, "m4a"):
+		format = "mp4"
+	case strings.Contains(mime, "webm"):
+		format = "webm"
 	}
 
 	b64 := base64.StdEncoding.EncodeToString(data)

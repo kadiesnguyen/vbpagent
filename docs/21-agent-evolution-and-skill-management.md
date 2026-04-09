@@ -431,12 +431,12 @@ Line-by-line regex scan of SKILL.md content **before** any disk write. Hard-reje
 |----------|----------|
 | Destructive shell | `rm -rf /`, fork bomb, `dd of=/dev/`, `mkfs`, `shred` |
 | Code injection | `base64 -d \| sh`, `eval $(...)`, `curl \| bash`, `python -c exec()` |
-| Credential exfil | `/etc/passwd`, `.ssh/id_rsa`, `AWS_SECRET_ACCESS_KEY`, `GOCLAW_DB_URL` |
+| Credential exfil | `/etc/passwd`, `.ssh/id_rsa`, `AWS_SECRET_ACCESS_KEY`, `VBPCLAW_DB_URL` |
 | Path traversal | `../../../` deep traversal |
 | SQL injection | `DROP TABLE`, `TRUNCATE TABLE`, `DROP DATABASE` |
 | Privilege escalation | `sudo`, world-writable `chmod`, `chown root` |
 
-Not exhaustive — defense-in-depth layer. GoClaw's `exec` tool has its own runtime deny-list for shell commands.
+Not exhaustive — defense-in-depth layer. VBPClaw's `exec` tool has its own runtime deny-list for shell commands.
 
 ### 4.2 Ownership Enforcement
 

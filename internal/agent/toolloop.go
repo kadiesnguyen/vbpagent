@@ -168,7 +168,7 @@ func (s *toolLoopState) recordMutation(toolName string, args map[string]any) {
 		return
 	}
 	// exec/bash: ambiguous (could be ls or rm).
-	// mcp_*: user-defined external tools — GoClaw cannot determine read vs write.
+	// mcp_*: user-defined external tools — VBPClaw cannot determine read vs write.
 	// Neither reset nor increment the read-only streak.
 	if toolName == "exec" || toolName == "bash" || strings.HasPrefix(toolName, "mcp_") {
 		return

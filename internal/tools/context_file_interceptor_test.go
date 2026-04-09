@@ -8,8 +8,8 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/nextlevelbuilder/goclaw/internal/cache"
-	"github.com/nextlevelbuilder/goclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/internal/cache"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
 )
 
 // ---- minimal AgentStore stub for interceptor tests ----

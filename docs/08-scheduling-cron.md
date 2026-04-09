@@ -51,10 +51,10 @@ flowchart TD
 
 | Lane | Concurrency | Env Override | Purpose |
 |------|:-----------:|-------------|---------|
-| `main` | 30 | `GOCLAW_LANE_MAIN` | Primary user chat sessions |
-| `subagent` | 50 | `GOCLAW_LANE_SUBAGENT` | Sub-agents spawned by the main agent |
-| `team` | 100 | `GOCLAW_LANE_TEAM` | Agent team/delegation executions |
-| `cron` | 30 | `GOCLAW_LANE_CRON` | Scheduled cron jobs (per-session serialization prevents same-job races) |
+| `main` | 30 | `VBPCLAW_LANE_MAIN` | Primary user chat sessions |
+| `subagent` | 50 | `VBPCLAW_LANE_SUBAGENT` | Sub-agents spawned by the main agent |
+| `team` | 100 | `VBPCLAW_LANE_TEAM` | Agent team/delegation executions |
+| `cron` | 30 | `VBPCLAW_LANE_CRON` | Scheduled cron jobs (per-session serialization prevents same-job races) |
 
 `GetOrCreate()` allows creating new lanes on demand with custom concurrency. All lane concurrency values are configurable via environment variables.
 

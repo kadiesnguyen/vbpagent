@@ -10,12 +10,12 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/nextlevelbuilder/goclaw/internal/bus"
-	"github.com/nextlevelbuilder/goclaw/internal/crypto"
-	"github.com/nextlevelbuilder/goclaw/internal/i18n"
-	"github.com/nextlevelbuilder/goclaw/internal/permissions"
-	"github.com/nextlevelbuilder/goclaw/internal/store"
-	"github.com/nextlevelbuilder/goclaw/pkg/protocol"
+	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
+	"github.com/nextlevelbuilder/vbpclaw/internal/crypto"
+	"github.com/nextlevelbuilder/vbpclaw/internal/i18n"
+	"github.com/nextlevelbuilder/vbpclaw/internal/permissions"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/nextlevelbuilder/vbpclaw/pkg/protocol"
 )
 
 // extractBearerToken extracts a bearer token from the Authorization header.
@@ -43,7 +43,7 @@ func tokenMatch(provided, expected string) bool {
 // Returns "" if no user ID is provided (anonymous).
 // Rejects IDs exceeding MaxUserIDLength (VARCHAR(255) DB constraint).
 func extractUserID(r *http.Request) string {
-	id := r.Header.Get("X-GoClaw-User-Id")
+	id := r.Header.Get("X-VBPClaw-User-Id")
 	if id == "" {
 		return ""
 	}
@@ -57,8 +57,8 @@ func extractUserID(r *http.Request) string {
 // extractAgentID determines the target agent from the request.
 // Checks model field, headers, and falls back to "default".
 func extractAgentID(r *http.Request, model string) string {
-	// From model field: "goclaw:<agentId>" or "agent:<agentId>"
-	if after, ok := strings.CutPrefix(model, "goclaw:"); ok {
+	// From model field: "vbpclaw:<agentId>" or "agent:<agentId>"
+	if after, ok := strings.CutPrefix(model, "vbpclaw:"); ok {
 		return after
 	}
 	if after, ok := strings.CutPrefix(model, "agent:"); ok {
@@ -66,10 +66,10 @@ func extractAgentID(r *http.Request, model string) string {
 	}
 
 	// From headers
-	if id := r.Header.Get("X-GoClaw-Agent-Id"); id != "" {
+	if id := r.Header.Get("X-VBPClaw-Agent-Id"); id != "" {
 		return id
 	}
-	if id := r.Header.Get("X-GoClaw-Agent"); id != "" {
+	if id := r.Header.Get("X-VBPClaw-Agent"); id != "" {
 		return id
 	}
 
@@ -104,7 +104,7 @@ func InitAPIKeyCache(s store.APIKeyStore, mb *bus.MessageBus) {
 }
 
 // InitPairingAuth sets the pairing store for HTTP auth.
-// Allows browser-paired users to access HTTP APIs via X-GoClaw-Sender-Id header.
+// Allows browser-paired users to access HTTP APIs via X-VBPClaw-Sender-Id header.
 func InitPairingAuth(ps store.PairingStore) {
 	pkgPairingStore = ps
 }
@@ -179,7 +179,7 @@ func resolveAuthWithBearer(r *http.Request, bearer string) authResult {
 			role = permissions.RoleOwner
 		}
 		res := authResult{Role: role, Authenticated: true}
-		tenantVal := r.Header.Get("X-GoClaw-Tenant-Id")
+		tenantVal := r.Header.Get("X-VBPClaw-Tenant-Id")
 		if isOwner {
 			res.TenantID = resolveScopedTenant(r.Context(), tenantVal)
 		} else {
@@ -201,7 +201,7 @@ func resolveAuthWithBearer(r *http.Request, bearer string) authResult {
 		if keyData.TenantID == uuid.Nil {
 			// System-level API keys keep their scope-derived role. They may
 			// optionally scope a request to a tenant, but they do not become owner.
-			res.TenantID = resolveScopedTenant(r.Context(), r.Header.Get("X-GoClaw-Tenant-Id"))
+			res.TenantID = resolveScopedTenant(r.Context(), r.Header.Get("X-VBPClaw-Tenant-Id"))
 			if res.TenantID == uuid.Nil {
 				res.TenantID = store.MasterTenantID
 			}
@@ -212,23 +212,30 @@ func resolveAuthWithBearer(r *http.Request, bearer string) authResult {
 		}
 		return res
 	}
-	// Browser pairing → operator (via X-GoClaw-Sender-Id header)
-	if senderID := r.Header.Get("X-GoClaw-Sender-Id"); senderID != "" && pkgPairingStore != nil {
-		paired, err := pkgPairingStore.IsPaired(r.Context(), senderID, "browser")
-		if err == nil && paired {
-			tenantID, allowed := resolveTenantHint(r.Context(), r.Header.Get("X-GoClaw-Tenant-Id"), extractUserID(r))
-			if !allowed {
-				return authResult{}
+	// Browser pairing → admin (via X-VBPClaw-Sender-Id header)
+	if senderID := r.Header.Get("X-VBPClaw-Sender-Id"); senderID != "" && pkgPairingStore != nil {
+		device, err := pkgPairingStore.GetPairedDevice(r.Context(), senderID, "browser")
+		if err != nil {
+			slog.Warn("security.http_pairing_check_failed", "sender_id", senderID, "error", err)
+		} else if device != nil {
+			// Use the tenant recorded in paired_devices (set at request time).
+			tenantID := device.TenantID
+			if tenantID == uuid.Nil {
+				tenantID = store.MasterTenantID
+			}
+			// Legacy pairings are stored under MasterTenantID (created before tenant_hint support).
+			// Honor X-VBPClaw-Tenant-Id header to scope the session to the correct tenant.
+			if tenantID == store.MasterTenantID {
+				if scoped := resolveScopedTenant(r.Context(), r.Header.Get("X-VBPClaw-Tenant-Id")); scoped != uuid.Nil {
+					tenantID = scoped
+				}
 			}
 			return authResult{
-				Role:          permissions.RoleOperator,
+				Role:          permissions.RoleAdmin,
 				Authenticated: true,
 				TenantID:      tenantID,
 				TenantSlug:    resolveTenantSlug(r.Context(), tenantID),
 			}
-		}
-		if err != nil {
-			slog.Warn("security.http_pairing_check_failed", "sender_id", senderID, "error", err)
 		} else {
 			slog.Warn("security.http_pairing_auth_failed", "sender_id", senderID, "ip", r.RemoteAddr)
 		}

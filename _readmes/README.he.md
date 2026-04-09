@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="../_statics/goclaw.png" alt="GoClaw" />
+  <img src="../_statics/vbpclaw.png" alt="VBPClaw" />
 </p>
 
-<h1 align="center">GoClaw</h1>
+<h1 align="center">VBPClaw</h1>
 
 <p align="center"><strong>Enterprise AI Agent Platform</strong></p>
 
@@ -12,8 +12,8 @@ Single binary. Production-tested. Agents that orchestrate for you.
 </p>
 
 <p align="center">
-  <a href="https://docs.goclaw.sh">תיעוד</a> •
-  <a href="https://docs.goclaw.sh/#quick-start">התחלה מהירה</a> •
+  <a href="https://docs.vbpclaw.sh">תיעוד</a> •
+  <a href="https://docs.vbpclaw.sh/#quick-start">התחלה מהירה</a> •
   <a href="https://x.com/nlb_io">Twitter / X</a>
 </p>
 
@@ -28,7 +28,7 @@ Single binary. Production-tested. Agents that orchestrate for you.
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="License: MIT" />
 </p>
 
-**GoClaw** הוא שער AI רב-סוכנים המחבר מודלי שפה גדולים לכלים, לערוצים ולנתונים שלך — פרוס כקובץ בינארי יחיד של Go ללא תלויות ריצה. הוא מתזמר צוותי סוכנים ואת הברת המשימות בין סוכנים אצל מעל 20 ספקי LLM עם בידוד מרובה-דיירים מלא.
+**VBPClaw** הוא שער AI רב-סוכנים המחבר מודלי שפה גדולים לכלים, לערוצים ולנתונים שלך — פרוס כקובץ בינארי יחיד של Go ללא תלויות ריצה. הוא מתזמר צוותי סוכנים ואת הברת המשימות בין סוכנים אצל מעל 20 ספקי LLM עם בידוד מרובה-דיירים מלא.
 
 פורט Go של [OpenClaw](https://github.com/openclaw/openclaw) עם אבטחה משופרת, PostgreSQL מרובה-דיירים ויכולות תצפית ברמת ייצור.
 
@@ -80,7 +80,7 @@ Single binary. Production-tested. Agents that orchestrate for you.
 
 ## מערכת האקולוגית של Claw
 
-|                 | OpenClaw        | ZeroClaw | PicoClaw | **GoClaw**                              |
+|                 | OpenClaw        | ZeroClaw | PicoClaw | **VBPClaw**                              |
 | --------------- | --------------- | -------- | -------- | --------------------------------------- |
 | שפה             | TypeScript      | Rust     | Go       | **Go**                                  |
 | גודל קובץ בינארי | 28 MB + Node.js | 3.4 MB   | ~8 MB    | **~25 MB** (בסיס) / **~36 MB** (+ OTel) |
@@ -89,7 +89,7 @@ Single binary. Production-tested. Agents that orchestrate for you.
 | הפעלה           | > 5 s           | < 10 ms  | < 1 s    | **< 1 s**                               |
 | חומרת יעד       | Mac Mini $599+  | קצה $10  | קצה $10  | **VPS $5+**                             |
 
-| תכונה                      | OpenClaw                             | ZeroClaw                                     | PicoClaw                              | **GoClaw**                     |
+| תכונה                      | OpenClaw                             | ZeroClaw                                     | PicoClaw                              | **VBPClaw**                     |
 | -------------------------- | ------------------------------------ | -------------------------------------------- | ------------------------------------- | ------------------------------ |
 | מרובה-דיירים (PostgreSQL)  | —                                    | —                                            | —                                     | ✅                             |
 | שילוב MCP                  | — (משתמש ב-ACP)                      | —                                            | —                                     | ✅ (stdio/SSE/streamable-http) |
@@ -110,7 +110,7 @@ Single binary. Production-tested. Agents that orchestrate for you.
 ## ארכיטקטורה
 
 <p align="center">
-  <img src="../_statics/architecture.jpg" alt="GoClaw Architecture" width="800" />
+  <img src="../_statics/architecture.jpg" alt="VBPClaw Architecture" width="800" />
 </p>
 
 ## התחלה מהירה
@@ -120,10 +120,10 @@ Single binary. Production-tested. Agents that orchestrate for you.
 ### מהמקור
 
 ```bash
-git clone https://github.com/nextlevelbuilder/goclaw.git && cd goclaw
+git clone https://github.com/nextlevelbuilder/vbpclaw.git && cd vbpclaw
 make build
-./goclaw onboard        # אשף הגדרה אינטראקטיבי
-source .env.local && ./goclaw
+./vbpclaw onboard        # אשף הגדרה אינטראקטיבי
+source .env.local && ./vbpclaw
 ```
 
 ### עם Docker
@@ -132,20 +132,20 @@ source .env.local && ./goclaw
 # יצירת .env עם סודות שנוצרו אוטומטית
 chmod +x prepare-env.sh && ./prepare-env.sh
 
-# הוסף לפחות GOCLAW_*_API_KEY אחד ל-.env, ואז:
+# הוסף לפחות VBPCLAW_*_API_KEY אחד ל-.env, ואז:
 make up
 
 # לוח הבקרה הווב בכתובת http://localhost:18790
 # בדיקת תקינות: curl http://localhost:18790/health
 ```
 
-כאשר משתני הסביבה `GOCLAW_*_API_KEY` מוגדרים, השער מגדיר את עצמו אוטומטית ללא פרומפטים אינטראקטיביים — מזהה ספק, מריץ מיגרציות ומזרע נתוני ברירת מחדל.
+כאשר משתני הסביבה `VBPCLAW_*_API_KEY` מוגדרים, השער מגדיר את עצמו אוטומטית ללא פרומפטים אינטראקטיביים — מזהה ספק, מריץ מיגרציות ומזרע נתוני ברירת מחדל.
 
-> לגרסאות בנייה (OTel, Tailscale, Redis), תגי תמונת Docker ושכבות compose, ראה את [מדריך הפריסה](https://docs.goclaw.sh/#deploy-docker-compose).
+> לגרסאות בנייה (OTel, Tailscale, Redis), תגי תמונת Docker ושכבות compose, ראה את [מדריך הפריסה](https://docs.vbpclaw.sh/#deploy-docker-compose).
 
 ## תזמור רב-סוכנים
 
-GoClaw תומך בצוותי סוכנים ובהאברת משימות בין סוכנים — כל סוכן רץ עם הזהות, הכלים, ספק ה-LLM וקבצי ההקשר שלו.
+VBPClaw תומך בצוותי סוכנים ובהאברת משימות בין סוכנים — כל סוכן רץ עם הזהות, הכלים, ספק ה-LLM וקבצי ההקשר שלו.
 
 ### האברת משימות בין סוכנים
 
@@ -170,7 +170,7 @@ GoClaw תומך בצוותי סוכנים ובהאברת משימות בין ס�
 - **תיבת דואר של הצוות** — הודעות ישירות עמית-לעמית ושידורים
 - **כלים**: `team_tasks` לניהול משימות, `team_message` לתיבת הדואר
 
-> לפרטי האברה, קישורי הרשאה ובקרת מקביליות, ראה את [תיעוד צוותי סוכנים](https://docs.goclaw.sh/#teams-what-are-teams).
+> לפרטי האברה, קישורי הרשאה ובקרת מקביליות, ראה את [תיעוד צוותי סוכנים](https://docs.vbpclaw.sh/#teams-what-are-teams).
 
 ## כלים מובנים
 
@@ -214,19 +214,19 @@ GoClaw תומך בצוותי סוכנים ובהאברת משימות בין ס�
 
 ## תיעוד
 
-תיעוד מלא בכתובת **[docs.goclaw.sh](https://docs.goclaw.sh)** — או עיין במקור ב-[`goclaw-docs/`](https://github.com/nextlevelbuilder/goclaw-docs)
+תיעוד מלא בכתובת **[docs.vbpclaw.sh](https://docs.vbpclaw.sh)** — או עיין במקור ב-[`vbpclaw-docs/`](https://github.com/nextlevelbuilder/vbpclaw-docs)
 
 | קטע | נושאים |
 |---------|--------|
-| [תחילת עבודה](https://docs.goclaw.sh/#what-is-goclaw) | התקנה, התחלה מהירה, הגדרה, סיור בלוח הבקרה הווב |
-| [מושגי יסוד](https://docs.goclaw.sh/#how-goclaw-works) | לולאת סוכן, סשנים, כלים, זיכרון, מרובה-דיירות |
-| [סוכנים](https://docs.goclaw.sh/#creating-agents) | יצירת סוכנים, קבצי הקשר, אישיות, שיתוף וגישה |
-| [ספקים](https://docs.goclaw.sh/#providers-overview) | Anthropic, OpenAI, OpenRouter, Gemini, DeepSeek, +15 נוספים |
-| [ערוצים](https://docs.goclaw.sh/#channels-overview) | Telegram, Discord, Slack, Feishu, Zalo, WhatsApp, WebSocket |
-| [צוותי סוכנים](https://docs.goclaw.sh/#teams-what-are-teams) | צוותים, לוח משימות, הודעות, האברה והעברה |
-| [מתקדם](https://docs.goclaw.sh/#custom-tools) | כלים מותאמים, MCP, מיומנויות, Cron, ארגז חול, Hooks, RBAC |
-| [פריסה](https://docs.goclaw.sh/#deploy-docker-compose) | Docker Compose, מסד נתונים, אבטחה, תצפית, Tailscale |
-| [עיון](https://docs.goclaw.sh/#cli-commands) | פקודות CLI, REST API, פרוטוקול WebSocket, משתני סביבה |
+| [תחילת עבודה](https://docs.vbpclaw.sh/#what-is-vbpclaw) | התקנה, התחלה מהירה, הגדרה, סיור בלוח הבקרה הווב |
+| [מושגי יסוד](https://docs.vbpclaw.sh/#how-vbpclaw-works) | לולאת סוכן, סשנים, כלים, זיכרון, מרובה-דיירות |
+| [סוכנים](https://docs.vbpclaw.sh/#creating-agents) | יצירת סוכנים, קבצי הקשר, אישיות, שיתוף וגישה |
+| [ספקים](https://docs.vbpclaw.sh/#providers-overview) | Anthropic, OpenAI, OpenRouter, Gemini, DeepSeek, +15 נוספים |
+| [ערוצים](https://docs.vbpclaw.sh/#channels-overview) | Telegram, Discord, Slack, Feishu, Zalo, WhatsApp, WebSocket |
+| [צוותי סוכנים](https://docs.vbpclaw.sh/#teams-what-are-teams) | צוותים, לוח משימות, הודעות, האברה והעברה |
+| [מתקדם](https://docs.vbpclaw.sh/#custom-tools) | כלים מותאמים, MCP, מיומנויות, Cron, ארגז חול, Hooks, RBAC |
+| [פריסה](https://docs.vbpclaw.sh/#deploy-docker-compose) | Docker Compose, מסד נתונים, אבטחה, תצפית, Tailscale |
+| [עיון](https://docs.vbpclaw.sh/#cli-commands) | פקודות CLI, REST API, פרוטוקול WebSocket, משתני סביבה |
 
 ## בדיקות
 
@@ -241,7 +241,7 @@ go test -v ./tests/integration/ -timeout 120s    # בדיקות אינטגרצי
 
 ## תודות
 
-GoClaw בנוי על בסיס הפרויקט המקורי [OpenClaw](https://github.com/openclaw/openclaw). אנו אסירי תודה על הארכיטקטורה והחזון שהשרה פורט Go זה.
+VBPClaw בנוי על בסיס הפרויקט המקורי [OpenClaw](https://github.com/openclaw/openclaw). אנו אסירי תודה על הארכיטקטורה והחזון שהשרה פורט Go זה.
 
 ## רישיון
 

@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="../_statics/goclaw.png" alt="GoClaw" />
+  <img src="../_statics/vbpclaw.png" alt="VBPClaw" />
 </p>
 
-<h1 align="center">GoClaw</h1>
+<h1 align="center">VBPClaw</h1>
 
 <p align="center"><strong>Enterprise AI Agent Platform</strong></p>
 
@@ -12,8 +12,8 @@ Single binary. Production-tested. Agents that orchestrate for you.
 </p>
 
 <p align="center">
-  <a href="https://docs.goclaw.sh">Dokumentasjon</a> •
-  <a href="https://docs.goclaw.sh/#quick-start">Hurtigstart</a> •
+  <a href="https://docs.vbpclaw.sh">Dokumentasjon</a> •
+  <a href="https://docs.vbpclaw.sh/#quick-start">Hurtigstart</a> •
   <a href="https://x.com/nlb_io">Twitter / X</a>
 </p>
 
@@ -28,7 +28,7 @@ Single binary. Production-tested. Agents that orchestrate for you.
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="License: MIT" />
 </p>
 
-**GoClaw** er en AI-gateway for flere agenter som kobler LLM-er til verktøyene, kanalene og dataene dine — distribuert som én enkelt Go-binærfil uten kjøretidsavhengigheter. Den orkestrerer agentteam og delegering mellom agenter på tvers av 20+ LLM-leverandører med full flerleietaker-isolasjon.
+**VBPClaw** er en AI-gateway for flere agenter som kobler LLM-er til verktøyene, kanalene og dataene dine — distribuert som én enkelt Go-binærfil uten kjøretidsavhengigheter. Den orkestrerer agentteam og delegering mellom agenter på tvers av 20+ LLM-leverandører med full flerleietaker-isolasjon.
 
 En Go-port av [OpenClaw](https://github.com/openclaw/openclaw) med forbedret sikkerhet, flerleietaker PostgreSQL og produksjonsklar observerbarhet.
 
@@ -80,7 +80,7 @@ En Go-port av [OpenClaw](https://github.com/openclaw/openclaw) med forbedret sik
 
 ## Claw-økosystemet
 
-|                 | OpenClaw        | ZeroClaw | PicoClaw | **GoClaw**                              |
+|                 | OpenClaw        | ZeroClaw | PicoClaw | **VBPClaw**                              |
 | --------------- | --------------- | -------- | -------- | --------------------------------------- |
 | Språk           | TypeScript      | Rust     | Go       | **Go**                                  |
 | Binærstørrelse  | 28 MB + Node.js | 3.4 MB   | ~8 MB    | **~25 MB** (base) / **~36 MB** (+ OTel) |
@@ -89,7 +89,7 @@ En Go-port av [OpenClaw](https://github.com/openclaw/openclaw) med forbedret sik
 | Oppstart        | > 5 s           | < 10 ms  | < 1 s    | **< 1 s**                               |
 | Målmaskinvare   | $599+ Mac Mini  | $10 edge | $10 edge | **$5 VPS+**                             |
 
-| Funksjon                    | OpenClaw                             | ZeroClaw                                     | PicoClaw                              | **GoClaw**                     |
+| Funksjon                    | OpenClaw                             | ZeroClaw                                     | PicoClaw                              | **VBPClaw**                     |
 | -------------------------- | ------------------------------------ | -------------------------------------------- | ------------------------------------- | ------------------------------ |
 | Flerleietaker (PostgreSQL)  | —                                    | —                                            | —                                     | ✅                             |
 | MCP-integrasjon            | — (bruker ACP)                       | —                                            | —                                     | ✅ (stdio/SSE/streamable-http) |
@@ -110,7 +110,7 @@ En Go-port av [OpenClaw](https://github.com/openclaw/openclaw) med forbedret sik
 ## Arkitektur
 
 <p align="center">
-  <img src="../_statics/architecture.jpg" alt="GoClaw Architecture" width="800" />
+  <img src="../_statics/architecture.jpg" alt="VBPClaw Architecture" width="800" />
 </p>
 
 ## Hurtigstart
@@ -120,10 +120,10 @@ En Go-port av [OpenClaw](https://github.com/openclaw/openclaw) med forbedret sik
 ### Fra kildekode
 
 ```bash
-git clone https://github.com/nextlevelbuilder/goclaw.git && cd goclaw
+git clone https://github.com/nextlevelbuilder/vbpclaw.git && cd vbpclaw
 make build
-./goclaw onboard        # Interaktiv oppsettsveiviser
-source .env.local && ./goclaw
+./vbpclaw onboard        # Interaktiv oppsettsveiviser
+source .env.local && ./vbpclaw
 ```
 
 ### Med Docker
@@ -132,20 +132,20 @@ source .env.local && ./goclaw
 # Generer .env med automatisk genererte hemmeligheter
 chmod +x prepare-env.sh && ./prepare-env.sh
 
-# Legg til minst én GOCLAW_*_API_KEY i .env, deretter:
+# Legg til minst én VBPCLAW_*_API_KEY i .env, deretter:
 make up
 
 # Web-dashbord på http://localhost:18790
 # Helsesjekk: curl http://localhost:18790/health
 ```
 
-Når `GOCLAW_*_API_KEY`-miljøvariabler er satt, registrerer gatewayen seg automatisk uten interaktive spørsmål — oppdager leverandør, kjører migrasjoner og fyller inn standarddata.
+Når `VBPCLAW_*_API_KEY`-miljøvariabler er satt, registrerer gatewayen seg automatisk uten interaktive spørsmål — oppdager leverandør, kjører migrasjoner og fyller inn standarddata.
 
-> For byggevarianter (OTel, Tailscale, Redis), Docker-bildekoder og compose-overlegg, se [Distribusjonsveiledningen](https://docs.goclaw.sh/#deploy-docker-compose).
+> For byggevarianter (OTel, Tailscale, Redis), Docker-bildekoder og compose-overlegg, se [Distribusjonsveiledningen](https://docs.vbpclaw.sh/#deploy-docker-compose).
 
 ## Fler-agent-orkestrering
 
-GoClaw støtter agentteam og delegering mellom agenter — hver agent kjører med sin egen identitet, verktøy, LLM-leverandør og kontekstfiler.
+VBPClaw støtter agentteam og delegering mellom agenter — hver agent kjører med sin egen identitet, verktøy, LLM-leverandør og kontekstfiler.
 
 ### Agentdelegering
 
@@ -170,7 +170,7 @@ Agenter kommuniserer gjennom eksplisitte **tillatelseslenker** med retningskontr
 - **Team-postboks** — Direkte meldinger mellom agenter og kringkasting
 - **Verktøy**: `team_tasks` for oppgaveadministrasjon, `team_message` for postboks
 
-> For detaljer om delegering, tillatelseslenker og samtidige grenser, se [dokumentasjonen for agentteam](https://docs.goclaw.sh/#teams-what-are-teams).
+> For detaljer om delegering, tillatelseslenker og samtidige grenser, se [dokumentasjonen for agentteam](https://docs.vbpclaw.sh/#teams-what-are-teams).
 
 ## Innebygde verktøy
 
@@ -214,19 +214,19 @@ Agenter kommuniserer gjennom eksplisitte **tillatelseslenker** med retningskontr
 
 ## Dokumentasjon
 
-Fullstendig dokumentasjon på **[docs.goclaw.sh](https://docs.goclaw.sh)** — eller bla gjennom kilden i [`goclaw-docs/`](https://github.com/nextlevelbuilder/goclaw-docs)
+Fullstendig dokumentasjon på **[docs.vbpclaw.sh](https://docs.vbpclaw.sh)** — eller bla gjennom kilden i [`vbpclaw-docs/`](https://github.com/nextlevelbuilder/vbpclaw-docs)
 
 | Seksjon | Emner |
 |---------|-------|
-| [Kom i gang](https://docs.goclaw.sh/#what-is-goclaw) | Installasjon, hurtigstart, konfigurasjon, web-dashbord-omvisning |
-| [Kjernekonsepter](https://docs.goclaw.sh/#how-goclaw-works) | Agentløkke, sesjoner, verktøy, minne, flerleietaker |
-| [Agenter](https://docs.goclaw.sh/#creating-agents) | Opprette agenter, kontekstfiler, personlighet, deling og tilgang |
-| [Leverandører](https://docs.goclaw.sh/#providers-overview) | Anthropic, OpenAI, OpenRouter, Gemini, DeepSeek, +15 flere |
-| [Kanaler](https://docs.goclaw.sh/#channels-overview) | Telegram, Discord, Slack, Feishu, Zalo, WhatsApp, WebSocket |
-| [Agentteam](https://docs.goclaw.sh/#teams-what-are-teams) | Team, oppgavetavle, meldinger, delegering og overlevering |
-| [Avansert](https://docs.goclaw.sh/#custom-tools) | Egendefinerte verktøy, MCP, ferdigheter, cron, sandbox, kroker, RBAC |
-| [Distribusjon](https://docs.goclaw.sh/#deploy-docker-compose) | Docker Compose, database, sikkerhet, observerbarhet, Tailscale |
-| [Referanse](https://docs.goclaw.sh/#cli-commands) | CLI-kommandoer, REST API, WebSocket-protokoll, miljøvariabler |
+| [Kom i gang](https://docs.vbpclaw.sh/#what-is-vbpclaw) | Installasjon, hurtigstart, konfigurasjon, web-dashbord-omvisning |
+| [Kjernekonsepter](https://docs.vbpclaw.sh/#how-vbpclaw-works) | Agentløkke, sesjoner, verktøy, minne, flerleietaker |
+| [Agenter](https://docs.vbpclaw.sh/#creating-agents) | Opprette agenter, kontekstfiler, personlighet, deling og tilgang |
+| [Leverandører](https://docs.vbpclaw.sh/#providers-overview) | Anthropic, OpenAI, OpenRouter, Gemini, DeepSeek, +15 flere |
+| [Kanaler](https://docs.vbpclaw.sh/#channels-overview) | Telegram, Discord, Slack, Feishu, Zalo, WhatsApp, WebSocket |
+| [Agentteam](https://docs.vbpclaw.sh/#teams-what-are-teams) | Team, oppgavetavle, meldinger, delegering og overlevering |
+| [Avansert](https://docs.vbpclaw.sh/#custom-tools) | Egendefinerte verktøy, MCP, ferdigheter, cron, sandbox, kroker, RBAC |
+| [Distribusjon](https://docs.vbpclaw.sh/#deploy-docker-compose) | Docker Compose, database, sikkerhet, observerbarhet, Tailscale |
+| [Referanse](https://docs.vbpclaw.sh/#cli-commands) | CLI-kommandoer, REST API, WebSocket-protokoll, miljøvariabler |
 
 ## Testing
 
@@ -241,7 +241,7 @@ Se [CHANGELOG.md](CHANGELOG.md) for detaljert funksjonsstatus, inkludert hva som
 
 ## Anerkjennelser
 
-GoClaw er bygd på det opprinnelige [OpenClaw](https://github.com/openclaw/openclaw)-prosjektet. Vi er takknemlige for arkitekturen og visjonen som inspirerte denne Go-porten.
+VBPClaw er bygd på det opprinnelige [OpenClaw](https://github.com/openclaw/openclaw)-prosjektet. Vi er takknemlige for arkitekturen og visjonen som inspirerte denne Go-porten.
 
 ## Lisens
 

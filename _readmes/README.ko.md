@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="../_statics/goclaw.png" alt="GoClaw" />
+  <img src="../_statics/vbpclaw.png" alt="VBPClaw" />
 </p>
 
-<h1 align="center">GoClaw</h1>
+<h1 align="center">VBPClaw</h1>
 
 <p align="center"><strong>Enterprise AI Agent Platform</strong></p>
 
@@ -12,8 +12,8 @@ Single binary. Production-tested. Agents that orchestrate for you.
 </p>
 
 <p align="center">
-  <a href="https://docs.goclaw.sh">문서</a> •
-  <a href="https://docs.goclaw.sh/#quick-start">빠른 시작</a> •
+  <a href="https://docs.vbpclaw.sh">문서</a> •
+  <a href="https://docs.vbpclaw.sh/#quick-start">빠른 시작</a> •
   <a href="https://x.com/nlb_io">Twitter / X</a>
 </p>
 
@@ -28,7 +28,7 @@ Single binary. Production-tested. Agents that orchestrate for you.
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="License: MIT" />
 </p>
 
-**GoClaw**는 LLM을 도구, 채널, 데이터에 연결하는 멀티 에이전트 AI 게이트웨이입니다 — 런타임 의존성 없이 단일 Go 바이너리로 배포됩니다. 20개 이상의 LLM 공급자에서 완전한 멀티 테넌트 격리와 함께 에이전트 팀과 에이전트 간 위임을 조율합니다.
+**VBPClaw**는 LLM을 도구, 채널, 데이터에 연결하는 멀티 에이전트 AI 게이트웨이입니다 — 런타임 의존성 없이 단일 Go 바이너리로 배포됩니다. 20개 이상의 LLM 공급자에서 완전한 멀티 테넌트 격리와 함께 에이전트 팀과 에이전트 간 위임을 조율합니다.
 
 향상된 보안, 멀티 테넌트 PostgreSQL, 프로덕션 수준의 관측 가능성을 갖춘 [OpenClaw](https://github.com/openclaw/openclaw)의 Go 포트입니다.
 
@@ -58,7 +58,7 @@ Single binary. Production-tested. Agents that orchestrate for you.
 
 ## Claw 에코시스템
 
-|                 | OpenClaw        | ZeroClaw | PicoClaw | **GoClaw**                              |
+|                 | OpenClaw        | ZeroClaw | PicoClaw | **VBPClaw**                              |
 | --------------- | --------------- | -------- | -------- | --------------------------------------- |
 | 언어            | TypeScript      | Rust     | Go       | **Go**                                  |
 | 바이너리 크기   | 28 MB + Node.js | 3.4 MB   | ~8 MB    | **~25 MB** (기본) / **~36 MB** (+ OTel) |
@@ -67,7 +67,7 @@ Single binary. Production-tested. Agents that orchestrate for you.
 | 시작 시간       | > 5 s           | < 10 ms  | < 1 s    | **< 1 s**                               |
 | 대상 하드웨어   | $599+ Mac Mini  | $10 엣지 | $10 엣지 | **$5 VPS+**                             |
 
-| 기능                       | OpenClaw                             | ZeroClaw                                     | PicoClaw                              | **GoClaw**                     |
+| 기능                       | OpenClaw                             | ZeroClaw                                     | PicoClaw                              | **VBPClaw**                     |
 | -------------------------- | ------------------------------------ | -------------------------------------------- | ------------------------------------- | ------------------------------ |
 | 멀티 테넌트 (PostgreSQL)   | —                                    | —                                            | —                                     | ✅                             |
 | MCP 통합                   | — (ACP 사용)                         | —                                            | —                                     | ✅ (stdio/SSE/streamable-http) |
@@ -88,7 +88,7 @@ Single binary. Production-tested. Agents that orchestrate for you.
 ## 아키텍처
 
 <p align="center">
-  <img src="../_statics/architecture.jpg" alt="GoClaw Architecture" width="800" />
+  <img src="../_statics/architecture.jpg" alt="VBPClaw Architecture" width="800" />
 </p>
 
 ## 빠른 시작
@@ -98,10 +98,10 @@ Single binary. Production-tested. Agents that orchestrate for you.
 ### 소스에서 빌드
 
 ```bash
-git clone https://github.com/nextlevelbuilder/goclaw.git && cd goclaw
+git clone https://github.com/nextlevelbuilder/vbpclaw.git && cd vbpclaw
 make build
-./goclaw onboard        # Interactive setup wizard
-source .env.local && ./goclaw
+./vbpclaw onboard        # Interactive setup wizard
+source .env.local && ./vbpclaw
 ```
 
 ### Docker 사용
@@ -110,20 +110,20 @@ source .env.local && ./goclaw
 # Generate .env with auto-generated secrets
 chmod +x prepare-env.sh && ./prepare-env.sh
 
-# Add at least one GOCLAW_*_API_KEY to .env, then:
+# Add at least one VBPCLAW_*_API_KEY to .env, then:
 make up
 
 # Web Dashboard at http://localhost:18790
 # Health check: curl http://localhost:18790/health
 ```
 
-`GOCLAW_*_API_KEY` 환경 변수가 설정되면, 게이트웨이는 대화형 프롬프트 없이 자동으로 온보딩됩니다 — 공급자를 감지하고, 마이그레이션을 실행하며, 기본 데이터를 시드합니다.
+`VBPCLAW_*_API_KEY` 환경 변수가 설정되면, 게이트웨이는 대화형 프롬프트 없이 자동으로 온보딩됩니다 — 공급자를 감지하고, 마이그레이션을 실행하며, 기본 데이터를 시드합니다.
 
-> 빌드 변형(OTel, Tailscale, Redis), Docker 이미지 태그, compose 오버레이에 대해서는 [배포 가이드](https://docs.goclaw.sh/#deploy-docker-compose)를 참조하세요.
+> 빌드 변형(OTel, Tailscale, Redis), Docker 이미지 태그, compose 오버레이에 대해서는 [배포 가이드](https://docs.vbpclaw.sh/#deploy-docker-compose)를 참조하세요.
 
 ## 멀티 에이전트 오케스트레이션
 
-GoClaw는 에이전트 팀과 에이전트 간 위임을 지원합니다 — 각 에이전트는 자체 ID, 도구, LLM 공급자, 컨텍스트 파일로 실행됩니다.
+VBPClaw는 에이전트 팀과 에이전트 간 위임을 지원합니다 — 각 에이전트는 자체 ID, 도구, LLM 공급자, 컨텍스트 파일로 실행됩니다.
 
 ### 에이전트 위임
 
@@ -148,7 +148,7 @@ GoClaw는 에이전트 팀과 에이전트 간 위임을 지원합니다 — 각
 - **팀 메일박스** — 직접 P2P 메시지 및 브로드캐스트
 - **도구**: 태스크 관리를 위한 `team_tasks`, 메일박스를 위한 `team_message`
 
-> 위임 세부 사항, 권한 링크, 동시성 제어에 대해서는 [에이전트 팀 문서](https://docs.goclaw.sh/#teams-what-are-teams)를 참조하세요.
+> 위임 세부 사항, 권한 링크, 동시성 제어에 대해서는 [에이전트 팀 문서](https://docs.vbpclaw.sh/#teams-what-are-teams)를 참조하세요.
 
 ## 내장 도구
 
@@ -192,19 +192,19 @@ GoClaw는 에이전트 팀과 에이전트 간 위임을 지원합니다 — 각
 
 ## 문서
 
-전체 문서는 **[docs.goclaw.sh](https://docs.goclaw.sh)**에서 — 또는 [`goclaw-docs/`](https://github.com/nextlevelbuilder/goclaw-docs)의 소스를 탐색하세요.
+전체 문서는 **[docs.vbpclaw.sh](https://docs.vbpclaw.sh)**에서 — 또는 [`vbpclaw-docs/`](https://github.com/nextlevelbuilder/vbpclaw-docs)의 소스를 탐색하세요.
 
 | 섹션 | 주제 |
 |---------|--------|
-| [시작하기](https://docs.goclaw.sh/#what-is-goclaw) | 설치, 빠른 시작, 구성, 웹 대시보드 둘러보기 |
-| [핵심 개념](https://docs.goclaw.sh/#how-goclaw-works) | 에이전트 루프, 세션, 도구, 기억, 멀티 테넌시 |
-| [에이전트](https://docs.goclaw.sh/#creating-agents) | 에이전트 생성, 컨텍스트 파일, 개성, 공유 & 접근 |
-| [공급자](https://docs.goclaw.sh/#providers-overview) | Anthropic, OpenAI, OpenRouter, Gemini, DeepSeek, +15개 이상 |
-| [채널](https://docs.goclaw.sh/#channels-overview) | Telegram, Discord, Slack, Feishu, Zalo, WhatsApp, WebSocket |
-| [에이전트 팀](https://docs.goclaw.sh/#teams-what-are-teams) | 팀, 태스크 보드, 메시징, 위임 & 핸드오프 |
-| [고급](https://docs.goclaw.sh/#custom-tools) | 커스텀 도구, MCP, 스킬, Cron, 샌드박스, 훅, RBAC |
-| [배포](https://docs.goclaw.sh/#deploy-docker-compose) | Docker Compose, 데이터베이스, 보안, 관측 가능성, Tailscale |
-| [레퍼런스](https://docs.goclaw.sh/#cli-commands) | CLI 명령, REST API, WebSocket 프로토콜, 환경 변수 |
+| [시작하기](https://docs.vbpclaw.sh/#what-is-vbpclaw) | 설치, 빠른 시작, 구성, 웹 대시보드 둘러보기 |
+| [핵심 개념](https://docs.vbpclaw.sh/#how-vbpclaw-works) | 에이전트 루프, 세션, 도구, 기억, 멀티 테넌시 |
+| [에이전트](https://docs.vbpclaw.sh/#creating-agents) | 에이전트 생성, 컨텍스트 파일, 개성, 공유 & 접근 |
+| [공급자](https://docs.vbpclaw.sh/#providers-overview) | Anthropic, OpenAI, OpenRouter, Gemini, DeepSeek, +15개 이상 |
+| [채널](https://docs.vbpclaw.sh/#channels-overview) | Telegram, Discord, Slack, Feishu, Zalo, WhatsApp, WebSocket |
+| [에이전트 팀](https://docs.vbpclaw.sh/#teams-what-are-teams) | 팀, 태스크 보드, 메시징, 위임 & 핸드오프 |
+| [고급](https://docs.vbpclaw.sh/#custom-tools) | 커스텀 도구, MCP, 스킬, Cron, 샌드박스, 훅, RBAC |
+| [배포](https://docs.vbpclaw.sh/#deploy-docker-compose) | Docker Compose, 데이터베이스, 보안, 관측 가능성, Tailscale |
+| [레퍼런스](https://docs.vbpclaw.sh/#cli-commands) | CLI 명령, REST API, WebSocket 프로토콜, 환경 변수 |
 
 ## 테스트
 
@@ -219,7 +219,7 @@ go test -v ./tests/integration/ -timeout 120s    # Integration tests (requires r
 
 ## 감사의 말
 
-GoClaw는 원본 [OpenClaw](https://github.com/openclaw/openclaw) 프로젝트를 기반으로 만들어졌습니다. 이 Go 포트에 영감을 준 아키텍처와 비전에 감사드립니다.
+VBPClaw는 원본 [OpenClaw](https://github.com/openclaw/openclaw) 프로젝트를 기반으로 만들어졌습니다. 이 Go 포트에 영감을 준 아키텍처와 비전에 감사드립니다.
 
 ## 라이선스
 

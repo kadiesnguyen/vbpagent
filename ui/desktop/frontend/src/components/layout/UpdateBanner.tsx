@@ -49,7 +49,7 @@ export function UpdateBanner() {
             <line x1="12" y1="15" x2="12" y2="3" />
           </svg>
           <span className="text-text-primary">
-            {t('update.available', 'GoClaw Lite v{{version}} is available', { version: update.version })}
+            {t('update.available', 'VBPClaw Lite v{{version}} is available', { version: update.version })}
           </span>
           <button
             onClick={handleUpdate}

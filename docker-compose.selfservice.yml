@@ -11,16 +11,16 @@
 # Dashboard via nginx: http://localhost:3000
 
 services:
-  goclaw-ui:
+  vbpclaw-ui:
     image: ghcr.io/nextlevelbuilder/goclaw-web:latest
     build:
-      context: ${GOCLAW_DIR:-.}/ui/web
+      context: ${VBPCLAW_DIR:-.}/ui/web
       dockerfile: Dockerfile
     ports:
-      - "${GOCLAW_UI_PORT:-3000}:80"
+      - "${VBPCLAW_UI_PORT:-3000}:80"
     networks:
       - default
-      - goclaw-net
+      - vbpclaw-net
     depends_on:
-      - goclaw
+      - vbpclaw
     restart: unless-stopped
