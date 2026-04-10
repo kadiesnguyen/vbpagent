@@ -196,7 +196,7 @@ export function OverviewPage() {
               icon={Bot}
               label={t("statCards.agents")}
               value={agentTotal}
-              sub={runningAgents > 0 ? `${runningAgents} ${t("statCards.running")}` : undefined}
+              sub={t("statCards.running")}
             />
             <StatCard
               icon={Radio}
