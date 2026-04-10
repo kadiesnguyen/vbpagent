@@ -126,7 +126,7 @@ func ExtractDocumentContent(filePath, fileName string) (string, error) {
 	}
 
 	// Binary document formats (PDF, DOCX, PPTX, XLS, ODS, etc.) — instruct LLM to call read_document.
-	_, isText := textExtensions[ext]
+	mime, isText := textExtensions[ext]
 	if !isText {
 		return readDocumentInstruction(fileName), nil
 	}
