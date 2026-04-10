@@ -136,8 +136,8 @@ func ExtractDocumentContent(filePath, fileName string) (string, error) {
 	mime, isText := textExtensions[ext]
 	if !isText {
 		// Binary files (PDF, DOCX, etc.) are persisted via MediaRef and analyzed
-		// by the read_document tool. Return a hint instead of "not supported" placeholder.
-		return fmt.Sprintf("[File: %s — use read_document tool to analyze this file]", fileName), nil
+		// by the read_document tool. Return a strong instruction so the LLM calls it.
+		return fmt.Sprintf("<media:document name=%q>IMPORTANT: Call read_document(file_name=%q) NOW to read this file before responding.</media:document>", fileName, fileName), nil
 	}
 
 	data, err := os.ReadFile(filePath)
