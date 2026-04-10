@@ -8,10 +8,10 @@ import (
 	"strings"
 )
 
-// spreadsheetExtensions are binary spreadsheet formats we extract inline.
+// spreadsheetExtensions are binary spreadsheet formats we attempt to extract inline (.xlsx only).
+// Others fall through to read_document.
 var spreadsheetExtensions = map[string]bool{
 	".xlsx": true,
-	".ods":  true,
 }
 
 // docMaxChars is the max characters to extract from text documents (matching TS: 200K).
@@ -105,24 +105,16 @@ func ExtractDocumentContent(filePath, fileName string) (string, error) {
 
 	ext := strings.ToLower(filepath.Ext(fileName))
 
-	// Spreadsheet files: extract inline as markdown tables.
+	// XLSX: extract inline as markdown table (fast, no provider call needed).
 	if spreadsheetExtensions[ext] {
 		data, err := os.ReadFile(filePath)
 		if err != nil {
 			return "", fmt.Errorf("read file %s: %w", fileName, err)
 		}
-		var (
-			content    string
-			extractErr error
-		)
-		switch ext {
-		case ".xlsx":
-			content, extractErr = extractXLSX(data)
-		default:
-			return fmt.Sprintf("[File: %s — use read_document tool to analyze this file]", fileName), nil
-		}
+		content, extractErr := extractXLSX(data)
 		if extractErr != nil {
-			return fmt.Sprintf("[File: %s — failed to extract spreadsheet: %v]", fileName, extractErr), nil
+			// Fall through to read_document instruction on extraction failure.
+			return readDocumentInstruction(fileName), nil
 		}
 		if content == "" {
 			return fmt.Sprintf("[File: %s — spreadsheet is empty]", fileName), nil
@@ -133,11 +125,10 @@ func ExtractDocumentContent(filePath, fileName string) (string, error) {
 		return fmt.Sprintf("<file name=%q mime=\"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\">\n%s\n</file>", fileName, content), nil
 	}
 
-	mime, isText := textExtensions[ext]
+	// Binary document formats (PDF, DOCX, PPTX, XLS, ODS, etc.) — instruct LLM to call read_document.
+	_, isText := textExtensions[ext]
 	if !isText {
-		// Binary files (PDF, DOCX, etc.) are persisted via MediaRef and analyzed
-		// by the read_document tool. Return a strong instruction so the LLM calls it.
-		return fmt.Sprintf("<media:document name=%q>IMPORTANT: Call read_document(file_name=%q) NOW to read this file before responding.</media:document>", fileName, fileName), nil
+		return readDocumentInstruction(fileName), nil
 	}
 
 	data, err := os.ReadFile(filePath)
@@ -156,4 +147,13 @@ func ExtractDocumentContent(filePath, fileName string) (string, error) {
 	escaped := html.EscapeString(content)
 
 	return fmt.Sprintf("<file name=%q mime=%q>\n%s\n</file>", fileName, mime, escaped), nil
+}
+
+// readDocumentInstruction returns a strong XML instruction for the LLM to call read_document.
+// Used for all binary document formats: PDF, DOCX, PPTX, XLS, ODS, etc.
+func readDocumentInstruction(fileName string) string {
+	return fmt.Sprintf(
+		"<media:document name=%q>IMPORTANT: You MUST call read_document(file_name=%q) immediately before responding. Do NOT describe the file without reading it first.</media:document>",
+		fileName, fileName,
+	)
 }
