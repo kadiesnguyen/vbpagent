@@ -99,6 +99,50 @@ if (gen.includes(originalGen) && !gen.includes('body_wrap')) {
   process.exit(1);
 }
 
+// ─── Patch 5: defaults.js – formatDefaultAction returns spreadsheetId ─────────
+// Google Sheets API returns spreadsheetId (not id). Without this patch the bot
+// sees "Operation completed." with no ID and hallucinates a fileId for rename.
+// ─────────────────────────────────────────────────────────────────────────────
+const defaultsPath = '/usr/local/lib/node_modules/@aaronsb/google-workspace-mcp/build/factory/defaults.js';
+let defaults = fs.readFileSync(defaultsPath, 'utf8');
+
+const originalDefaults = `function formatDefaultAction(data) {
+    const obj = (data ?? {});
+    const id = String(obj.id ?? 'unknown');
+    const parts = ['Operation completed.'];
+    if (obj.id)
+        parts.push(\`\\n**ID:** \${id}\`);
+    return {
+        text: parts.join(''),
+        refs: { id, ...extractScalarRefs(obj) },
+    };
+}`;
+
+const patchedDefaults = `function formatDefaultAction(data) {
+    const obj = (data ?? {});
+    // Google Sheets returns spreadsheetId; Drive returns id or fileId
+    const id = String(obj.spreadsheetId ?? obj.id ?? obj.fileId ?? 'unknown');
+    const parts = ['Operation completed.'];
+    if (obj.spreadsheetId || obj.id || obj.fileId)
+        parts.push(\`\\n**ID:** \${id}\`);
+    if (obj.spreadsheetUrl)
+        parts.push(\`\\n**URL:** \${obj.spreadsheetUrl}\`);
+    return {
+        text: parts.join(''),
+        refs: { id, ...extractScalarRefs(obj) },
+    };
+}`;
+
+if (defaults.includes(originalDefaults) && !defaults.includes('spreadsheetId')) {
+  fs.writeFileSync(defaultsPath, defaults.replace(originalDefaults, patchedDefaults));
+  console.log('Patched defaults.js: formatDefaultAction now returns spreadsheetId');
+} else if (defaults.includes('spreadsheetId')) {
+  console.log('defaults.js already patched, skipping');
+} else {
+  console.log('WARNING: defaults.js pattern not found, patch skipped');
+  process.exit(1);
+}
+
 // ─── Patch 3: manifest.yaml – add renameFile to drive ────────────────────────
 // Drive has no rename op. Uses files.update with fileId in --params and
 // {"name":"..."} in --json body.
