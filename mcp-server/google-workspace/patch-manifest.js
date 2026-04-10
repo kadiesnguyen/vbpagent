@@ -90,7 +90,18 @@ const patchedGen = `    if (Object.keys(gwsParams).length > 0) {
 }`;
 
 if (gen.includes(originalGen) && !gen.includes('body_wrap')) {
-  fs.writeFileSync(generatorPath, gen.replace(originalGen, patchedGen));
+  let patched = gen.replace(originalGen, patchedGen);
+  // Also skip body:true params in the --params building loop so they don't
+  // end up in both --params and --json. Patch the loop to add `if (paramDef.body) continue;`
+  const loopOrig = `for (const [paramName, paramDef] of Object.entries(opDef.params)) {
+            const value = params[paramName];`;
+  const loopPatched = `for (const [paramName, paramDef] of Object.entries(opDef.params)) {
+            if (paramDef.body) continue; // body params go to --json only
+            const value = params[paramName];`;
+  if (patched.includes(loopOrig)) {
+    patched = patched.replace(loopOrig, loopPatched);
+  }
+  fs.writeFileSync(generatorPath, patched);
   console.log('Patched generator.js: buildResourceArgs now supports body params (--json)');
 } else if (gen.includes('body_wrap')) {
   console.log('generator.js already patched, skipping');
@@ -124,7 +135,7 @@ const patchedDefaults = `function formatDefaultAction(data) {
     const id = String(obj.spreadsheetId ?? obj.id ?? obj.fileId ?? 'unknown');
     const parts = ['Operation completed.'];
     if (obj.spreadsheetId || obj.id || obj.fileId)
-        parts.push(\`\\n**ID:** \${id}\`);
+        parts.push(\`\\n**ID:** \\\`\${id}\\\`\`);
     if (obj.spreadsheetUrl)
         parts.push(\`\\n**URL:** \${obj.spreadsheetUrl}\`);
     return {
