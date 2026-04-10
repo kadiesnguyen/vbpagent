@@ -30,7 +30,7 @@ const patchedManifest = originalManifest + `
             default: "USER_ENTERED"
           jsonValues:
             type: string
-            description: "JSON array of rows to write (e.g. '[[\"Header1\",\"Header2\"],[\"val1\",\"val2\"]]')"
+            description: JSON array of rows to write, e.g. Header1,Header2 on first row then data rows
             required: true
             body: true
             body_wrap: "values"`;
@@ -130,7 +130,7 @@ const driveDeletePatched = `      rename:
             required: true
             body: true
 
-      ` + driveDeleteBlock;
+` + driveDeleteBlock;
 
 if (!yaml.includes('rename a file or folder')) {
   fs.writeFileSync(manifestPath, yaml.replace(driveDeleteBlock, driveDeletePatched));
@@ -160,11 +160,11 @@ const sheetsGetValuesPatched = `      renameSheet:
             required: true
           jsonBody:
             type: string
-            description: "Full batchUpdate body JSON. For renaming tab with sheetId=0 to 'Banggia': '{\"requests\":[{\"updateSheetProperties\":{\"properties\":{\"sheetId\":0,\"title\":\"Banggia\"},\"fields\":\"title\"}}]}'"
+            description: 'Full batchUpdate request body as JSON string. Example to rename first tab to Banggia: {"requests":[{"updateSheetProperties":{"properties":{"sheetId":0,"title":"Banggia"},"fields":"title"}}]}'
             required: true
             body: true
 
-      ` + sheetsGetValuesBlock;
+` + sheetsGetValuesBlock;
 
 if (!yaml.includes('rename a sheet tab')) {
   // renameSheet uses nested body fields — handle via custom body construction
