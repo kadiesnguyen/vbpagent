@@ -122,6 +122,11 @@ func (h *UsageHandler) handleSummary(w http.ResponseWriter, r *http.Request) {
 	currentSummary := h.aggregateTimeSeries(r, currentQ)
 	previousSummary := h.aggregateTimeSeries(r, previousQ)
 
+	// unique_users from timeseries is SUM of per-hour counts → overcounts.
+	// Query COUNT(DISTINCT user_id) directly from traces for accurate values.
+	currentSummary.UniqueUsers = h.queryDistinctUsers(r, currentFrom, now, baseQ)
+	previousSummary.UniqueUsers = h.queryDistinctUsers(r, previousFrom, currentFrom, baseQ)
+
 	writeJSON(w, http.StatusOK, map[string]any{
 		"current":  currentSummary,
 		"previous": previousSummary,
@@ -220,6 +225,40 @@ func (h *UsageHandler) queryLiveHour(r *http.Request, from, to time.Time, q stor
 		return nil
 	}
 	return &p
+}
+
+// queryDistinctUsers returns COUNT(DISTINCT user_id) from traces for the given time range.
+// This is accurate — unlike summing per-hour unique_users snapshots which overcounts repeat users.
+func (h *UsageHandler) queryDistinctUsers(r *http.Request, from, to time.Time, q store.SnapshotQuery) int {
+	if h.db == nil {
+		return 0
+	}
+	query := `SELECT COUNT(DISTINCT user_id) FROM traces
+		WHERE start_time >= $1 AND start_time < $2 AND parent_trace_id IS NULL`
+	args := []any{from, to}
+	idx := 3
+
+	if !store.IsOwnerRole(r.Context()) {
+		tid := store.TenantIDFromContext(r.Context())
+		if tid != uuid.Nil {
+			query += fmt.Sprintf(" AND tenant_id = $%d", idx)
+			args = append(args, tid)
+			idx++
+		}
+	}
+	if q.AgentID != nil {
+		query += fmt.Sprintf(" AND agent_id = $%d", idx)
+		args = append(args, *q.AgentID)
+		idx++
+	}
+	if q.Channel != "" {
+		query += fmt.Sprintf(" AND channel = $%d", idx)
+		args = append(args, q.Channel)
+	}
+
+	var count int
+	_ = h.db.QueryRowContext(r.Context(), query, args...).Scan(&count)
+	return count
 }
 
 func parseSnapshotFilters(r *http.Request) store.SnapshotQuery {
