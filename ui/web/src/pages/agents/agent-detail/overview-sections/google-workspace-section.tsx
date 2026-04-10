@@ -59,8 +59,7 @@ export function GoogleWorkspaceSection({ emails, onChange }: GoogleWorkspaceSect
     }
   };
 
-  // derive the auth URL from the current page origin (proxied through /oauth/ prefix)
-  const authUrl = `${window.location.origin}/oauth/auth`;
+  const authUrl = `${window.location.origin}/auth`;
 
   return (
     <section className="space-y-3 rounded-lg border p-3 sm:p-4">

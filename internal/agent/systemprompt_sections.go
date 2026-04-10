@@ -331,6 +331,27 @@ func buildGroupChatReplyHint() []string {
 	}
 }
 
+// buildGoogleWorkspaceSection renders a prompt section listing the Gmail/Google Workspace
+// accounts that are bound to this agent. This tells the LLM which email account(s) to use
+// when calling Gmail/Google Workspace MCP tools.
+func buildGoogleWorkspaceSection(emails []string) []string {
+	lines := []string{
+		"## Google Workspace",
+		"",
+		"The following Google account(s) are authenticated and available for you to use with Gmail and Google Workspace tools:",
+		"",
+	}
+	for _, email := range emails {
+		lines = append(lines, fmt.Sprintf("- %s", email))
+	}
+	lines = append(lines,
+		"",
+		"When using Gmail or Google Workspace tools, use one of these accounts as the authorized account.",
+		"",
+	)
+	return lines
+}
+
 // personaFileNames are the context files that define agent identity/behavior.
 // These are injected early in the system prompt (primacy zone) and reinforced
 // at the end (recency zone) to prevent persona drift in long conversations.

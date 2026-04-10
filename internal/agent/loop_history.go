@@ -266,6 +266,7 @@ func (l *Loop) buildMessages(ctx context.Context, history []providers.Message, s
 		SandboxContainerDir:    l.sandboxContainerDir,
 		SandboxWorkspaceAccess: l.sandboxWorkspaceAccess,
 		ShellDenyGroups:        l.shellDenyGroups,
+		GoogleEmails:           l.googleEmails,
 		SelfEvolve:             l.selfEvolve,
 		ProviderType:           providerTypeOf(l.provider),
 		CredentialCLIContext:   l.buildCredentialCLIContext(ctx),

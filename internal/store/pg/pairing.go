@@ -24,7 +24,7 @@ const (
 // PGPairingStore implements store.PairingStore backed by Postgres.
 type PGPairingStore struct {
 	db        *sql.DB
-	onRequest func(code, senderID, channel, chatID string)
+	onRequest func(tenantID uuid.UUID, code, senderID, channel, chatID string)
 }
 
 func NewPGPairingStore(db *sql.DB) *PGPairingStore {
@@ -32,7 +32,7 @@ func NewPGPairingStore(db *sql.DB) *PGPairingStore {
 }
 
 // SetOnRequest sets a callback fired after a new pairing request is created.
-func (s *PGPairingStore) SetOnRequest(cb func(code, senderID, channel, chatID string)) {
+func (s *PGPairingStore) SetOnRequest(cb func(tenantID uuid.UUID, code, senderID, channel, chatID string)) {
 	s.onRequest = cb
 }
 
@@ -72,7 +72,7 @@ func (s *PGPairingStore) RequestPairing(ctx context.Context, senderID, channel, 
 		return "", fmt.Errorf("create pairing request: %w", err)
 	}
 	if s.onRequest != nil {
-		go s.onRequest(code, senderID, channel, chatID)
+		go s.onRequest(tid, code, senderID, channel, chatID)
 	}
 	return code, nil
 }
@@ -93,6 +93,14 @@ func (s *PGPairingStore) ApprovePairing(ctx context.Context, code, approvedBy st
 	).Scan(&reqID, &senderID, &channel, &chatID, &metaJSON, &reqTenantID)
 	if err != nil {
 		return nil, fmt.Errorf("pairing code %s not found or expired", code)
+	}
+
+	// Tenant owners can only approve requests that belong to their own tenant.
+	callerTenantID := store.TenantIDFromContext(ctx)
+	if callerTenantID != uuid.Nil && callerTenantID != store.MasterTenantID {
+		if reqTenantID != callerTenantID {
+			return nil, fmt.Errorf("access denied: pairing request belongs to a different tenant")
+		}
 	}
 
 	// Remove from pending
@@ -126,8 +134,15 @@ func (s *PGPairingStore) ApprovePairing(ctx context.Context, code, approvedBy st
 }
 
 func (s *PGPairingStore) DenyPairing(ctx context.Context, code string) error {
-	// Code lookup is cross-tenant (random token)
-	result, err := s.db.ExecContext(ctx, "DELETE FROM pairing_requests WHERE code = $1", code)
+	callerTenantID := store.TenantIDFromContext(ctx)
+	var result sql.Result
+	var err error
+	// Non-master callers may only deny requests belonging to their own tenant.
+	if callerTenantID != uuid.Nil && callerTenantID != store.MasterTenantID {
+		result, err = s.db.ExecContext(ctx, "DELETE FROM pairing_requests WHERE code = $1 AND tenant_id = $2", code, callerTenantID)
+	} else {
+		result, err = s.db.ExecContext(ctx, "DELETE FROM pairing_requests WHERE code = $1", code)
+	}
 	if err != nil {
 		return err
 	}

@@ -5,6 +5,12 @@ WORKDIR /app
 # Install MCP server + supergateway (stdio → SSE bridge)
 RUN npm install -g @aaronsb/google-workspace-mcp supergateway
 
+# Patch manifest.yaml: add valueInputOption to manage_sheets updateValues.
+# The Google Sheets API requires this query param but the manifest omits it,
+# causing "valueInputOption is required but not specified" errors.
+COPY patch-manifest.js /tmp/patch-manifest.js
+RUN node /tmp/patch-manifest.js
+
 # XDG dirs mapped to persistent volume
 ENV XDG_CONFIG_HOME=/data/config
 ENV XDG_DATA_HOME=/data/share

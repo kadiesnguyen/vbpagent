@@ -2,6 +2,7 @@ package http
 
 import (
 	"context"
+	"errors"
 	"log/slog"
 	"regexp"
 	"time"
@@ -21,6 +22,11 @@ const (
 	SummonEventCompleted     = "completed"
 	SummonEventFileGenerated = "file_generated"
 )
+
+// errNoParseableFiles is returned by generateFiles when the LLM response
+// contains no XML file tags. Treated as retryable — the 2-call path uses
+// smaller, more focused prompts that are more likely to produce valid output.
+var errNoParseableFiles = errors.New("no parseable files in LLM response")
 
 // frontmatterKey is the special key used to store frontmatter in the parsed file map.
 const frontmatterKey = "__frontmatter__"

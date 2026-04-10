@@ -8,6 +8,12 @@ import (
 	"strings"
 )
 
+// spreadsheetExtensions are binary spreadsheet formats we extract inline.
+var spreadsheetExtensions = map[string]bool{
+	".xlsx": true,
+	".ods":  true,
+}
+
 // docMaxChars is the max characters to extract from text documents (matching TS: 200K).
 const docMaxChars = 200_000
 
@@ -98,6 +104,35 @@ func ExtractDocumentContent(filePath, fileName string) (string, error) {
 	}
 
 	ext := strings.ToLower(filepath.Ext(fileName))
+
+	// Spreadsheet files: extract inline as markdown tables.
+	if spreadsheetExtensions[ext] {
+		data, err := os.ReadFile(filePath)
+		if err != nil {
+			return "", fmt.Errorf("read file %s: %w", fileName, err)
+		}
+		var (
+			content    string
+			extractErr error
+		)
+		switch ext {
+		case ".xlsx":
+			content, extractErr = extractXLSX(data)
+		default:
+			return fmt.Sprintf("[File: %s — use read_document tool to analyze this file]", fileName), nil
+		}
+		if extractErr != nil {
+			return fmt.Sprintf("[File: %s — failed to extract spreadsheet: %v]", fileName, extractErr), nil
+		}
+		if content == "" {
+			return fmt.Sprintf("[File: %s — spreadsheet is empty]", fileName), nil
+		}
+		if len(content) > docMaxChars {
+			content = content[:docMaxChars] + "\n... [truncated]"
+		}
+		return fmt.Sprintf("<file name=%q mime=\"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\">\n%s\n</file>", fileName, content), nil
+	}
+
 	mime, isText := textExtensions[ext]
 	if !isText {
 		// Binary files (PDF, DOCX, etc.) are persisted via MediaRef and analyzed

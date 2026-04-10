@@ -386,6 +386,21 @@ type ChatGPTOAuthRoutingConfig struct {
 	ExtraProviderNames []string `json:"extra_provider_names,omitempty"`
 }
 
+// ParseGoogleEmails extracts google_emails from other_config JSONB.
+// Returns nil if not configured.
+func (a *AgentData) ParseGoogleEmails() []string {
+	if len(a.OtherConfig) == 0 {
+		return nil
+	}
+	var cfg struct {
+		GoogleEmails []string `json:"google_emails"`
+	}
+	if json.Unmarshal(a.OtherConfig, &cfg) != nil {
+		return nil
+	}
+	return cfg.GoogleEmails
+}
+
 // ParseWorkspaceSharing extracts workspace_sharing from other_config JSONB.
 // Returns nil if not configured or all fields are default (isolation enabled).
 func (a *AgentData) ParseWorkspaceSharing() *WorkspaceSharingConfig {

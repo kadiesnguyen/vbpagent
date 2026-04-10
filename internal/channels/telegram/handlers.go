@@ -13,10 +13,15 @@ import (
 	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
 	"github.com/nextlevelbuilder/vbpclaw/internal/channels"
 	"github.com/nextlevelbuilder/vbpclaw/internal/channels/typing"
+	"github.com/nextlevelbuilder/vbpclaw/internal/store"
 )
 
 // handleMessage processes an incoming Telegram update.
 func (c *Channel) handleMessage(ctx context.Context, update telego.Update) {
+	// Inject tenant scope early so all downstream calls (pairing, bus publish, etc.)
+	// carry the correct tenant ID regardless of call path.
+	ctx = store.WithTenantID(ctx, c.TenantID())
+
 	message := update.Message
 	if message == nil {
 		return

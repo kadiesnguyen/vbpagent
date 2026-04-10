@@ -70,10 +70,14 @@ func (s *AgentSummoner) RegenerateAgent(agentID uuid.UUID, tenantID uuid.UUID, p
 	slog.Info("summoning: regeneration completed", "agent", agentID, "files", len(files))
 }
 
-// isRetryableError returns true for timeout and context-cancellation errors
-// that warrant falling back to the 2-call approach.
+// isRetryableError returns true for errors that warrant falling back to the 2-call approach.
+// This includes timeouts, context cancellations, and parse failures — the 2-call path uses
+// smaller, more focused prompts that may succeed when the combined prompt did not.
 func isRetryableError(err error) bool {
 	if errors.Is(err, context.DeadlineExceeded) || errors.Is(err, context.Canceled) {
+		return true
+	}
+	if errors.Is(err, errNoParseableFiles) {
 		return true
 	}
 	var netErr net.Error
@@ -132,7 +136,8 @@ func (s *AgentSummoner) generateFiles(ctx context.Context, providerName, model, 
 
 	files := parseFileResponse(resp.Content)
 	if len(files) == 0 {
-		return nil, fmt.Errorf("LLM returned no parseable files (response length: %d)", len(resp.Content))
+		preview := truncateUTF8(resp.Content, 200)
+		return nil, fmt.Errorf("%w (length: %d, content: %q)", errNoParseableFiles, len(resp.Content), preview)
 	}
 
 	return files, nil

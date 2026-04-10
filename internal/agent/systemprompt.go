@@ -88,6 +88,10 @@ type SystemPromptConfig struct {
 	// Bootstrap mode: BOOTSTRAP.md is present — slim prompt with only write_file tool.
 	// Skips skills, MCP, team workspace, spawn, sandbox, self-evolve, recency reminders.
 	IsBootstrap bool
+
+	// GoogleEmails lists Gmail/Google Workspace accounts bound to this agent.
+	// Injected into the system prompt so the LLM knows which accounts to use.
+	GoogleEmails []string
 }
 
 // coreToolSummaries maps tool names to one-line descriptions.
@@ -291,6 +295,11 @@ func BuildSystemPrompt(cfg SystemPromptConfig) string {
 	// 9.6. Group chat reply hint — remind bot to check reply content, not just reply context
 	if cfg.PeerKind == "group" {
 		lines = append(lines, buildGroupChatReplyHint()...)
+	}
+
+	// 9.7. Google Workspace accounts bound to this agent
+	if len(cfg.GoogleEmails) > 0 {
+		lines = append(lines, buildGoogleWorkspaceSection(cfg.GoogleEmails)...)
 	}
 
 	// 10. Extra system prompt (wrapped in tags for context isolation)
