@@ -107,7 +107,7 @@ yaml = fs.readFileSync(manifestPath, 'utf8'); // re-read after patch 1
 
 const driveDeleteBlock = `      delete:
         type: action
-        description: "permanently delete a file"
+        description: "permanently delete a file (cannot be undone)"
         resource: files.delete
         params:
           fileId:
