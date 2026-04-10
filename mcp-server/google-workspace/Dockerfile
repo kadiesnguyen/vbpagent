@@ -23,4 +23,6 @@ VOLUME ["/data"]
 EXPOSE 3100
 
 # Wrap stdio MCP server as SSE on port 3100
-CMD ["supergateway", "--stdio", "google-workspace-mcp", "--port", "3100", "--outputTransport", "streamableHttp", "--stateful"]
+# Use SSE transport (stable with mcp-go clients). streamableHttp+stateful caused
+# "unexpected nil response" during initialize handshake (--stateful not supported in v3.4.3).
+CMD ["supergateway", "--stdio", "google-workspace-mcp", "--port", "3100", "--outputTransport", "sse"]
