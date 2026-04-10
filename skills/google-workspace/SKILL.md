@@ -77,6 +77,85 @@ Always use `get` first to confirm the real tab name before reading.
 
 ---
 
+## Google Sheets — Cell Formatting
+
+Use `formatCells` after writing data. All formatting uses `spreadsheets.batchUpdate` via `jsonBody`.
+
+**sheetId**: always 0 for the first tab. Call `get` to find sheetId for other tabs.
+
+### Freeze header row
+```
+manage_sheets(
+  operation="formatCells",
+  email="user@gmail.com",
+  spreadsheetId=<id>,
+  jsonBody='{"requests":[{"updateSheetProperties":{"properties":{"sheetId":0,"gridProperties":{"frozenRowCount":1}},"fields":"gridProperties.frozenRowCount"}}]}'
+)
+```
+
+### Bold + background color on header row (row 1 = startRowIndex 0, endRowIndex 1)
+```
+manage_sheets(
+  operation="formatCells",
+  email="user@gmail.com",
+  spreadsheetId=<id>,
+  jsonBody='{"requests":[{"repeatCell":{"range":{"sheetId":0,"startRowIndex":0,"endRowIndex":1},"cell":{"userEnteredFormat":{"backgroundColor":{"red":0.26,"green":0.52,"blue":0.96},"textFormat":{"bold":true,"foregroundColor":{"red":1,"green":1,"blue":1}},"horizontalAlignment":"CENTER"}},"fields":"userEnteredFormat(backgroundColor,textFormat,horizontalAlignment)"}}]}'
+)
+```
+
+### Center-align a range (e.g. all data rows)
+```
+manage_sheets(
+  operation="formatCells",
+  email="user@gmail.com",
+  spreadsheetId=<id>,
+  jsonBody='{"requests":[{"repeatCell":{"range":{"sheetId":0,"startRowIndex":0,"endRowIndex":100,"startColumnIndex":0,"endColumnIndex":5},"cell":{"userEnteredFormat":{"horizontalAlignment":"CENTER"}},"fields":"userEnteredFormat.horizontalAlignment"}}]}'
+)
+```
+
+### Add borders to a range
+```
+manage_sheets(
+  operation="formatCells",
+  email="user@gmail.com",
+  spreadsheetId=<id>,
+  jsonBody='{"requests":[{"updateBorders":{"range":{"sheetId":0,"startRowIndex":0,"endRowIndex":10,"startColumnIndex":0,"endColumnIndex":3},"top":{"style":"SOLID","width":1},"bottom":{"style":"SOLID","width":1},"left":{"style":"SOLID","width":1},"right":{"style":"SOLID","width":1},"innerHorizontal":{"style":"SOLID","width":1},"innerVertical":{"style":"SOLID","width":1}}}]}'
+)
+```
+
+### Merge cells (e.g. merge A1:C1 as title)
+```
+manage_sheets(
+  operation="formatCells",
+  email="user@gmail.com",
+  spreadsheetId=<id>,
+  jsonBody='{"requests":[{"mergeCells":{"range":{"sheetId":0,"startRowIndex":0,"endRowIndex":1,"startColumnIndex":0,"endColumnIndex":3},"mergeType":"MERGE_ALL"}}]}'
+)
+```
+
+### Combine multiple formatting requests in one call
+```
+manage_sheets(
+  operation="formatCells",
+  email="user@gmail.com",
+  spreadsheetId=<id>,
+  jsonBody='{"requests":[
+    {"updateSheetProperties":{"properties":{"sheetId":0,"gridProperties":{"frozenRowCount":1}},"fields":"gridProperties.frozenRowCount"}},
+    {"repeatCell":{"range":{"sheetId":0,"startRowIndex":0,"endRowIndex":1},"cell":{"userEnteredFormat":{"backgroundColor":{"red":0.26,"green":0.52,"blue":0.96},"textFormat":{"bold":true,"foregroundColor":{"red":1,"green":1,"blue":1}}}},"fields":"userEnteredFormat(backgroundColor,textFormat)"}},
+    {"updateBorders":{"range":{"sheetId":0,"startRowIndex":0,"endRowIndex":10,"startColumnIndex":0,"endColumnIndex":2},"top":{"style":"SOLID"},"bottom":{"style":"SOLID"},"left":{"style":"SOLID"},"right":{"style":"SOLID"},"innerHorizontal":{"style":"SOLID"},"innerVertical":{"style":"SOLID"}}}
+  ]}'
+)
+```
+
+**Color reference (red/green/blue as 0.0–1.0):**
+- Blue header: `{"red":0.26,"green":0.52,"blue":0.96}`
+- Green: `{"red":0.18,"green":0.62,"blue":0.18}`
+- Yellow: `{"red":1.0,"green":0.9,"blue":0.0}`
+- Gray: `{"red":0.85,"green":0.85,"blue":0.85}`
+- White text: `{"red":1,"green":1,"blue":1}`
+
+---
+
 ## Google Drive — File Operations
 
 ### Search files

@@ -222,10 +222,41 @@ const sheetsGetValuesPatched = `      renameSheet:
 ` + sheetsGetValuesBlock;
 
 if (!yaml.includes('rename a sheet tab')) {
-  // renameSheet uses nested body fields — handle via custom body construction
-  // We'll use the simpler approach: mark all body fields and build manually
   fs.writeFileSync(manifestPath, yaml.replace(sheetsGetValuesBlock, sheetsGetValuesPatched));
   console.log('Patched manifest.yaml: added renameSheet operation to sheets');
 } else {
   console.log('manifest.yaml renameSheet already patched, skipping');
+}
+
+// ─── Patch 5b: manifest.yaml – add formatCells to sheets ─────────────────────
+// Exposes spreadsheets.batchUpdate for cell formatting: backgroundColor,
+// textFormat (bold/italic), horizontalAlignment, borders, freeze rows, merge.
+// The agent passes a jsonBody with the full requests array.
+// ─────────────────────────────────────────────────────────────────────────────
+yaml = fs.readFileSync(manifestPath, 'utf8');
+
+const sheetsUpdateValuesBlock = `      updateValues:`;
+
+const sheetsFormatPatch = `      formatCells:
+        type: action
+        description: "format cells in a spreadsheet: set background color, bold/italic text, alignment, borders, freeze rows, or merge cells. Uses spreadsheets.batchUpdate."
+        resource: spreadsheets.batchUpdate
+        params:
+          spreadsheetId:
+            type: string
+            description: "Spreadsheet ID"
+            required: true
+          jsonBody:
+            type: string
+            description: 'Full batchUpdate requests array as JSON. Use sheetId 0 for first tab. Common requests: repeatCell (color/bold/align), updateBorders, mergeCells, updateSheetProperties (freeze rows).'
+            required: true
+            body: true
+
+` + sheetsUpdateValuesBlock;
+
+if (!yaml.includes('format cells in a spreadsheet')) {
+  fs.writeFileSync(manifestPath, yaml.replace(sheetsUpdateValuesBlock, sheetsFormatPatch));
+  console.log('Patched manifest.yaml: added formatCells operation to sheets');
+} else {
+  console.log('manifest.yaml formatCells already patched, skipping');
 }
