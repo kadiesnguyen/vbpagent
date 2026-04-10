@@ -545,13 +545,23 @@ func (r *MethodRouter) handleStatus(ctx context.Context, client *Client, req *pr
 		sessionCount = len(r.server.sessions.List(ctx, ""))
 	}
 
+	// For tenant-scoped clients, filter running agents and client count to their tenant.
+	clientTenantID := client.TenantID()
+	isMaster := clientTenantID == store.MasterTenantID
+
 	// Agents are lazily resolved — router only has loaded agents.
 	// Query the DB store for the real total count (tenant-scoped via ctx).
+	// For master: use max(in-memory, DB) so newly-loaded agents are counted.
+	// For non-master: use DB count directly (already tenant-scoped via ctx).
 	var dbAgentIDs map[string]struct{}
 	agentTotal := len(allAgents)
 	if r.server.agentStore != nil {
 		if dbAgents, err := r.server.agentStore.List(ctx, ""); err == nil {
-			if len(dbAgents) > agentTotal {
+			if isMaster {
+				if len(dbAgents) > agentTotal {
+					agentTotal = len(dbAgents)
+				}
+			} else {
 				agentTotal = len(dbAgents)
 			}
 			// Build ID set for tenant-aware filtering of in-memory agents.
@@ -561,10 +571,6 @@ func (r *MethodRouter) handleStatus(ctx context.Context, client *Client, req *pr
 			}
 		}
 	}
-
-	// For tenant-scoped clients, filter running agents and client count to their tenant.
-	clientTenantID := client.TenantID()
-	isMaster := clientTenantID == store.MasterTenantID
 
 	agents := allAgents
 	if !isMaster && dbAgentIDs != nil {
