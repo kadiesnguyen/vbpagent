@@ -4,9 +4,9 @@ import (
 	"context"
 	"log/slog"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
-	"github.com/nextlevelbuilder/vbpclaw/internal/tools"
+	"github.com/kadiesnguyen/vbpclaw/internal/bus"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/tools"
 )
 
 // collectRefsByKind gathers MediaRefs of a given kind from message history

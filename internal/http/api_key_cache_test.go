@@ -8,8 +8,8 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/permissions"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/permissions"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
 )
 
 // mockAPIKeyStore is a minimal mock for testing the cache layer.

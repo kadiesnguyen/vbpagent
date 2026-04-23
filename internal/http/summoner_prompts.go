@@ -5,8 +5,8 @@ import (
 	"log/slog"
 	"strings"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/bootstrap"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/bootstrap"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
 )
 
 // buildSoulPrompt constructs the prompt for SOUL.md generation.

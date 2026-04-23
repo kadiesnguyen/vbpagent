@@ -6,9 +6,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
-	"github.com/nextlevelbuilder/vbpclaw/internal/sandbox"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/bus"
+	"github.com/kadiesnguyen/vbpclaw/internal/sandbox"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
 )
 
 // WriteFileTool writes content to a file, optionally through a sandbox container.

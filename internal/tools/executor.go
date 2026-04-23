@@ -3,7 +3,7 @@ package tools
 import (
 	"context"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
 )
 
 // ToolExecutor abstracts tool execution for dependency inversion.

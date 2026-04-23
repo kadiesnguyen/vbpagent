@@ -10,8 +10,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/config"
-	"github.com/nextlevelbuilder/vbpclaw/internal/skills"
+	"github.com/kadiesnguyen/vbpclaw/internal/config"
+	"github.com/kadiesnguyen/vbpclaw/internal/skills"
 )
 
 func skillsCmd() *cobra.Command {

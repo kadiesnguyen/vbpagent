@@ -10,7 +10,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
 )
 
 // geminiNativeDocumentCall sends a document to Gemini's native generateContent API.

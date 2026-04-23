@@ -3,7 +3,7 @@ package discord
 import (
 	"context"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/channels/media"
+	"github.com/kadiesnguyen/vbpclaw/internal/channels/media"
 )
 
 // transcribeAudio calls the shared STT proxy service with the given audio file.

@@ -87,7 +87,6 @@ export function OverviewPage() {
 
   // Computed
   const agents = status?.agents ?? [];
-  const runningAgents = agents.filter((a) => a.isRunning).length;
   const agentTotal = status?.agentTotal ?? agents.length;
   const channelEntries = channelStatusData?.channels
     ? Object.entries(channelStatusData.channels)

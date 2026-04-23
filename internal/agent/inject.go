@@ -5,9 +5,9 @@ import (
 	"log/slog"
 	"strings"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/config"
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
-	"github.com/nextlevelbuilder/vbpclaw/pkg/protocol"
+	"github.com/kadiesnguyen/vbpclaw/internal/config"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/pkg/protocol"
 )
 
 // InjectedMessage represents a user message injected into a running agent loop

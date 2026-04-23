@@ -14,10 +14,10 @@ import (
 	"github.com/google/uuid"
 	"github.com/mymmrac/telego"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
-	"github.com/nextlevelbuilder/vbpclaw/internal/channels"
-	"github.com/nextlevelbuilder/vbpclaw/internal/config"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/bus"
+	"github.com/kadiesnguyen/vbpclaw/internal/channels"
+	"github.com/kadiesnguyen/vbpclaw/internal/config"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
 )
 
 // Channel connects to Telegram via the Bot API using long polling.

@@ -6,7 +6,7 @@ import (
 	"context"
 	"strings"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
 )
 
 // Search performs LIKE-based text search over memory_chunks.

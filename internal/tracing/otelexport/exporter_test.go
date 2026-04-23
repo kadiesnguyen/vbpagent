@@ -7,7 +7,7 @@ import (
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel/trace"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
 )
 
 func TestUUIDToTraceID(t *testing.T) {

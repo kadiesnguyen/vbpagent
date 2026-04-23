@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"regexp"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/permissions"
-	"github.com/nextlevelbuilder/vbpclaw/internal/skills"
-	"github.com/nextlevelbuilder/vbpclaw/internal/tools"
+	"github.com/kadiesnguyen/vbpclaw/internal/permissions"
+	"github.com/kadiesnguyen/vbpclaw/internal/skills"
+	"github.com/kadiesnguyen/vbpclaw/internal/tools"
 )
 
 // validPkgName allows alphanumeric, hyphens, underscores, dots, @, / (for scoped npm).

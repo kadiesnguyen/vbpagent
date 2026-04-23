@@ -8,8 +8,8 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/config"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/config"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
 )
 
 // importTeamSection creates a team, members, tasks, comments, events, links,

@@ -1,9 +1,9 @@
 package methods
 
 import (
-	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
-	"github.com/nextlevelbuilder/vbpclaw/internal/gateway"
-	"github.com/nextlevelbuilder/vbpclaw/pkg/protocol"
+	"github.com/kadiesnguyen/vbpclaw/internal/bus"
+	"github.com/kadiesnguyen/vbpclaw/internal/gateway"
+	"github.com/kadiesnguyen/vbpclaw/pkg/protocol"
 )
 
 // emitAudit broadcasts an audit event via eventBus for async persistence.

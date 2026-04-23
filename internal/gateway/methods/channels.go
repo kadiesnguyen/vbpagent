@@ -3,11 +3,11 @@ package methods
 import (
 	"context"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/channels"
-	"github.com/nextlevelbuilder/vbpclaw/internal/gateway"
-	"github.com/nextlevelbuilder/vbpclaw/internal/i18n"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
-	"github.com/nextlevelbuilder/vbpclaw/pkg/protocol"
+	"github.com/kadiesnguyen/vbpclaw/internal/channels"
+	"github.com/kadiesnguyen/vbpclaw/internal/gateway"
+	"github.com/kadiesnguyen/vbpclaw/internal/i18n"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/pkg/protocol"
 )
 
 // ChannelsMethods handles channels.list, channels.status, channels.toggle.

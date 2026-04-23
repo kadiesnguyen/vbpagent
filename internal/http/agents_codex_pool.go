@@ -10,9 +10,9 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/i18n"
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/i18n"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
 )
 
 type codexPoolProviderCount struct {

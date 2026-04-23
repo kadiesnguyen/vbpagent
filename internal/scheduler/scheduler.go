@@ -7,7 +7,7 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/agent"
+	"github.com/kadiesnguyen/vbpclaw/internal/agent"
 )
 
 // --- Scheduler ---

@@ -9,7 +9,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/oauth"
+	"github.com/kadiesnguyen/vbpclaw/internal/oauth"
 	"github.com/spf13/cobra"
 )
 

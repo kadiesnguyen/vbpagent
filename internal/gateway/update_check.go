@@ -11,11 +11,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/version"
+	"github.com/kadiesnguyen/vbpclaw/internal/version"
 )
 
 const (
-	githubRepo         = "nextlevelbuilder/vbpclaw"
+	githubRepo         = "kadiesnguyen/vbpclaw"
 	liteTagPrefix      = "lite-v"
 	updateCheckInterval = 1 * time.Hour
 	maxResponseBody    = 2 << 20 // 2 MB

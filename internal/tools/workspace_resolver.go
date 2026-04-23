@@ -6,7 +6,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/config"
+	"github.com/kadiesnguyen/vbpclaw/internal/config"
 )
 
 // WorkspaceLayer transforms a base path into a scoped path.

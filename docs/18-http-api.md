@@ -689,7 +689,7 @@ Check which prerequisite runtimes are available inside the active VBPClaw runtim
 }
 ```
 
-The published `ghcr.io/nextlevelbuilder/goclaw:latest` image is the minimal variant, so missing Python or Node runtimes can be expected there.
+The published `ghcr.io/kadiesnguyen/vbpagent:latest` image is the minimal variant, so missing Python or Node runtimes can be expected there.
 
 ---
 

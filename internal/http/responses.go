@@ -9,11 +9,11 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/agent"
-	"github.com/nextlevelbuilder/vbpclaw/internal/permissions"
-	"github.com/nextlevelbuilder/vbpclaw/internal/sessions"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
-	"github.com/nextlevelbuilder/vbpclaw/internal/tools"
+	"github.com/kadiesnguyen/vbpclaw/internal/agent"
+	"github.com/kadiesnguyen/vbpclaw/internal/permissions"
+	"github.com/kadiesnguyen/vbpclaw/internal/sessions"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/tools"
 )
 
 // ResponsesHandler handles POST /v1/responses (OpenResponses protocol).

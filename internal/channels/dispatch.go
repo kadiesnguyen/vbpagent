@@ -9,7 +9,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
+	"github.com/kadiesnguyen/vbpclaw/internal/bus"
 )
 
 // WebhookRoute holds a path and handler pair for mounting on the main gateway mux.

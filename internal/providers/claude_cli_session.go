@@ -11,7 +11,7 @@ import (
 	"strings"
 
 	"github.com/google/uuid"
-	"github.com/nextlevelbuilder/vbpclaw/internal/config"
+	"github.com/kadiesnguyen/vbpclaw/internal/config"
 )
 
 // validCLIModels lists accepted model aliases for the Claude CLI.

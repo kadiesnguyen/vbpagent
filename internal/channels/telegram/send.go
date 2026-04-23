@@ -15,8 +15,8 @@ import (
 	"github.com/mymmrac/telego/telegoapi"
 	tu "github.com/mymmrac/telego/telegoutil"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
-	"github.com/nextlevelbuilder/vbpclaw/internal/channels/typing"
+	"github.com/kadiesnguyen/vbpclaw/internal/bus"
+	"github.com/kadiesnguyen/vbpclaw/internal/channels/typing"
 )
 
 // Error patterns for graceful handling (matching TS error constants in send.ts).

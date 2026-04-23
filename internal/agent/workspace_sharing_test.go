@@ -3,7 +3,7 @@ package agent
 import (
 	"testing"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
 )
 
 func TestShouldShareWorkspace_NilConfig(t *testing.T) {

@@ -7,11 +7,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/channels"
-	"github.com/nextlevelbuilder/vbpclaw/internal/i18n"
-	"github.com/nextlevelbuilder/vbpclaw/internal/providerresolve"
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/channels"
+	"github.com/kadiesnguyen/vbpclaw/internal/i18n"
+	"github.com/kadiesnguyen/vbpclaw/internal/providerresolve"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
 )
 
 // PendingMessagesHandler handles pending message HTTP endpoints.

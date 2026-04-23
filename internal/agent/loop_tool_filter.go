@@ -3,9 +3,9 @@ package agent
 import (
 	"slices"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
-	"github.com/nextlevelbuilder/vbpclaw/internal/tools"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/tools"
 )
 
 // buildFilteredTools resolves the per-iteration tool definitions based on policy,

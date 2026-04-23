@@ -10,10 +10,10 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/bootstrap"
-	"github.com/nextlevelbuilder/vbpclaw/internal/config"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
-	"github.com/nextlevelbuilder/vbpclaw/internal/tools"
+	"github.com/kadiesnguyen/vbpclaw/internal/bootstrap"
+	"github.com/kadiesnguyen/vbpclaw/internal/config"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/tools"
 )
 
 // contextSetupResult holds the outputs of injectContext that are needed by the main loop.

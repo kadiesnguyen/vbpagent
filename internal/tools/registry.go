@@ -9,8 +9,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
-	"github.com/nextlevelbuilder/vbpclaw/internal/safego"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/safego"
 )
 
 // Registry manages tool registration and execution.

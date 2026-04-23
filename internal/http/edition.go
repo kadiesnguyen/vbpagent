@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/edition"
+	"github.com/kadiesnguyen/vbpclaw/internal/edition"
 )
 
 // EditionHandler serves the current edition info for UI feature comparison.

@@ -9,7 +9,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers/acp"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers/acp"
 )
 
 // ACPProvider implements Provider by orchestrating ACP-compatible agent subprocesses.

@@ -5,7 +5,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
 )
 
 // Regex patterns for extractive memory fallback.

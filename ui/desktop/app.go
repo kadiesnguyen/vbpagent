@@ -15,8 +15,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/nextlevelbuilder/vbpclaw/cmd"
-	"github.com/nextlevelbuilder/vbpclaw/internal/updater"
+	"github.com/kadiesnguyen/vbpclaw/cmd"
+	"github.com/kadiesnguyen/vbpclaw/internal/updater"
 	wailsRuntime "github.com/wailsapp/wails/v2/pkg/runtime"
 )
 

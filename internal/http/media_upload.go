@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/channels/media"
-	"github.com/nextlevelbuilder/vbpclaw/internal/i18n"
+	"github.com/kadiesnguyen/vbpclaw/internal/channels/media"
+	"github.com/kadiesnguyen/vbpclaw/internal/i18n"
 )
 
 const (

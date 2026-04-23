@@ -615,6 +615,18 @@ func poolHealthLoop(ctx context.Context, ss *serverState) {
 					ss.mu.Unlock()
 					continue
 				}
+				// streamableHttp stateless mode: the child process is killed
+				// after each request, so "nil response" is a transport artifact.
+				// Fall back to a plain HTTP probe to confirm liveness.
+				if isNilResponse(err) && ss.transport == "streamable-http" && ss.url != "" {
+					if probeTCP(ctx, ss.url) == nil {
+						ss.connected.Store(true)
+						ss.mu.Lock()
+						ss.healthFailures = 0
+						ss.mu.Unlock()
+						continue
+					}
+				}
 				ss.mu.Lock()
 				ss.healthFailures++
 				failures := ss.healthFailures

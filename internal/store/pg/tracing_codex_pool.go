@@ -7,7 +7,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/lib/pq"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
 )
 
 const listCodexPoolSpansQuery = `

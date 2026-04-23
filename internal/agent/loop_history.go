@@ -11,13 +11,13 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/nextlevelbuilder/vbpclaw/internal/bootstrap"
-	"github.com/nextlevelbuilder/vbpclaw/internal/config"
-	"github.com/nextlevelbuilder/vbpclaw/internal/edition"
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
-	"github.com/nextlevelbuilder/vbpclaw/internal/safego"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
-	"github.com/nextlevelbuilder/vbpclaw/internal/tools"
+	"github.com/kadiesnguyen/vbpclaw/internal/bootstrap"
+	"github.com/kadiesnguyen/vbpclaw/internal/config"
+	"github.com/kadiesnguyen/vbpclaw/internal/edition"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/safego"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/tools"
 )
 
 // teamGuidance returns edition-specific system prompt guidance for team members.

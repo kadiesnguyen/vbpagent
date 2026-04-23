@@ -5,7 +5,7 @@ import (
 	"log/slog"
 	"strings"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/channels"
+	"github.com/kadiesnguyen/vbpclaw/internal/channels"
 )
 
 // Matching TS pi-embedded-helpers/errors.ts error classification.
@@ -33,7 +33,7 @@ func formatAgentError(err error) string {
 
 	// 4. Rate limit
 	if containsAny(lower, "rate limit", "rate_limit", "too many requests", "429", "quota exceeded", "resource_exhausted") {
-		return "⚠️ API rate limit reached. Please try again later."
+		return "⚠️ The requested limit has been reached. Please upgrade your plan."
 	}
 
 	// 5. Overloaded

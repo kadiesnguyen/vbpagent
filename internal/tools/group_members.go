@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/channels"
+	"github.com/kadiesnguyen/vbpclaw/internal/channels"
 )
 
 // GroupMemberLister abstracts listing members of a group chat.

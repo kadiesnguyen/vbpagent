@@ -106,30 +106,30 @@ case "${1:-serve}" in
     if [ -n "$VBPCLAW_POSTGRES_DSN" ]; then
       echo "Running database upgrade..."
       if command -v su-exec >/dev/null 2>&1 && [ "$(id -u)" = "0" ]; then
-        su-exec vbpclaw /app/goclaw upgrade || \
+        su-exec vbpclaw /app/vbpclaw upgrade || \
           echo "Upgrade warning (may already be up-to-date)"
       else
-        /app/goclaw upgrade || \
+        /app/vbpclaw upgrade || \
           echo "Upgrade warning (may already be up-to-date)"
       fi
     fi
-    run_as_vbpclaw /app/goclaw
+    run_as_vbpclaw /app/vbpclaw
     ;;
   upgrade)
     shift
-    run_as_vbpclaw /app/goclaw upgrade "$@"
+    run_as_vbpclaw /app/vbpclaw upgrade "$@"
     ;;
   migrate)
     shift
-    run_as_vbpclaw /app/goclaw migrate "$@"
+    run_as_vbpclaw /app/vbpclaw migrate "$@"
     ;;
   onboard)
-    run_as_vbpclaw /app/goclaw onboard
+    run_as_vbpclaw /app/vbpclaw onboard
     ;;
   version)
-    run_as_vbpclaw /app/goclaw version
+    run_as_vbpclaw /app/vbpclaw version
     ;;
   *)
-    run_as_vbpclaw /app/goclaw "$@"
+    run_as_vbpclaw /app/vbpclaw "$@"
     ;;
 esac

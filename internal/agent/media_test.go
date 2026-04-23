@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/media"
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/media"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
 )
 
 // TestEnrichImageIDs_BareTag verifies enrichment of a bare <media:image> tag

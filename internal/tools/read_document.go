@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
 )
 
 // textReadableMIMEs are MIME types whose content can be returned directly without LLM analysis.

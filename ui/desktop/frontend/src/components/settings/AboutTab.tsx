@@ -83,7 +83,7 @@ export function AboutTab() {
 
       <div className="text-xs text-text-muted">
         <button
-          onClick={() => BrowserOpenURL('https://github.com/nextlevelbuilder/vbpclaw')}
+          onClick={() => BrowserOpenURL('https://github.com/kadiesnguyen/vbpclaw')}
           className="text-accent hover:underline cursor-pointer"
         >
           GitHub

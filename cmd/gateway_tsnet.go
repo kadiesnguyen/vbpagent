@@ -12,7 +12,7 @@ import (
 
 	"tailscale.com/tsnet"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/config"
+	"github.com/kadiesnguyen/vbpclaw/internal/config"
 )
 
 // initTailscale starts an additional Tailscale listener alongside the main gateway.

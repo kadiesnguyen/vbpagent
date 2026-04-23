@@ -12,9 +12,9 @@ import (
 	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/spf13/cobra"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/config"
-	"github.com/nextlevelbuilder/vbpclaw/internal/upgrade"
-	"github.com/nextlevelbuilder/vbpclaw/pkg/protocol"
+	"github.com/kadiesnguyen/vbpclaw/internal/config"
+	"github.com/kadiesnguyen/vbpclaw/internal/upgrade"
+	"github.com/kadiesnguyen/vbpclaw/pkg/protocol"
 )
 
 func upgradeCmd() *cobra.Command {

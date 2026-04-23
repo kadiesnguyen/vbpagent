@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
 )
 
 // callOpenAICompatJSON sends a raw JSON body to an OpenAI-compatible chat/completions endpoint

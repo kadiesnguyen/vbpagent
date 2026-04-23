@@ -131,10 +131,10 @@ const originalDefaults = `function formatDefaultAction(data) {
 
 const patchedDefaults = `function formatDefaultAction(data) {
     const obj = (data ?? {});
-    // Google Sheets returns spreadsheetId; Drive returns id or fileId
-    const id = String(obj.spreadsheetId ?? obj.id ?? obj.fileId ?? 'unknown');
+    // Google Sheets returns spreadsheetId; Drive returns id or fileId; Docs returns documentId
+    const id = String(obj.documentId ?? obj.spreadsheetId ?? obj.id ?? obj.fileId ?? 'unknown');
     const parts = ['Operation completed.'];
-    if (obj.spreadsheetId || obj.id || obj.fileId)
+    if (obj.documentId || obj.spreadsheetId || obj.id || obj.fileId)
         parts.push(\`\\n**ID:** \\\`\${id}\\\`\`);
     if (obj.spreadsheetUrl)
         parts.push(\`\\n**URL:** \${obj.spreadsheetUrl}\`);
@@ -146,9 +146,13 @@ const patchedDefaults = `function formatDefaultAction(data) {
 
 if (defaults.includes(originalDefaults) && !defaults.includes('spreadsheetId')) {
   fs.writeFileSync(defaultsPath, defaults.replace(originalDefaults, patchedDefaults));
-  console.log('Patched defaults.js: formatDefaultAction now returns spreadsheetId');
+  console.log('Patched defaults.js: formatDefaultAction now returns documentId/spreadsheetId/fileId');
+} else if (defaults.includes('documentId')) {
+  console.log('defaults.js already patched with documentId, skipping');
 } else if (defaults.includes('spreadsheetId')) {
-  console.log('defaults.js already patched, skipping');
+  // Old patch — re-apply with documentId support
+  fs.writeFileSync(defaultsPath, defaults.replace(/function formatDefaultAction[\s\S]*?^}/m, patchedDefaults));
+  console.log('Patched defaults.js: upgraded to include documentId');
 } else {
   console.log('WARNING: defaults.js pattern not found, patch skipped');
   process.exit(1);
@@ -259,4 +263,34 @@ if (!yaml.includes('format cells in a spreadsheet')) {
   console.log('Patched manifest.yaml: added formatCells operation to sheets');
 } else {
   console.log('manifest.yaml formatCells already patched, skipping');
+}
+
+// ─── Patch 6: server.js – disable token warmup in stateless mode ─────────────
+// In streamableHttp stateless mode, each request spawns a fresh child process.
+// Token warmup (prefetching OAuth tokens for all 14 accounts) runs on every
+// child start, creating 14+ concurrent HTTP connections per child. With multiple
+// concurrent children (health checks, tool calls, SSE streams), memory grows to
+// OOM. Warmup is also pointless in stateless mode: the next request gets a new
+// child and warms again anyway. Disable it via GWS_SKIP_WARMUP env var.
+// ─────────────────────────────────────────────────────────────────────────────
+const serverPath = '/usr/local/lib/node_modules/@aaronsb/google-workspace-mcp/build/server/server.js';
+let server = fs.readFileSync(serverPath, 'utf8');
+
+const originalWarmup = `    // Non-blocking warmup — don't delay MCP handshake
+    warmupAccounts().catch(() => { });`;
+
+const patchedWarmup = `    // Non-blocking warmup — disabled in stateless mode (GWS_SKIP_WARMUP=1)
+    // to prevent OOM: each child warms tokens for all accounts on startup.
+    if (!process.env.GWS_SKIP_WARMUP) {
+        warmupAccounts().catch(() => { });
+    }`;
+
+if (server.includes(originalWarmup) && !server.includes('GWS_SKIP_WARMUP')) {
+  fs.writeFileSync(serverPath, server.replace(originalWarmup, patchedWarmup));
+  console.log('Patched server.js: token warmup gated on GWS_SKIP_WARMUP env var');
+} else if (server.includes('GWS_SKIP_WARMUP')) {
+  console.log('server.js already patched, skipping');
+} else {
+  console.log('WARNING: server.js warmup pattern not found, patch skipped');
+  process.exit(1);
 }

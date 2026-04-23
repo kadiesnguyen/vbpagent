@@ -10,9 +10,9 @@ import (
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/config"
-	"github.com/nextlevelbuilder/vbpclaw/internal/sessions"
-	"github.com/nextlevelbuilder/vbpclaw/pkg/protocol"
+	"github.com/kadiesnguyen/vbpclaw/internal/config"
+	"github.com/kadiesnguyen/vbpclaw/internal/sessions"
+	"github.com/kadiesnguyen/vbpclaw/pkg/protocol"
 )
 
 func runClientMode(cfg *config.Config, addr, agentName, message, sessionKey string) {

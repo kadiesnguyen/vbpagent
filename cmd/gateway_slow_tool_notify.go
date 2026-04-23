@@ -3,9 +3,9 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/agent"
-	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
-	"github.com/nextlevelbuilder/vbpclaw/pkg/protocol"
+	"github.com/kadiesnguyen/vbpclaw/internal/agent"
+	"github.com/kadiesnguyen/vbpclaw/internal/bus"
+	"github.com/kadiesnguyen/vbpclaw/pkg/protocol"
 )
 
 // wireSlowToolNotifySubscriber registers a subscriber that sends direct outbound

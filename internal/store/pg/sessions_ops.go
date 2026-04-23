@@ -5,7 +5,7 @@ import (
 	"log/slog"
 	"time"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
 )
 
 func (s *PGSessionStore) TruncateHistory(ctx context.Context, key string, keepLast int) {

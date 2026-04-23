@@ -3,7 +3,7 @@ package http
 import (
 	"fmt"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
 )
 
 // Provider-level embedding settings are used by the memory system, whose

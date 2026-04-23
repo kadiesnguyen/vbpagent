@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+	"net"
+	"net/url"
 	"strings"
 	"time"
 
@@ -11,7 +13,7 @@ import (
 	mcpclient "github.com/mark3labs/mcp-go/client"
 	"github.com/mark3labs/mcp-go/client/transport"
 	mcpgo "github.com/mark3labs/mcp-go/mcp"
-	"github.com/nextlevelbuilder/vbpclaw/internal/tools"
+	"github.com/kadiesnguyen/vbpclaw/internal/tools"
 )
 
 // connectAndDiscover creates a client, initializes the MCP handshake, and
@@ -56,6 +58,7 @@ func connectAndDiscover(ctx context.Context, name, transportType, command string
 	ss := &serverState{
 		name:       name,
 		transport:  transportType,
+		url:        url,
 		client:     client,
 		timeoutSec: timeoutSec,
 	}
@@ -226,6 +229,44 @@ func isMethodNotFound(err error) bool {
 	return strings.Contains(strings.ToLower(err.Error()), "method not found")
 }
 
+// isNilResponse returns true for the "unexpected nil response" error that
+// occurs in streamableHttp stateless mode: supergateway kills the child
+// process after each request, so the response sometimes arrives after the
+// HTTP connection has closed. This is a transport artifact, not a real
+// server failure — use probeTCP to confirm liveness instead.
+func isNilResponse(err error) bool {
+	return strings.Contains(strings.ToLower(err.Error()), "nil response")
+}
+
+// probeTCP dials the TCP address of rawURL and returns nil if the port is
+// open. Unlike an HTTP GET, this does NOT trigger supergateway to spawn a
+// child process, so it is safe to call frequently against stateless
+// streamableHttp servers that warm tokens on every child start.
+func probeTCP(ctx context.Context, rawURL string) error {
+	u, err := url.Parse(rawURL)
+	if err != nil {
+		return err
+	}
+	host := u.Hostname()
+	port := u.Port()
+	if port == "" {
+		if u.Scheme == "https" {
+			port = "443"
+		} else {
+			port = "80"
+		}
+	}
+	probeCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+	d := net.Dialer{}
+	conn, err := d.DialContext(probeCtx, "tcp", net.JoinHostPort(host, port))
+	if err != nil {
+		return err
+	}
+	conn.Close()
+	return nil
+}
+
 // healthLoop periodically pings the MCP server and attempts reconnection on failure.
 func (m *Manager) healthLoop(ctx context.Context, ss *serverState) {
 	ticker := newHealthTicker()
@@ -245,6 +286,20 @@ func (m *Manager) healthLoop(ctx context.Context, ss *serverState) {
 					ss.lastErr = ""
 					ss.mu.Unlock()
 					continue
+				}
+				// streamableHttp stateless mode: the child process is killed
+				// after each request, so "nil response" is a transport artifact.
+				// Fall back to a plain HTTP probe to confirm liveness.
+				if isNilResponse(err) && ss.transport == "streamable-http" && ss.url != "" {
+					if probeTCP(ctx, ss.url) == nil {
+						ss.connected.Store(true)
+						ss.mu.Lock()
+						ss.reconnAttempts = 0
+						ss.healthFailures = 0
+						ss.lastErr = ""
+						ss.mu.Unlock()
+						continue
+					}
 				}
 				ss.mu.Lock()
 				ss.healthFailures++

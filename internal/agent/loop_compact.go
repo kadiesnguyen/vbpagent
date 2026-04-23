@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
 )
 
 // compactionSummaryPrompt is the structured summarization instruction used by both

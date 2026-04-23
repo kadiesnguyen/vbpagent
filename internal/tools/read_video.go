@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
 )
 
 // --- Context helpers for media video ---

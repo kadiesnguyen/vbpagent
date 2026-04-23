@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"regexp"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
-	"github.com/nextlevelbuilder/vbpclaw/internal/i18n"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/bus"
+	"github.com/kadiesnguyen/vbpclaw/internal/i18n"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
 )
 
 // SystemConfigsHandler handles system config CRUD endpoints.

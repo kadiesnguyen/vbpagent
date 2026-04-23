@@ -7,8 +7,8 @@ import (
 	"time"
 
 	mcpgo "github.com/mark3labs/mcp-go/mcp"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
-	"github.com/nextlevelbuilder/vbpclaw/internal/tools"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/tools"
 )
 
 // UserCredServers returns servers requiring per-user credentials.

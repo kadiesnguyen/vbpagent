@@ -10,7 +10,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
 )
 
 // Session stores conversation history for one agent+scope combination.

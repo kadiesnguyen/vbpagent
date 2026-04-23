@@ -13,7 +13,7 @@ import (
 	"github.com/mymmrac/telego"
 	tu "github.com/mymmrac/telego/telegoutil"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/channels"
+	"github.com/kadiesnguyen/vbpclaw/internal/channels"
 )
 
 const (

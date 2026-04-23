@@ -2,14 +2,14 @@
 # VBPClaw Lite (Desktop) installer — downloads the latest .app from GitHub Releases.
 #
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/nextlevelbuilder/vbpclaw/main/scripts/install-lite.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/kadiesnguyen/vbpclaw/main/scripts/install-lite.sh | bash
 #   curl -fsSL ... | bash -s -- --version lite-v0.1.0
 #
 # macOS only. Windows users: download .zip from GitHub Releases.
 
 set -euo pipefail
 
-REPO="nextlevelbuilder/vbpclaw"
+REPO="kadiesnguyen/vbpclaw"
 INSTALL_DIR="/Applications"
 VERSION=""
 

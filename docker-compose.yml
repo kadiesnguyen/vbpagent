@@ -1,5 +1,5 @@
 # Base docker-compose — shared service definition.
-# Pre-built images: ghcr.io/nextlevelbuilder/goclaw (also on Docker Hub: digitop/vbpclaw)
+# Pre-built images: ghcr.io/kadiesnguyen/vbpclaw (also on Docker Hub: digitop/vbpclaw)
 #
 # The default `latest` image includes an embedded web dashboard (no separate nginx needed).
 # Web UI is served at the same port as the API (default: 18790).
@@ -24,7 +24,7 @@
 
 services:
   vbpclaw:
-    image: ghcr.io/nextlevelbuilder/goclaw:latest
+    image: ghcr.io/kadiesnguyen/vbpagent:latest
     build:
       context: ${VBPCLAW_DIR:-.}
       dockerfile: Dockerfile

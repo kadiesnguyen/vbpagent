@@ -6,7 +6,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
 )
 
 // --- SessionKey ---

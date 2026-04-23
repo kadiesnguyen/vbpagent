@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/agent"
-	"github.com/nextlevelbuilder/vbpclaw/internal/config"
-	"github.com/nextlevelbuilder/vbpclaw/internal/scheduler"
+	"github.com/kadiesnguyen/vbpclaw/internal/agent"
+	"github.com/kadiesnguyen/vbpclaw/internal/config"
+	"github.com/kadiesnguyen/vbpclaw/internal/scheduler"
 )
 
 // makeSchedulerRunFunc creates the RunFunc for the scheduler.

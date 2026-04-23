@@ -4,9 +4,9 @@ import (
 	"context"
 	"database/sql"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/channels"
-	"github.com/nextlevelbuilder/vbpclaw/internal/gateway"
-	"github.com/nextlevelbuilder/vbpclaw/pkg/protocol"
+	"github.com/kadiesnguyen/vbpclaw/internal/channels"
+	"github.com/kadiesnguyen/vbpclaw/internal/gateway"
+	"github.com/kadiesnguyen/vbpclaw/pkg/protocol"
 )
 
 // QuotaMethods handles quota.usage — returns per-user quota consumption for the dashboard.

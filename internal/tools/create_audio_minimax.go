@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
 )
 
 // callMinimaxMusicGen calls the MiniMax music generation API.

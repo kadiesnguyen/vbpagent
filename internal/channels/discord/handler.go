@@ -9,11 +9,11 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
-	"github.com/nextlevelbuilder/vbpclaw/internal/channels"
-	"github.com/nextlevelbuilder/vbpclaw/internal/channels/media"
-	"github.com/nextlevelbuilder/vbpclaw/internal/channels/typing"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/bus"
+	"github.com/kadiesnguyen/vbpclaw/internal/channels"
+	"github.com/kadiesnguyen/vbpclaw/internal/channels/media"
+	"github.com/kadiesnguyen/vbpclaw/internal/channels/typing"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
 )
 
 // handleMessage processes incoming Discord messages.

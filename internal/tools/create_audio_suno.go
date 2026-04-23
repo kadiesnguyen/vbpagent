@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
 )
 
 // callSunoMusicGen generates music via the Suno API.

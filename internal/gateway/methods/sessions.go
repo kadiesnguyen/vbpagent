@@ -4,13 +4,13 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
-	"github.com/nextlevelbuilder/vbpclaw/internal/config"
-	"github.com/nextlevelbuilder/vbpclaw/internal/gateway"
-	httpapi "github.com/nextlevelbuilder/vbpclaw/internal/http"
-	"github.com/nextlevelbuilder/vbpclaw/internal/i18n"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
-	"github.com/nextlevelbuilder/vbpclaw/pkg/protocol"
+	"github.com/kadiesnguyen/vbpclaw/internal/bus"
+	"github.com/kadiesnguyen/vbpclaw/internal/config"
+	"github.com/kadiesnguyen/vbpclaw/internal/gateway"
+	httpapi "github.com/kadiesnguyen/vbpclaw/internal/http"
+	"github.com/kadiesnguyen/vbpclaw/internal/i18n"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/pkg/protocol"
 )
 
 // SessionsMethods handles sessions.list, sessions.preview, sessions.patch, sessions.delete, sessions.reset.

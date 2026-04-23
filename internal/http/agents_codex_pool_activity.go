@@ -5,8 +5,8 @@ import (
 	"slices"
 	"time"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
 )
 
 const codexPoolRuntimeHealthSampleSize = 120

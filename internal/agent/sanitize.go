@@ -21,7 +21,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
 )
 
 // SanitizeAssistantContent applies the full sanitization pipeline to assistant

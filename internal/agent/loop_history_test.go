@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/config"
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/config"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
 )
 
 func TestLimitHistoryTurns_NoLimit(t *testing.T) {

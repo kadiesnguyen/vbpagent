@@ -2,7 +2,7 @@
 # VBPClaw installer — downloads the latest binary from GitHub Releases.
 #
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/nextlevelbuilder/vbpclaw/main/scripts/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/kadiesnguyen/vbpclaw/main/scripts/install.sh | bash
 #   curl -fsSL ... | bash -s -- --version v1.30.0
 #   curl -fsSL ... | bash -s -- --dir /opt/vbpclaw
 #
@@ -10,7 +10,7 @@
 
 set -euo pipefail
 
-REPO="nextlevelbuilder/vbpclaw"
+REPO="kadiesnguyen/vbpclaw"
 INSTALL_DIR="${VBPCLAW_INSTALL_DIR:-/usr/local/bin}"
 MIGRATIONS_DIR="/usr/local/share/vbpclaw/migrations"
 VERSION=""

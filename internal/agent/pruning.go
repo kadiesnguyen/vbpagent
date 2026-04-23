@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"unicode/utf8"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/config"
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/config"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
 )
 
 // Context pruning defaults matching TS DEFAULT_CONTEXT_PRUNING_SETTINGS.

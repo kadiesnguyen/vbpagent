@@ -10,11 +10,11 @@ import (
 	"github.com/google/uuid"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/channels"
-	"github.com/nextlevelbuilder/vbpclaw/internal/channels/zalo/personal/protocol"
-	"github.com/nextlevelbuilder/vbpclaw/internal/gateway"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
-	vbpclawprotocol "github.com/nextlevelbuilder/vbpclaw/pkg/protocol"
+	"github.com/kadiesnguyen/vbpclaw/internal/channels"
+	"github.com/kadiesnguyen/vbpclaw/internal/channels/zalo/personal/protocol"
+	"github.com/kadiesnguyen/vbpclaw/internal/gateway"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
+	vbpclawprotocol "github.com/kadiesnguyen/vbpclaw/pkg/protocol"
 )
 
 // ContactsMethods handles fetching Zalo friends/groups for the picker UI.

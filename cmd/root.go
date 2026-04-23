@@ -6,10 +6,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/nextlevelbuilder/vbpclaw/pkg/protocol"
+	"github.com/kadiesnguyen/vbpclaw/pkg/protocol"
 )
 
-// Version is set at build time via -ldflags "-X github.com/nextlevelbuilder/vbpclaw/cmd.Version=v1.0.0"
+// Version is set at build time via -ldflags "-X github.com/kadiesnguyen/vbpclaw/cmd.Version=v1.0.0"
 var Version = "dev"
 
 var (

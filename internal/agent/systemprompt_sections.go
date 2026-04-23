@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/bootstrap"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/bootstrap"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
 )
 
 // mcpOptionalParamInstruction is the shared instruction for MCP tool optional parameters.

@@ -3,8 +3,8 @@ package providerresolve
 import (
 	"fmt"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
 )
 
 // ResolveConfiguredProvider resolves the provider an agent should actually use.

@@ -22,7 +22,12 @@ VOLUME ["/data"]
 
 EXPOSE 3100
 
-# Wrap stdio MCP server as SSE on port 3100
-# Use SSE transport (stable with mcp-go clients). streamableHttp+stateful caused
-# "unexpected nil response" during initialize handshake (--stateful not supported in v3.4.3).
-CMD ["supergateway", "--stdio", "google-workspace-mcp", "--port", "3100", "--outputTransport", "sse"]
+# Wrap stdio MCP server as streamableHttp on port 3100.
+# streamableHttp (stateless) spawns a fresh child process per session, supporting
+# multiple concurrent connections from multi-tenant pool. SSE mode only supports
+# one connection and crashes when a second client connects.
+#
+# The trap below gives in-flight tool calls time to complete before the process
+# exits. Without it, a SIGTERM during a Docs/Drive operation drops the response
+# (bot sees no ID, reports Drive error even though the file was created).
+CMD ["/bin/sh", "-c", "supergateway --stdio google-workspace-mcp --port 3100 --outputTransport streamableHttp & PID=$!; trap 'sleep 10; kill $PID' TERM; wait $PID"]

@@ -7,8 +7,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store/pg"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/store/pg"
 )
 
 // testPostgresConnection verifies connectivity to Postgres with a 5s timeout.

@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/gateway"
-	"github.com/nextlevelbuilder/vbpclaw/pkg/protocol"
+	"github.com/kadiesnguyen/vbpclaw/internal/gateway"
+	"github.com/kadiesnguyen/vbpclaw/pkg/protocol"
 )
 
 // --- agent.identity.get ---

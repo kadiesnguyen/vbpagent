@@ -16,17 +16,17 @@ import (
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/agent"
-	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
-	"github.com/nextlevelbuilder/vbpclaw/internal/config"
-	httpapi "github.com/nextlevelbuilder/vbpclaw/internal/http"
-	mcpbridge "github.com/nextlevelbuilder/vbpclaw/internal/mcp"
-	"github.com/nextlevelbuilder/vbpclaw/internal/webui"
-	"github.com/nextlevelbuilder/vbpclaw/internal/permissions"
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
-	"github.com/nextlevelbuilder/vbpclaw/internal/tools"
-	"github.com/nextlevelbuilder/vbpclaw/pkg/protocol"
+	"github.com/kadiesnguyen/vbpclaw/internal/agent"
+	"github.com/kadiesnguyen/vbpclaw/internal/bus"
+	"github.com/kadiesnguyen/vbpclaw/internal/config"
+	httpapi "github.com/kadiesnguyen/vbpclaw/internal/http"
+	mcpbridge "github.com/kadiesnguyen/vbpclaw/internal/mcp"
+	"github.com/kadiesnguyen/vbpclaw/internal/webui"
+	"github.com/kadiesnguyen/vbpclaw/internal/permissions"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/tools"
+	"github.com/kadiesnguyen/vbpclaw/pkg/protocol"
 )
 
 // Server is the main gateway server handling WebSocket and HTTP connections.

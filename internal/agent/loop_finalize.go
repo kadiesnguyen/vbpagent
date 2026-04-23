@@ -8,10 +8,10 @@ import (
 
 	"log/slog"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/bootstrap"
-	"github.com/nextlevelbuilder/vbpclaw/internal/i18n"
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/bootstrap"
+	"github.com/kadiesnguyen/vbpclaw/internal/i18n"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
 )
 
 // isUserFilePopulated checks if USER.md has been filled with actual user data

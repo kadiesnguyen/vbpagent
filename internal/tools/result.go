@@ -1,8 +1,8 @@
 package tools
 
 import (
-	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/bus"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
 )
 
 // Result is the unified return type from tool execution.

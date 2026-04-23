@@ -7,11 +7,11 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
-	"github.com/nextlevelbuilder/vbpclaw/internal/config"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store/pg"
-	"github.com/nextlevelbuilder/vbpclaw/internal/tracing"
+	"github.com/kadiesnguyen/vbpclaw/internal/bus"
+	"github.com/kadiesnguyen/vbpclaw/internal/config"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/store/pg"
+	"github.com/kadiesnguyen/vbpclaw/internal/tracing"
 )
 
 // setupStoresAndTracing creates PG stores, tracing collector, snapshot worker, and wires cron config.

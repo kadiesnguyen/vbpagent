@@ -14,9 +14,9 @@ import (
 
 	"github.com/mymmrac/telego"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/channels"
-	"github.com/nextlevelbuilder/vbpclaw/internal/channels/media"
-	"github.com/nextlevelbuilder/vbpclaw/internal/tools"
+	"github.com/kadiesnguyen/vbpclaw/internal/channels"
+	"github.com/kadiesnguyen/vbpclaw/internal/channels/media"
+	"github.com/kadiesnguyen/vbpclaw/internal/tools"
 )
 
 const (

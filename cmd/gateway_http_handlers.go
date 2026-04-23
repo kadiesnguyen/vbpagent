@@ -1,11 +1,11 @@
 package cmd
 
 import (
-	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
-	httpapi "github.com/nextlevelbuilder/vbpclaw/internal/http"
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
-	"github.com/nextlevelbuilder/vbpclaw/internal/tools"
+	"github.com/kadiesnguyen/vbpclaw/internal/bus"
+	httpapi "github.com/kadiesnguyen/vbpclaw/internal/http"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/tools"
 )
 
 // wireHTTP creates HTTP handlers (agents + skills + traces + MCP + channel instances + providers + builtin tools + pending messages).

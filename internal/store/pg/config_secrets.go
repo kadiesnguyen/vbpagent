@@ -7,7 +7,7 @@ import (
 	"log/slog"
 	"time"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/crypto"
+	"github.com/kadiesnguyen/vbpclaw/internal/crypto"
 )
 
 // PGConfigSecretsStore implements store.ConfigSecretsStore backed by Postgres.

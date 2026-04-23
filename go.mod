@@ -1,4 +1,4 @@
-module github.com/nextlevelbuilder/vbpclaw
+module github.com/kadiesnguyen/vbpclaw
 
 go 1.26.0
 

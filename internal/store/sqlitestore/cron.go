@@ -13,8 +13,8 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/cron"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/cron"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
 )
 
 const defaultCronCacheTTL = 2 * time.Minute

@@ -8,8 +8,8 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/cache"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/cache"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
 )
 
 // ---- minimal AgentStore stub for interceptor tests ----

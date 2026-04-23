@@ -16,8 +16,8 @@ import (
 	"github.com/google/uuid"
 	shellwords "github.com/mattn/go-shellwords"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/sandbox"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/sandbox"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
 )
 
 // shellOperatorPattern detects shell metacharacters that indicate command chaining.

@@ -5,8 +5,8 @@ package cmd
 import (
 	"context"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/config"
-	"github.com/nextlevelbuilder/vbpclaw/internal/tracing"
+	"github.com/kadiesnguyen/vbpclaw/internal/config"
+	"github.com/kadiesnguyen/vbpclaw/internal/tracing"
 )
 
 // initOTelExporter is a no-op when built without the "otel" tag.

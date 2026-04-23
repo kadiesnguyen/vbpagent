@@ -12,9 +12,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/i18n"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store/pg"
+	"github.com/kadiesnguyen/vbpclaw/internal/i18n"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/store/pg"
 )
 
 // SetDB injects the raw DB handle needed for MCP export/import direct queries.

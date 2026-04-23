@@ -8,7 +8,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/permissions"
+	"github.com/kadiesnguyen/vbpclaw/internal/permissions"
 )
 
 // IntegrationsHandler exposes read-only status endpoints for external integrations

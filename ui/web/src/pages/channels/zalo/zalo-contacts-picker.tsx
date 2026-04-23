@@ -22,8 +22,8 @@ interface Group {
 }
 
 interface ContactsResult {
-  friends: Friend[];
-  groups: Group[];
+  friends: Friend[] | null;
+  groups: Group[] | null;
 }
 
 interface ZaloContactsPickerProps {
@@ -75,9 +75,9 @@ export function ZaloContactsPicker({ instanceId, hasCredentials, value, onChange
   };
 
   const resolveName = (id: string): string => {
-    const friend = contacts?.friends.find((f) => f.userId === id);
+    const friend = (contacts?.friends ?? []).find((f) => f.userId === id);
     if (friend) return friend.displayName;
-    const group = contacts?.groups.find((g) => g.groupId === id);
+    const group = (contacts?.groups ?? []).find((g) => g.groupId === id);
     if (group) return group.name;
     return id;
   };
@@ -92,12 +92,12 @@ export function ZaloContactsPicker({ instanceId, hasCredentials, value, onChange
   }
 
   const lowerSearch = search.toLowerCase();
-  const filteredFriends = contacts?.friends.filter(
+  const filteredFriends = (contacts?.friends ?? []).filter(
     (f) => f.displayName.toLowerCase().includes(lowerSearch) || f.userId.includes(search),
-  ) ?? [];
-  const filteredGroups = contacts?.groups.filter(
+  );
+  const filteredGroups = (contacts?.groups ?? []).filter(
     (g) => g.name.toLowerCase().includes(lowerSearch) || g.groupId.includes(search),
-  ) ?? [];
+  );
 
   return (
     <div className="space-y-3">

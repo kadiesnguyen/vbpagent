@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/agent"
+	"github.com/kadiesnguyen/vbpclaw/internal/agent"
 )
 
 func TestLane_ConcurrencyLimit(t *testing.T) {

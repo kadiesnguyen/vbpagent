@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/channels/zalo/personal/protocol"
+	"github.com/kadiesnguyen/vbpclaw/internal/channels/zalo/personal/protocol"
 )
 
 const pairingDebounce = 60 * time.Second

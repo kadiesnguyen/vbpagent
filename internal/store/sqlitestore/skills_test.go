@@ -8,7 +8,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
 )
 
 func TestSQLiteSkillStore_StoreMissingDeps_PersistsForCustomSkills(t *testing.T) {

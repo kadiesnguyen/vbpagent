@@ -4,9 +4,9 @@ import (
 	"context"
 	"net/http"
 
-	kg "github.com/nextlevelbuilder/vbpclaw/internal/knowledgegraph"
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	kg "github.com/kadiesnguyen/vbpclaw/internal/knowledgegraph"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
 )
 
 // KnowledgeGraphHandler handles KG entity/relation management endpoints.

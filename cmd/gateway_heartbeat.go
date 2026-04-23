@@ -3,8 +3,8 @@ package cmd
 import (
 	"context"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/agent"
-	"github.com/nextlevelbuilder/vbpclaw/internal/scheduler"
+	"github.com/kadiesnguyen/vbpclaw/internal/agent"
+	"github.com/kadiesnguyen/vbpclaw/internal/scheduler"
 )
 
 // makeHeartbeatRunFn creates a function that routes a heartbeat run through the scheduler's cron lane.

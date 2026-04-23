@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/config"
-	"github.com/nextlevelbuilder/vbpclaw/internal/tools"
+	"github.com/kadiesnguyen/vbpclaw/internal/config"
+	"github.com/kadiesnguyen/vbpclaw/internal/tools"
 )
 
 // mockExecTool is a simple tool that records whether it was executed.

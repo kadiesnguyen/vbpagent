@@ -3,8 +3,8 @@ package tracing
 import (
 	"strings"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/config"
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/config"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
 )
 
 // defaultModelPricing contains built-in USD pricing for popular models (per million tokens).

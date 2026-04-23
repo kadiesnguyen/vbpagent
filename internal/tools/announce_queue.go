@@ -8,7 +8,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
+	"github.com/kadiesnguyen/vbpclaw/internal/bus"
 )
 
 // AnnounceQueueItem represents a single subagent result waiting to be announced.

@@ -7,9 +7,9 @@ import (
 
 	"github.com/redis/go-redis/v9"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/cache"
-	"github.com/nextlevelbuilder/vbpclaw/internal/config"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/cache"
+	"github.com/kadiesnguyen/vbpclaw/internal/config"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
 )
 
 // initRedisClient creates a Redis client when built with -tags redis.

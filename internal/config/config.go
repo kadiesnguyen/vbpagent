@@ -6,8 +6,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/cron"
-	"github.com/nextlevelbuilder/vbpclaw/internal/sandbox"
+	"github.com/kadiesnguyen/vbpclaw/internal/cron"
+	"github.com/kadiesnguyen/vbpclaw/internal/sandbox"
 )
 
 // FlexibleStringSlice accepts both ["str"] and [123] in JSON.

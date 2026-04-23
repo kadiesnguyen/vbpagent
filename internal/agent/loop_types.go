@@ -7,17 +7,17 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/bootstrap"
-	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
-	"github.com/nextlevelbuilder/vbpclaw/internal/config"
-	mcpbridge "github.com/nextlevelbuilder/vbpclaw/internal/mcp"
-	"github.com/nextlevelbuilder/vbpclaw/internal/media"
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
-	"github.com/nextlevelbuilder/vbpclaw/internal/sandbox"
-	"github.com/nextlevelbuilder/vbpclaw/internal/skills"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
-	"github.com/nextlevelbuilder/vbpclaw/internal/tools"
-	"github.com/nextlevelbuilder/vbpclaw/internal/tracing"
+	"github.com/kadiesnguyen/vbpclaw/internal/bootstrap"
+	"github.com/kadiesnguyen/vbpclaw/internal/bus"
+	"github.com/kadiesnguyen/vbpclaw/internal/config"
+	mcpbridge "github.com/kadiesnguyen/vbpclaw/internal/mcp"
+	"github.com/kadiesnguyen/vbpclaw/internal/media"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/sandbox"
+	"github.com/kadiesnguyen/vbpclaw/internal/skills"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/tools"
+	"github.com/kadiesnguyen/vbpclaw/internal/tracing"
 )
 
 // bootstrapAutoCleanupTurns is the number of user messages after which

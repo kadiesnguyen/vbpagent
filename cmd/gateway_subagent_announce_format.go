@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/tools"
+	"github.com/kadiesnguyen/vbpclaw/internal/tools"
 )
 
 // buildMergedSubagentAnnounce creates the announce message for one or more subagent results.

@@ -7,13 +7,13 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/bus"
-	"github.com/nextlevelbuilder/vbpclaw/internal/config"
-	"github.com/nextlevelbuilder/vbpclaw/internal/edition"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store/pg"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store/sqlitestore"
-	"github.com/nextlevelbuilder/vbpclaw/internal/tracing"
+	"github.com/kadiesnguyen/vbpclaw/internal/bus"
+	"github.com/kadiesnguyen/vbpclaw/internal/config"
+	"github.com/kadiesnguyen/vbpclaw/internal/edition"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/store/pg"
+	"github.com/kadiesnguyen/vbpclaw/internal/store/sqlitestore"
+	"github.com/kadiesnguyen/vbpclaw/internal/tracing"
 )
 
 // setupStoresAndTracing creates stores (PG or SQLite based on config), tracing collector,

@@ -3,7 +3,7 @@ package permissions
 import (
 	"testing"
 
-	"github.com/nextlevelbuilder/vbpclaw/pkg/protocol"
+	"github.com/kadiesnguyen/vbpclaw/pkg/protocol"
 )
 
 // --- Role hierarchy ---

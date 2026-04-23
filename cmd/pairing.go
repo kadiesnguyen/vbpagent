@@ -10,8 +10,8 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/spf13/cobra"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/config"
-	"github.com/nextlevelbuilder/vbpclaw/pkg/protocol"
+	"github.com/kadiesnguyen/vbpclaw/internal/config"
+	"github.com/kadiesnguyen/vbpclaw/pkg/protocol"
 )
 
 func pairingCmd() *cobra.Command {

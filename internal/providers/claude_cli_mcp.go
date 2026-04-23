@@ -13,7 +13,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/config"
+	"github.com/kadiesnguyen/vbpclaw/internal/config"
 )
 
 // MCPServerEntry represents a single MCP server config for CLI injection.

@@ -3,7 +3,7 @@ package telegram
 import (
 	"testing"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/config"
+	"github.com/kadiesnguyen/vbpclaw/internal/config"
 )
 
 //go:fix inline

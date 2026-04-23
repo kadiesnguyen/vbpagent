@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
 )
 
 // callMinimaxVideoGen calls the MiniMax video generation API (async with task polling).

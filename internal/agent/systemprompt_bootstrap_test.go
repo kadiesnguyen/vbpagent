@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/bootstrap"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/bootstrap"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
 )
 
 // TestBuildSystemPrompt_BootstrapStates verifies the 4 bootstrap states

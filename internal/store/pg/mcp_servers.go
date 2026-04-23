@@ -10,8 +10,8 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/crypto"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/crypto"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
 )
 
 // PGMCPServerStore implements store.MCPServerStore backed by Postgres.

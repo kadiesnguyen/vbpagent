@@ -5,9 +5,9 @@ import (
 	"log/slog"
 	"path/filepath"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
-	"github.com/nextlevelbuilder/vbpclaw/internal/tools"
-	"github.com/nextlevelbuilder/vbpclaw/pkg/protocol"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/tools"
+	"github.com/kadiesnguyen/vbpclaw/pkg/protocol"
 )
 
 // toolResultAction describes what the caller should do after processing a tool result.

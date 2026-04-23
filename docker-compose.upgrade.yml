@@ -14,7 +14,7 @@
 
 services:
   upgrade:
-    image: ghcr.io/nextlevelbuilder/goclaw:latest
+    image: ghcr.io/kadiesnguyen/vbpagent:latest
     build:
       context: ${VBPCLAW_DIR:-.}
       dockerfile: Dockerfile
@@ -33,6 +33,6 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    entrypoint: ["/app/goclaw"]
+    entrypoint: ["/app/vbpclaw"]
     command: ["upgrade"]
     restart: "no"

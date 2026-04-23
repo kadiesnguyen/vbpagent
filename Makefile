@@ -1,5 +1,5 @@
 VERSION ?= $(shell git describe --tags --abbrev=0 --match "v[0-9]*" 2>/dev/null || echo dev)
-LDFLAGS  = -s -w -X github.com/nextlevelbuilder/vbpclaw/cmd.Version=$(VERSION)
+LDFLAGS  = -s -w -X github.com/kadiesnguyen/vbpclaw/cmd.Version=$(VERSION)
 BINARY   = vbpclaw
 
 .PHONY: build build-full run clean version up down logs reset test vet check-web dev migrate setup ci desktop-dev desktop-build desktop-dmg
@@ -58,7 +58,7 @@ version-file:
 	@echo $(VERSION) > VERSION
 
 up: version-file
-	GOCLAW_VERSION=$(VERSION) $(COMPOSE) up -d --build
+	vbpclaw_VERSION=$(VERSION) $(COMPOSE) up -d --build
 	$(UPGRADE) run --rm upgrade
 
 down:
@@ -98,7 +98,7 @@ desktop-dev:
 	cd ui/desktop && wails dev -tags sqliteonly
 
 desktop-build:
-	cd ui/desktop && wails build -tags sqliteonly -ldflags="-s -w -X github.com/nextlevelbuilder/vbpclaw/cmd.Version=$(VERSION)"
+	cd ui/desktop && wails build -tags sqliteonly -ldflags="-s -w -X github.com/kadiesnguyen/vbpclaw/cmd.Version=$(VERSION)"
 
 desktop-dmg: desktop-build
 	@echo "Creating DMG..."

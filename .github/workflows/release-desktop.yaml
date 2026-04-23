@@ -57,7 +57,7 @@ jobs:
           GOARCH: ${{ matrix.arch }}
         run: |
           wails build -tags sqliteonly \
-            -ldflags "-s -w -X github.com/nextlevelbuilder/vbpclaw/cmd.Version=${{ steps.version.outputs.version }}"
+            -ldflags "-s -w -X github.com/kadiesnguyen/vbpclaw/cmd.Version=${{ steps.version.outputs.version }}"
 
       - name: Create DMG
         run: |
@@ -128,7 +128,7 @@ jobs:
         shell: bash
         run: |
           wails build -tags sqliteonly \
-            -ldflags "-s -w -X github.com/nextlevelbuilder/vbpclaw/cmd.Version=${{ steps.version.outputs.version }}"
+            -ldflags "-s -w -X github.com/kadiesnguyen/vbpclaw/cmd.Version=${{ steps.version.outputs.version }}"
 
       - name: Create zip
         shell: pwsh

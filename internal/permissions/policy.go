@@ -16,7 +16,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/nextlevelbuilder/vbpclaw/pkg/protocol"
+	"github.com/kadiesnguyen/vbpclaw/pkg/protocol"
 )
 
 // Role represents a user's permission level.

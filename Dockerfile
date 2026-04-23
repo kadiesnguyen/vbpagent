@@ -49,8 +49,8 @@ RUN set -eux; \
     fi; \
     if [ -n "$TAGS" ]; then TAGS="-tags $TAGS"; fi; \
     CGO_ENABLED=0 GOOS=linux \
-    go build -ldflags="-s -w -X github.com/nextlevelbuilder/vbpclaw/cmd.Version=${VERSION}" \
-    ${TAGS} -o /out/goclaw . && \
+    go build -ldflags="-s -w -X github.com/kadiesnguyen/vbpclaw/cmd.Version=${VERSION}" \
+    ${TAGS} -o /out/vbpclaw . && \
     CGO_ENABLED=0 GOOS=linux \
     go build -ldflags="-s -w" -o /out/pkg-helper ./cmd/pkg-helper
 
@@ -97,11 +97,12 @@ RUN set -eux; \
 RUN adduser -D -u 1000 -h /app vbpclaw && addgroup vbpclaw docker
 WORKDIR /app
 
-# Copy binary, migrations, and bundled skills
-COPY --from=builder /out/goclaw /app/goclaw
+# Copy binary, migrations, bundled skills, and web UI
+COPY --from=builder /out/vbpclaw /app/vbpclaw
 COPY --from=builder /out/pkg-helper /app/pkg-helper
 COPY --from=builder /src/migrations/ /app/migrations/
 COPY --from=builder /src/skills/ /app/bundled-skills/
+COPY --from=web-builder /app/dist /app/ui/web/dist
 COPY docker-entrypoint.sh /app/docker-entrypoint.sh
 
 # Fix Windows git clone issues:

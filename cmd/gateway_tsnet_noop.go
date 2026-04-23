@@ -6,7 +6,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/config"
+	"github.com/kadiesnguyen/vbpclaw/internal/config"
 )
 
 // initTailscale is a no-op when built without the "tsnet" tag.

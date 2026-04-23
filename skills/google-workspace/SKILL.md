@@ -200,6 +200,23 @@ manage_gmail(operation="get", email="user@gmail.com", messageId=<id>)
 
 ---
 
+## Recovery After Missing File ID
+
+If a `manage_docs` or `manage_drive` create/upload call returns an error, no ID, or an empty response (can happen when the MCP server restarts mid-call), **do NOT report failure**. The file may have been created successfully. Always recover:
+
+**Step 1 — Search Drive for the file**
+```
+manage_drive(operation="search", email="<email>", query="name contains '<filename>' and trashed=false", maxResults=5)
+```
+
+**Step 2 — If found**, use that fileId to build and return the link normally.
+
+**Step 3 — If not found**, then and only then report that the file could not be created, and offer to retry.
+
+This recovery step is mandatory whenever a create/upload operation does not return a file ID or document ID.
+
+---
+
 ## Common Mistakes to Avoid
 
 | Wrong | Correct |

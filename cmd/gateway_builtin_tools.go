@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"log/slog"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/edition"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
-	"github.com/nextlevelbuilder/vbpclaw/internal/tools"
+	"github.com/kadiesnguyen/vbpclaw/internal/edition"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/tools"
 )
 
 // builtinToolSeedData returns the canonical list of built-in tools to seed into the database.

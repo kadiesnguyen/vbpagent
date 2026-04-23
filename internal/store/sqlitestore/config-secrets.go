@@ -9,7 +9,7 @@ import (
 	"log/slog"
 	"time"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/crypto"
+	"github.com/kadiesnguyen/vbpclaw/internal/crypto"
 )
 
 // SQLiteConfigSecretsStore implements store.ConfigSecretsStore backed by SQLite.

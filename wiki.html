@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VBP Agent Wiki — Hướng dẫn sử dụng Skills</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --bg2: #161b27;
+    --bg3: #1e2535;
+    --border: #2a3350;
+    --accent: #4f7df3;
+    --accent2: #7c3aed;
+    --text: #e2e8f0;
+    --text2: #94a3b8;
+    --text3: #64748b;
+    --green: #10b981;
+    --radius: 12px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* HEADER */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(15,17,23,0.9);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex; align-items: center; gap: 16px;
+    height: 60px;
+  }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 16px; color: var(--text); text-decoration: none; }
+  .logo-icon { width: 32px; height: 32px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .logo-badge { font-size: 11px; font-weight: 600; background: rgba(79,125,243,0.15); color: var(--accent); border: 1px solid rgba(79,125,243,0.3); padding: 2px 7px; border-radius: 99px; }
+  .spacer { flex: 1; }
+  .search-box { display: flex; align-items: center; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 0 12px; gap: 8px; width: 240px; }
+  .search-box input { background: transparent; border: none; outline: none; color: var(--text); font-size: 13px; width: 100%; padding: 7px 0; }
+  .search-box input::placeholder { color: var(--text3); }
+  .lang-switcher { display: flex; gap: 4px; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 3px; }
+  .lang-btn { padding: 4px 10px; border-radius: 5px; border: none; font-size: 12px; font-weight: 600; cursor: pointer; color: var(--text2); background: transparent; transition: all 0.15s; }
+  .lang-btn.active { background: var(--accent); color: #fff; }
+
+  /* LAYOUT */
+  .layout { display: flex; max-width: 1280px; margin: 0 auto; }
+
+  /* SIDEBAR */
+  aside { width: 240px; flex-shrink: 0; position: sticky; top: 60px; height: calc(100vh - 60px); overflow-y: auto; padding: 24px 16px; border-right: 1px solid var(--border); }
+  aside::-webkit-scrollbar { width: 4px; }
+  aside::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  .nav-section { margin-bottom: 24px; }
+  .nav-section-title { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3); padding: 0 8px; margin-bottom: 6px; }
+  .nav-item { display: flex; align-items: center; gap: 8px; padding: 7px 8px; border-radius: 6px; font-size: 13px; color: var(--text2); cursor: pointer; text-decoration: none; transition: all 0.15s; }
+  .nav-item:hover { background: var(--bg3); color: var(--text); }
+  .nav-item.active { background: rgba(79,125,243,0.12); color: var(--accent); }
+  .nav-item .nav-icon { font-size: 15px; width: 18px; text-align: center; }
+  .nav-item .nav-count { margin-left: auto; font-size: 11px; background: var(--bg3); color: var(--text3); padding: 1px 6px; border-radius: 99px; }
+
+  /* MAIN */
+  main { flex: 1; padding: 36px 40px; min-width: 0; }
+
+  /* HERO */
+  .hero { background: linear-gradient(135deg, rgba(79,125,243,0.08) 0%, rgba(124,58,237,0.06) 100%); border: 1px solid rgba(79,125,243,0.15); border-radius: var(--radius); padding: 32px 36px; margin-bottom: 40px; position: relative; overflow: hidden; }
+  .hero::after { content: ''; position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(79,125,243,0.12) 0%, transparent 70%); }
+  .hero-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--accent); margin-bottom: 12px; background: rgba(79,125,243,0.1); border: 1px solid rgba(79,125,243,0.2); padding: 4px 10px; border-radius: 99px; }
+  .hero h1 { font-size: 28px; font-weight: 800; line-height: 1.2; margin-bottom: 10px; }
+  .hero p { font-size: 15px; color: var(--text2); max-width: 560px; }
+  .hero-stats { display: flex; gap: 24px; margin-top: 24px; flex-wrap: wrap; }
+  .stat { display: flex; flex-direction: column; gap: 2px; }
+  .stat-num { font-size: 22px; font-weight: 800; color: var(--accent); }
+  .stat-label { font-size: 12px; color: var(--text3); }
+
+  /* SECTION */
+  .skill-section { margin-bottom: 48px; display: none; }
+  .skill-section.visible { display: block; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+  .section-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .section-header h2 { font-size: 18px; font-weight: 700; }
+  .section-header p { font-size: 13px; color: var(--text2); margin-top: 2px; }
+  .section-badge { margin-left: auto; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 99px; }
+
+  /* CARDS */
+  .skill-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+  .skill-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden; }
+  .skill-card:hover { border-color: rgba(79,125,243,0.4); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+  .skill-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--card-color, var(--accent)); opacity: 0; transition: opacity 0.2s; }
+  .skill-card:hover::before { opacity: 1; }
+  .card-head { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+  .card-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .card-title { font-size: 15px; font-weight: 700; margin-bottom: 3px; }
+  .card-subtitle { font-size: 12px; color: var(--text3); }
+  .card-desc { font-size: 13px; color: var(--text2); line-height: 1.6; margin-bottom: 16px; }
+  .card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+  .tag { font-size: 11px; font-weight: 600; background: var(--bg3); color: var(--text3); border: 1px solid var(--border); padding: 2px 8px; border-radius: 99px; }
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 6px; border: none; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.15s; text-decoration: none; }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: #3b69e0; }
+
+  /* DETAIL */
+  .detail-overlay { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.65); backdrop-filter: blur(4px); align-items: center; justify-content: center; padding: 16px; }
+  .detail-overlay.open { display: flex; }
+  .detail-panel { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; width: 660px; max-width: 100%; max-height: 88vh; overflow-y: auto; display: flex; flex-direction: column; }
+  .detail-panel::-webkit-scrollbar { width: 4px; }
+  .detail-panel::-webkit-scrollbar-thumb { background: var(--border); }
+  .detail-header { display: flex; align-items: center; gap: 14px; padding: 22px 28px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg2); z-index: 1; }
+  .detail-close { margin-left: auto; background: var(--bg3); border: 1px solid var(--border); color: var(--text2); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .detail-close:hover { color: var(--text); border-color: var(--accent); }
+  .detail-body { padding: 24px 28px; display: flex; flex-direction: column; gap: 24px; }
+
+  /* PROMPT EXAMPLES */
+  .prompt-section h4 { font-size: 11px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text3); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+  .prompt-list { display: flex; flex-direction: column; gap: 8px; }
+  .prompt-item { display: flex; flex-direction: column; gap: 6px; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; transition: border-color 0.15s; cursor: default; }
+  .prompt-item:hover { border-color: rgba(79,125,243,0.35); }
+  .prompt-bubble { display: flex; gap: 8px; align-items: flex-start; }
+  .prompt-avatar { width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; margin-top: 1px; }
+  .prompt-text { font-size: 13px; color: var(--text); line-height: 1.55; flex: 1; }
+  .prompt-result { font-size: 12px; color: var(--text3); padding-left: 34px; display: flex; align-items: center; gap: 5px; }
+  .prompt-result::before { content: '↳'; color: var(--green); font-weight: 700; }
+
+  /* TIP BOX */
+  .tip-box { background: rgba(79,125,243,0.06); border: 1px solid rgba(79,125,243,0.2); border-radius: 10px; padding: 14px 16px; font-size: 13px; color: var(--text2); line-height: 1.6; display: flex; gap: 10px; }
+  .tip-icon { flex-shrink: 0; font-size: 16px; margin-top: 1px; }
+
+  /* NO RESULTS */
+  .no-results { display: none; text-align: center; padding: 60px 20px; color: var(--text3); }
+  .no-results.show { display: block; }
+  .no-results-icon { font-size: 48px; margin-bottom: 16px; }
+  .no-results h3 { font-size: 18px; color: var(--text2); margin-bottom: 8px; }
+
+  @media (max-width: 900px) { aside { display: none; } main { padding: 24px 20px; } .search-box { width: 160px; } }
+  @media (max-width: 600px) { .hero { padding: 20px; } .hero h1 { font-size: 20px; } .skill-grid { grid-template-columns: 1fr; } .search-box { display: none; } .detail-body { padding: 20px; } }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="#">
+    <div class="logo-icon">⚡</div>
+    <span>VBP Agent</span>
+    <span class="logo-badge">Wiki</span>
+  </a>
+  <div class="spacer"></div>
+  <div class="search-box">
+    <span style="color:var(--text3)">🔍</span>
+    <input type="text" id="searchInput" placeholder="Tìm kiếm skill..." />
+  </div>
+  <div class="lang-switcher">
+    <button class="lang-btn active" onclick="setLang('vi')">VI</button>
+    <button class="lang-btn" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('zh')">中</button>
+  </div>
+</header>
+
+<div class="layout">
+  <aside>
+    <div class="nav-section">
+      <div class="nav-section-title" data-i18n="nav.overview">Tổng quan</div>
+      <a class="nav-item active" href="#" onclick="filterCategory('all');return false;">
+        <span class="nav-icon">🏠</span>
+        <span data-i18n="nav.all">Tất cả Skills</span>
+        <span class="nav-count">6</span>
+      </a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-title" data-i18n="nav.categories">Danh mục</div>
+      <a class="nav-item" href="#" onclick="filterCategory('documents');return false;"><span class="nav-icon">📄</span><span data-i18n="cat.documents">Tài liệu</span><span class="nav-count">2</span></a>
+      <a class="nav-item" href="#" onclick="filterCategory('spreadsheets');return false;"><span class="nav-icon">📊</span><span data-i18n="cat.spreadsheets">Bảng tính</span><span class="nav-count">1</span></a>
+      <a class="nav-item" href="#" onclick="filterCategory('presentations');return false;"><span class="nav-icon">🎨</span><span data-i18n="cat.presentations">Trình chiếu</span><span class="nav-count">1</span></a>
+      <a class="nav-item" href="#" onclick="filterCategory('google');return false;"><span class="nav-icon">🌐</span><span data-i18n="cat.google">Google Workspace</span><span class="nav-count">1</span></a>
+      <a class="nav-item" href="#" onclick="filterCategory('dev');return false;"><span class="nav-icon">🛠️</span><span data-i18n="cat.dev">Phát triển</span><span class="nav-count">1</span></a>
+      <a class="nav-item" href="#" onclick="filterCategory('research');return false;"><span class="nav-icon">🔎</span><span data-i18n="cat.research">Nghiên cứu</span><span class="nav-count">4</span></a>
+      <a class="nav-item" href="#" onclick="filterCategory('marketing');return false;"><span class="nav-icon">📣</span><span data-i18n="cat.marketing">Marketing</span><span class="nav-count">3</span></a>
+      <a class="nav-item" href="#" onclick="filterCategory('drive');return false;"><span class="nav-icon">☁️</span><span data-i18n="cat.drive">Drive Tools</span><span class="nav-count">3</span></a>
+      <a class="nav-item" href="#" onclick="filterCategory('automation');return false;"><span class="nav-icon">🤖</span><span data-i18n="cat.automation">Tự động hóa</span><span class="nav-count">2</span></a>
+    </div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <div class="hero-tag">📚 <span data-i18n="hero.tag">Tài liệu chính thức</span></div>
+      <h1 data-i18n="hero.title">Hướng dẫn sử dụng Skills</h1>
+      <p data-i18n="hero.desc">Khám phá toàn bộ kỹ năng của VBP Agent. Nhấn vào từng skill để xem ví dụ yêu cầu thực tế bạn có thể gửi cho agent.</p>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num">18</span><span class="stat-label" data-i18n="stat.skills">Skills</span></div>
+        <div class="stat"><span class="stat-num">9</span><span class="stat-label" data-i18n="stat.cats">Danh mục</span></div>
+        <div class="stat"><span class="stat-num">3</span><span class="stat-label" data-i18n="stat.langs">Ngôn ngữ</span></div>
+      </div>
+    </div>
+
+    <div class="no-results" id="noResults">
+      <div class="no-results-icon">🔍</div>
+      <h3 data-i18n="search.noresult">Không tìm thấy kết quả</h3>
+      <p data-i18n="search.try">Thử từ khóa khác hoặc duyệt theo danh mục</p>
+    </div>
+
+    <!-- TÀI LIỆU -->
+    <div class="skill-section visible" data-category="documents" id="sec-documents">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(239,68,68,0.12)">📄</div>
+        <div><h2 data-i18n="cat.documents">Tài liệu</h2><p data-i18n="sec.documents.desc">Xử lý PDF, Word, trích xuất nội dung</p></div>
+        <span class="section-badge" style="background:rgba(239,68,68,0.12);color:#f87171">2 skills</span>
+      </div>
+      <div class="skill-grid">
+        <div class="skill-card" style="--card-color:#ef4444" onclick="openDetail('pdf')">
+          <div class="card-head"><div class="card-icon" style="background:rgba(239,68,68,0.12)">📕</div><div><div class="card-title">PDF</div><div class="card-subtitle" data-i18n="pdf.sub">Đọc · Tạo · Chỉnh sửa · OCR</div></div></div>
+          <div class="card-desc" data-i18n="pdf.desc">Xử lý mọi thao tác với file PDF: đọc nội dung, gộp/tách file, OCR tài liệu scan, điền form, thêm watermark.</div>
+          <div class="card-tags"><span class="tag">read</span><span class="tag">merge</span><span class="tag">split</span><span class="tag">OCR</span><span class="tag">form</span></div>
+          <div><button class="btn btn-primary" onclick="event.stopPropagation();openDetail('pdf')">📖 <span data-i18n="btn.guide">Ví dụ yêu cầu</span></button></div>
+        </div>
+        <div class="skill-card" style="--card-color:#3b82f6" onclick="openDetail('docx')">
+          <div class="card-head"><div class="card-icon" style="background:rgba(59,130,246,0.12)">📘</div><div><div class="card-title">DOCX</div><div class="card-subtitle" data-i18n="docx.sub">Tạo · Chỉnh sửa · Word</div></div></div>
+          <div class="card-desc" data-i18n="docx.desc">Tạo và chỉnh sửa tài liệu Word chuyên nghiệp: báo cáo, hợp đồng, mẫu letterhead, mục lục tự động.</div>
+          <div class="card-tags"><span class="tag">word</span><span class="tag">report</span><span class="tag">template</span><span class="tag">table</span></div>
+          <div><button class="btn btn-primary" onclick="event.stopPropagation();openDetail('docx')">📖 <span data-i18n="btn.guide">Ví dụ yêu cầu</span></button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BẢNG TÍNH -->
+    <div class="skill-section visible" data-category="spreadsheets" id="sec-spreadsheets">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(16,185,129,0.12)">📊</div>
+        <div><h2 data-i18n="cat.spreadsheets">Bảng tính</h2><p data-i18n="sec.spreadsheets.desc">Excel, CSV, xử lý dữ liệu dạng bảng</p></div>
+        <span class="section-badge" style="background:rgba(16,185,129,0.12);color:#34d399">1 skill</span>
+      </div>
+      <div class="skill-grid">
+        <div class="skill-card" style="--card-color:#10b981" onclick="openDetail('xlsx')">
+          <div class="card-head"><div class="card-icon" style="background:rgba(16,185,129,0.12)">📗</div><div><div class="card-title">XLSX</div><div class="card-subtitle" data-i18n="xlsx.sub">Excel · CSV · Bảng tính</div></div></div>
+          <div class="card-desc" data-i18n="xlsx.desc">Tạo, đọc và chỉnh sửa file Excel/CSV: nhập dữ liệu, tính toán công thức, vẽ biểu đồ, định dạng bảng.</div>
+          <div class="card-tags"><span class="tag">excel</span><span class="tag">csv</span><span class="tag">formula</span><span class="tag">chart</span></div>
+          <div><button class="btn btn-primary" onclick="event.stopPropagation();openDetail('xlsx')">📖 <span data-i18n="btn.guide">Ví dụ yêu cầu</span></button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRÌNH CHIẾU -->
+    <div class="skill-section visible" data-category="presentations" id="sec-presentations">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(245,158,11,0.12)">🎨</div>
+        <div><h2 data-i18n="cat.presentations">Trình chiếu</h2><p data-i18n="sec.presentations.desc">PowerPoint, slide deck chuyên nghiệp</p></div>
+        <span class="section-badge" style="background:rgba(245,158,11,0.12);color:#fbbf24">1 skill</span>
+      </div>
+      <div class="skill-grid">
+        <div class="skill-card" style="--card-color:#f59e0b" onclick="openDetail('pptx')">
+          <div class="card-head"><div class="card-icon" style="background:rgba(245,158,11,0.12)">📙</div><div><div class="card-title">PPTX</div><div class="card-subtitle" data-i18n="pptx.sub">PowerPoint · Slide deck</div></div></div>
+          <div class="card-desc" data-i18n="pptx.desc">Tạo và chỉnh sửa bài thuyết trình PowerPoint: thiết kế slide, thêm biểu đồ, áp dụng template chuyên nghiệp.</div>
+          <div class="card-tags"><span class="tag">slides</span><span class="tag">deck</span><span class="tag">chart</span><span class="tag">layout</span></div>
+          <div><button class="btn btn-primary" onclick="event.stopPropagation();openDetail('pptx')">📖 <span data-i18n="btn.guide">Ví dụ yêu cầu</span></button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GOOGLE WORKSPACE -->
+    <div class="skill-section visible" data-category="google" id="sec-google">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(14,165,233,0.12)">🌐</div>
+        <div><h2 data-i18n="cat.google">Google Workspace</h2><p data-i18n="sec.google.desc">Sheets, Drive, Gmail, Docs tích hợp đầy đủ</p></div>
+        <span class="section-badge" style="background:rgba(14,165,233,0.12);color:#38bdf8">1 skill</span>
+      </div>
+      <div class="skill-grid">
+        <div class="skill-card" style="--card-color:#0ea5e9" onclick="openDetail('google')">
+          <div class="card-head"><div class="card-icon" style="background:rgba(14,165,233,0.12)">🌐</div><div><div class="card-title">Google Workspace</div><div class="card-subtitle">Sheets · Drive · Gmail · Docs</div></div></div>
+          <div class="card-desc" data-i18n="google.desc">Tạo và cập nhật Google Sheets, lưu file lên Drive, gửi email Gmail, tạo Google Docs — trực tiếp trong chat.</div>
+          <div class="card-tags"><span class="tag">sheets</span><span class="tag">drive</span><span class="tag">gmail</span><span class="tag">docs</span></div>
+          <div><button class="btn btn-primary" onclick="event.stopPropagation();openDetail('google')">📖 <span data-i18n="btn.guide">Ví dụ yêu cầu</span></button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHÁT TRIỂN -->
+    <div class="skill-section visible" data-category="dev" id="sec-dev">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(124,58,237,0.12)">🛠️</div>
+        <div><h2 data-i18n="cat.dev">Phát triển</h2><p data-i18n="sec.dev.desc">Tạo và quản lý skill tùy chỉnh</p></div>
+        <span class="section-badge" style="background:rgba(124,58,237,0.12);color:#a78bfa">1 skill</span>
+      </div>
+      <div class="skill-grid">
+        <div class="skill-card" style="--card-color:#7c3aed" onclick="openDetail('skillcreator')">
+          <div class="card-head"><div class="card-icon" style="background:rgba(124,58,237,0.12)">🛠️</div><div><div class="card-title">Skill Creator</div><div class="card-subtitle" data-i18n="skillcreator.sub">Tạo · Test · Publish</div></div></div>
+          <div class="card-desc" data-i18n="skillcreator.desc">Thiết kế và xuất bản skill mới cho agent. Từ ý tưởng đến skill hoàn chỉnh với quy trình có hướng dẫn.</div>
+          <div class="card-tags"><span class="tag">design</span><span class="tag">test</span><span class="tag">publish</span><span class="tag">marketplace</span></div>
+          <div><button class="btn btn-primary" onclick="event.stopPropagation();openDetail('skillcreator')">📖 <span data-i18n="btn.guide">Ví dụ yêu cầu</span></button></div>
+        </div>
+      </div>
+    </div>
+    <!-- NGHIÊN CỨU & TÌM KIẾM -->
+    <div class="skill-section visible" data-category="research" id="sec-research">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(99,102,241,0.12)">🔎</div>
+        <div><h2 data-i18n="cat.research">Nghiên cứu & Tìm kiếm</h2><p data-i18n="sec.research.desc">Web search, theo dõi đối thủ, phân tích lead</p></div>
+        <span class="section-badge" style="background:rgba(99,102,241,0.12);color:#a5b4fc">4 skills</span>
+      </div>
+      <div class="skill-grid">
+        <div class="skill-card" style="--card-color:#6366f1" onclick="openDetail('brave-search')">
+          <div class="card-head"><div class="card-icon" style="background:rgba(99,102,241,0.12)">🦁</div><div><div class="card-title">Brave Search</div><div class="card-subtitle">Web search · Real-time · AI answers</div></div></div>
+          <div class="card-desc" data-i18n="bravesearch.desc">Tìm kiếm web thời gian thực qua Brave API. Kết quả không bị tracking, hỗ trợ AI grounded answers kèm nguồn trích dẫn.</div>
+          <div class="card-tags"><span class="tag">web search</span><span class="tag">real-time</span><span class="tag">citations</span></div>
+          <div><button class="btn btn-primary" onclick="event.stopPropagation();openDetail('brave-search')">📖 <span data-i18n="btn.guide">Ví dụ yêu cầu</span></button></div>
+        </div>
+        <div class="skill-card" style="--card-color:#8b5cf6" onclick="openDetail('competitor-watch')">
+          <div class="card-head"><div class="card-icon" style="background:rgba(139,92,246,0.12)">👁️</div><div><div class="card-title">Competitor Watch</div><div class="card-subtitle">Monitor · Pricing · Product changes</div></div></div>
+          <div class="card-desc" data-i18n="competitorwatch.desc">Theo dõi đối thủ tự động: phát hiện thay đổi sản phẩm, giá cả, nội dung. Nhận tóm tắt thông minh những gì thực sự quan trọng.</div>
+          <div class="card-tags"><span class="tag">competitor</span><span class="tag">monitoring</span><span class="tag">pricing</span><span class="tag">alerts</span></div>
+          <div><button class="btn btn-primary" onclick="event.stopPropagation();openDetail('competitor-watch')">📖 <span data-i18n="btn.guide">Ví dụ yêu cầu</span></button></div>
+        </div>
+        <div class="skill-card" style="--card-color:#a855f7" onclick="openDetail('lead-enrichment')">
+          <div class="card-head"><div class="card-icon" style="background:rgba(168,85,247,0.12)">🎯</div><div><div class="card-title">Lead Enrichment</div><div class="card-subtitle">LinkedIn · Profile · Sales intel</div></div></div>
+          <div class="card-desc" data-i18n="leadenrichment.desc">Biến tên + công ty thành hồ sơ đầy đủ: mạng xã hội, bio, thông tin công ty, hoạt động gần đây, talking points cá nhân hóa.</div>
+          <div class="card-tags"><span class="tag">lead</span><span class="tag">CRM</span><span class="tag">outreach</span><span class="tag">batch</span></div>
+          <div><button class="btn btn-primary" onclick="event.stopPropagation();openDetail('lead-enrichment')">📖 <span data-i18n="btn.guide">Ví dụ yêu cầu</span></button></div>
+        </div>
+        <div class="skill-card" style="--card-color:#ec4899" onclick="openDetail('tiktok-research')">
+          <div class="card-head"><div class="card-icon" style="background:rgba(236,72,153,0.12)">🎵</div><div><div class="card-title">TikTok Research</div><div class="card-subtitle">Profile · Video · Hashtag · Compare</div></div></div>
+          <div class="card-desc" data-i18n="tiktokresearch.desc">Nghiên cứu đối thủ TikTok: xem profile, video mới nhất, thống kê, so sánh nhiều kênh, tra hashtag, tìm kiếm theo từ khóa.</div>
+          <div class="card-tags"><span class="tag">tiktok</span><span class="tag">competitor</span><span class="tag">hashtag</span><span class="tag">analytics</span></div>
+          <div><button class="btn btn-primary" onclick="event.stopPropagation();openDetail('tiktok-research')">📖 <span data-i18n="btn.guide">Ví dụ yêu cầu</span></button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MARKETING -->
+    <div class="skill-section visible" data-category="marketing" id="sec-marketing">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(249,115,22,0.12)">📣</div>
+        <div><h2 data-i18n="cat.marketing">Marketing</h2><p data-i18n="sec.marketing.desc">Content, quảng cáo, SEO, email, CRO</p></div>
+        <span class="section-badge" style="background:rgba(249,115,22,0.12);color:#fb923c">3 skills</span>
+      </div>
+      <div class="skill-grid">
+        <div class="skill-card" style="--card-color:#f97316" onclick="openDetail('master-marketing')">
+          <div class="card-head"><div class="card-icon" style="background:rgba(249,115,22,0.12)">🚀</div><div><div class="card-title">Master Marketing</div><div class="card-subtitle">Growth · Strategy · All-in-one</div></div></div>
+          <div class="card-desc" data-i18n="mastermarketing.desc">Bộ công cụ marketing tổng hợp: chiến lược tăng trưởng, phân tích xu hướng, tái sử dụng nội dung đa kênh. Một yêu cầu, nhiều output.</div>
+          <div class="card-tags"><span class="tag">growth</span><span class="tag">strategy</span><span class="tag">trends</span><span class="tag">multi-channel</span></div>
+          <div><button class="btn btn-primary" onclick="event.stopPropagation();openDetail('master-marketing')">📖 <span data-i18n="btn.guide">Ví dụ yêu cầu</span></button></div>
+        </div>
+        <div class="skill-card" style="--card-color:#ef4444" onclick="openDetail('content-repurposer')">
+          <div class="card-head"><div class="card-icon" style="background:rgba(239,68,68,0.12)">♻️</div><div><div class="card-title">Content Repurposer</div><div class="card-subtitle">Blog → Thread → Post → Newsletter</div></div></div>
+          <div class="card-desc" data-i18n="contentrepurposer.desc">Biến 1 bài viết dài thành nhiều định dạng: Twitter thread, LinkedIn post, email newsletter, Instagram caption — giữ nguyên giọng văn.</div>
+          <div class="card-tags"><span class="tag">twitter</span><span class="tag">linkedin</span><span class="tag">newsletter</span><span class="tag">instagram</span></div>
+          <div><button class="btn btn-primary" onclick="event.stopPropagation();openDetail('content-repurposer')">📖 <span data-i18n="btn.guide">Ví dụ yêu cầu</span></button></div>
+        </div>
+        <div class="skill-card" style="--card-color:#f59e0b" onclick="openDetail('marketing-skills')">
+          <div class="card-head"><div class="card-icon" style="background:rgba(245,158,11,0.12)">📚</div><div><div class="card-title">Marketing Playbooks</div><div class="card-subtitle">23 playbooks · CRO · SEO · Ads · Copy</div></div></div>
+          <div class="card-desc" data-i18n="marketingskills.desc">23 playbook marketing chuyên biệt: Paid Ads, SEO Audit, Copywriting, Email Sequence, Social Content, CRO, Referral Program và nhiều hơn.</div>
+          <div class="card-tags"><span class="tag">paid ads</span><span class="tag">SEO</span><span class="tag">CRO</span><span class="tag">email</span><span class="tag">copy</span></div>
+          <div><button class="btn btn-primary" onclick="event.stopPropagation();openDetail('marketing-skills')">📖 <span data-i18n="btn.guide">Ví dụ yêu cầu</span></button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DRIVE TOOLS -->
+    <div class="skill-section visible" data-category="drive" id="sec-drive">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(34,197,94,0.12)">☁️</div>
+        <div><h2 data-i18n="cat.drive">Google Drive Tools</h2><p data-i18n="sec.drive.desc">Upload, summarize, tạo file và lưu Drive</p></div>
+        <span class="section-badge" style="background:rgba(34,197,94,0.12);color:#4ade80">3 skills</span>
+      </div>
+      <div class="skill-grid">
+        <div class="skill-card" style="--card-color:#22c55e" onclick="openDetail('safe-drive-upload')">
+          <div class="card-head"><div class="card-icon" style="background:rgba(34,197,94,0.12)">⬆️</div><div><div class="card-title">Safe Drive Upload</div><div class="card-subtitle">Upload · Verify · Link</div></div></div>
+          <div class="card-desc" data-i18n="safedriveupload.desc">Upload file workspace lên Google Drive an toàn, kiểm tra quyền, xác nhận file tồn tại, trả về link Drive ngay lập tức.</div>
+          <div class="card-tags"><span class="tag">upload</span><span class="tag">verify</span><span class="tag">drive link</span></div>
+          <div><button class="btn btn-primary" onclick="event.stopPropagation();openDetail('safe-drive-upload')">📖 <span data-i18n="btn.guide">Ví dụ yêu cầu</span></button></div>
+        </div>
+        <div class="skill-card" style="--card-color:#16a34a" onclick="openDetail('drive-report-summarizer')">
+          <div class="card-head"><div class="card-icon" style="background:rgba(22,163,74,0.12)">📋</div><div><div class="card-title">Drive Report Summarizer</div><div class="card-subtitle">Read Drive · Summarize · Report</div></div></div>
+          <div class="card-desc" data-i18n="drivereportsummarizer.desc">Đọc file từ Google Drive (Docs, Sheets, PDF, báo cáo) và tạo tóm tắt điều hành súc tích, trực tiếp trong chat.</div>
+          <div class="card-tags"><span class="tag">summarize</span><span class="tag">docs</span><span class="tag">sheets</span><span class="tag">executive report</span></div>
+          <div><button class="btn btn-primary" onclick="event.stopPropagation();openDetail('drive-report-summarizer')">📖 <span data-i18n="btn.guide">Ví dụ yêu cầu</span></button></div>
+        </div>
+        <div class="skill-card" style="--card-color:#15803d" onclick="openDetail('create-and-upload')">
+          <div class="card-head"><div class="card-icon" style="background:rgba(21,128,61,0.12)">📤</div><div><div class="card-title">Create & Upload</div><div class="card-subtitle">Tạo file → Lưu Drive</div></div></div>
+          <div class="card-desc" data-i18n="createandupload.desc">Tạo file (báo cáo, Excel, PDF, PPTX) và upload thẳng lên Google Drive trong một bước — không cần thao tác tay.</div>
+          <div class="card-tags"><span class="tag">create</span><span class="tag">upload</span><span class="tag">one-step</span><span class="tag">automation</span></div>
+          <div><button class="btn btn-primary" onclick="event.stopPropagation();openDetail('create-and-upload')">📖 <span data-i18n="btn.guide">Ví dụ yêu cầu</span></button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TỰ ĐỘNG HÓA -->
+    <div class="skill-section visible" data-category="automation" id="sec-automation">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(20,184,166,0.12)">🤖</div>
+        <div><h2 data-i18n="cat.automation">Tự động hóa</h2><p data-i18n="sec.automation.desc">Voice transcribe, browser automation</p></div>
+        <span class="section-badge" style="background:rgba(20,184,166,0.12);color:#2dd4bf">2 skills</span>
+      </div>
+      <div class="skill-grid">
+        <div class="skill-card" style="--card-color:#14b8a6" onclick="openDetail('telegram-voice')">
+          <div class="card-head"><div class="card-icon" style="background:rgba(20,184,166,0.12)">🎙️</div><div><div class="card-title">Telegram Voice Transcribe</div><div class="card-subtitle">Whisper · Voice → Text</div></div></div>
+          <div class="card-desc" data-i18n="telegramvoice.desc">Transcribe voice message Telegram thành văn bản tự động qua Whisper API. Gửi voice note, nhận lại text đầy đủ.</div>
+          <div class="card-tags"><span class="tag">voice</span><span class="tag">whisper</span><span class="tag">transcribe</span><span class="tag">telegram</span></div>
+          <div><button class="btn btn-primary" onclick="event.stopPropagation();openDetail('telegram-voice')">📖 <span data-i18n="btn.guide">Ví dụ yêu cầu</span></button></div>
+        </div>
+        <div class="skill-card" style="--card-color:#0891b2" onclick="openDetail('agent-browser')">
+          <div class="card-head"><div class="card-icon" style="background:rgba(8,145,178,0.12)">🌏</div><div><div class="card-title">Agent Browser</div><div class="card-subtitle">Navigate · Click · Screenshot · Extract</div></div></div>
+          <div class="card-desc" data-i18n="agentbrowser.desc">Tự động hóa trình duyệt: điều hướng trang web, click, điền form, chụp screenshot, trích xuất dữ liệu từ bất kỳ website nào.</div>
+          <div class="card-tags"><span class="tag">browser</span><span class="tag">screenshot</span><span class="tag">scraping</span><span class="tag">automation</span></div>
+          <div><button class="btn btn-primary" onclick="event.stopPropagation();openDetail('agent-browser')">📖 <span data-i18n="btn.guide">Ví dụ yêu cầu</span></button></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- DETAIL PANEL -->
+<div class="detail-overlay" id="detailOverlay" onclick="closeDetail(event)">
+  <div class="detail-panel" id="detailPanel">
+    <div class="detail-header">
+      <div id="detailIcon" style="width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0"></div>
+      <div style="min-width:0">
+        <div id="detailTitle" style="font-size:17px;font-weight:700"></div>
+        <div id="detailSub" style="font-size:12px;color:var(--text3);margin-top:2px"></div>
+      </div>
+      <button class="detail-close" onclick="closeDetail(null)">✕</button>
+    </div>
+    <div class="detail-body" id="detailBody"></div>
+  </div>
+</div>
+
+<script>
+// ─── I18N ───────────────────────────────────────────────────
+const t = {
+  vi: {
+    "nav.overview":"Tổng quan","nav.all":"Tất cả Skills","nav.categories":"Danh mục",
+    "cat.documents":"Tài liệu","cat.spreadsheets":"Bảng tính","cat.presentations":"Trình chiếu","cat.google":"Google Workspace","cat.dev":"Phát triển",
+    "hero.tag":"Tài liệu chính thức","hero.title":"Hướng dẫn sử dụng Skills",
+    "hero.desc":"Khám phá toàn bộ kỹ năng của VBP Agent. Nhấn vào từng skill để xem ví dụ yêu cầu thực tế bạn có thể gửi cho agent.",
+    "stat.skills":"Skills","stat.cats":"Danh mục","stat.langs":"Ngôn ngữ",
+    "sec.documents.desc":"Xử lý PDF, Word, trích xuất nội dung",
+    "sec.spreadsheets.desc":"Excel, CSV, xử lý dữ liệu dạng bảng",
+    "sec.presentations.desc":"PowerPoint, slide deck chuyên nghiệp",
+    "sec.google.desc":"Sheets, Drive, Gmail, Docs tích hợp đầy đủ",
+    "sec.dev.desc":"Tạo và quản lý skill tùy chỉnh",
+    "pdf.sub":"Đọc · Tạo · Chỉnh sửa · OCR","pdf.desc":"Xử lý mọi thao tác với file PDF: đọc nội dung, gộp/tách file, OCR tài liệu scan, điền form, thêm watermark.",
+    "docx.sub":"Tạo · Chỉnh sửa · Word","docx.desc":"Tạo và chỉnh sửa tài liệu Word chuyên nghiệp: báo cáo, hợp đồng, mẫu letterhead, mục lục tự động.",
+    "xlsx.sub":"Excel · CSV · Bảng tính","xlsx.desc":"Tạo, đọc và chỉnh sửa file Excel/CSV: nhập dữ liệu, tính toán công thức, vẽ biểu đồ, định dạng bảng.",
+    "pptx.sub":"PowerPoint · Slide deck","pptx.desc":"Tạo và chỉnh sửa bài thuyết trình PowerPoint: thiết kế slide, thêm biểu đồ, áp dụng template chuyên nghiệp.",
+    "google.desc":"Tạo và cập nhật Google Sheets, lưu file lên Drive, gửi email Gmail, tạo Google Docs — trực tiếp trong chat.",
+    "skillcreator.sub":"Tạo · Test · Publish","skillcreator.desc":"Thiết kế và xuất bản skill mới cho agent. Từ ý tưởng đến skill hoàn chỉnh với quy trình có hướng dẫn.",
+    "btn.guide":"Ví dụ yêu cầu","search.noresult":"Không tìm thấy kết quả","search.try":"Thử từ khóa khác hoặc duyệt theo danh mục",
+    "detail.howto":"Cách yêu cầu agent","detail.tip":"Mẹo sử dụng",
+    "cat.research":"Nghiên cứu & Tìm kiếm","cat.marketing":"Marketing","cat.drive":"Drive Tools","cat.automation":"Tự động hóa",
+    "sec.research.desc":"Web search, theo dõi đối thủ, phân tích lead",
+    "sec.marketing.desc":"Content, quảng cáo, SEO, email, CRO",
+    "sec.drive.desc":"Upload, summarize, tạo file và lưu Drive",
+    "sec.automation.desc":"Voice transcribe, browser automation",
+    "bravesearch.desc":"Tìm kiếm web thời gian thực qua Brave API. Kết quả không bị tracking, hỗ trợ AI grounded answers kèm nguồn trích dẫn.",
+    "competitorwatch.desc":"Theo dõi đối thủ tự động: phát hiện thay đổi sản phẩm, giá cả, nội dung. Nhận tóm tắt thông minh những gì thực sự quan trọng.",
+    "leadenrichment.desc":"Biến tên + công ty thành hồ sơ đầy đủ: mạng xã hội, bio, thông tin công ty, hoạt động gần đây, talking points cá nhân hóa.",
+    "tiktokresearch.desc":"Nghiên cứu đối thủ TikTok: xem profile, video mới nhất, thống kê, so sánh nhiều kênh, tra hashtag, tìm kiếm theo từ khóa.",
+    "mastermarketing.desc":"Bộ công cụ marketing tổng hợp: chiến lược tăng trưởng, phân tích xu hướng, tái sử dụng nội dung đa kênh. Một yêu cầu, nhiều output.",
+    "contentrepurposer.desc":"Biến 1 bài viết dài thành nhiều định dạng: Twitter thread, LinkedIn post, email newsletter, Instagram caption — giữ nguyên giọng văn.",
+    "marketingskills.desc":"23 playbook marketing chuyên biệt: Paid Ads, SEO Audit, Copywriting, Email Sequence, Social Content, CRO, Referral Program và nhiều hơn.",
+    "safedriveupload.desc":"Upload file workspace lên Google Drive an toàn, kiểm tra quyền, xác nhận file tồn tại, trả về link Drive ngay lập tức.",
+    "drivereportsummarizer.desc":"Đọc file từ Google Drive (Docs, Sheets, PDF, báo cáo) và tạo tóm tắt điều hành súc tích, trực tiếp trong chat.",
+    "createandupload.desc":"Tạo file (báo cáo, Excel, PDF, PPTX) và upload thẳng lên Google Drive trong một bước — không cần thao tác tay.",
+    "telegramvoice.desc":"Transcribe voice message Telegram thành văn bản tự động qua Whisper API. Gửi voice note, nhận lại text đầy đủ.",
+    "agentbrowser.desc":"Tự động hóa trình duyệt: điều hướng trang web, click, điền form, chụp screenshot, trích xuất dữ liệu từ bất kỳ website nào."
+  },
+  en: {
+    "nav.overview":"Overview","nav.all":"All Skills","nav.categories":"Categories",
+    "cat.documents":"Documents","cat.spreadsheets":"Spreadsheets","cat.presentations":"Presentations","cat.google":"Google Workspace","cat.dev":"Development",
+    "hero.tag":"Official Documentation","hero.title":"Skills Usage Guide",
+    "hero.desc":"Explore all built-in skills of VBP Agent. Click each skill to see real example prompts you can send to the agent.",
+    "stat.skills":"Skills","stat.cats":"Categories","stat.langs":"Languages",
+    "sec.documents.desc":"PDF, Word processing, content extraction",
+    "sec.spreadsheets.desc":"Excel, CSV, tabular data processing",
+    "sec.presentations.desc":"PowerPoint, professional slide decks",
+    "sec.google.desc":"Sheets, Drive, Gmail, Docs fully integrated",
+    "sec.dev.desc":"Create and manage custom skills",
+    "pdf.sub":"Read · Create · Edit · OCR","pdf.desc":"Handle all PDF operations: read content, merge/split files, OCR scanned documents, fill forms, add watermarks.",
+    "docx.sub":"Create · Edit · Word","docx.desc":"Create and edit professional Word documents: reports, contracts, letterhead templates, automatic table of contents.",
+    "xlsx.sub":"Excel · CSV · Spreadsheet","xlsx.desc":"Create, read and edit Excel/CSV files: data entry, formula calculations, charts, table formatting.",
+    "pptx.sub":"PowerPoint · Slide deck","pptx.desc":"Create and edit PowerPoint presentations: design slides, add charts, apply professional templates.",
+    "google.desc":"Create and update Google Sheets, save files to Drive, send Gmail, create Google Docs — directly in chat.",
+    "skillcreator.sub":"Create · Test · Publish","skillcreator.desc":"Design and publish new agent skills. From idea to complete skill with a guided workflow.",
+    "btn.guide":"See Examples","search.noresult":"No results found","search.try":"Try different keywords or browse by category",
+    "detail.howto":"How to request the agent","detail.tip":"Tips",
+    "cat.research":"Research & Search","cat.marketing":"Marketing","cat.drive":"Drive Tools","cat.automation":"Automation",
+    "sec.research.desc":"Web search, competitor monitoring, lead analysis",
+    "sec.marketing.desc":"Content, ads, SEO, email, CRO",
+    "sec.drive.desc":"Upload, summarize, create files and save to Drive",
+    "sec.automation.desc":"Voice transcribe, browser automation",
+    "bravesearch.desc":"Real-time web search via Brave API. Privacy-first results, supports AI grounded answers with citations.",
+    "competitorwatch.desc":"Automated competitor monitoring: detect product changes, pricing, content. Get smart summaries of what actually matters.",
+    "leadenrichment.desc":"Turn a name + company into a full profile: social links, bio, company intel, recent activity, personalized talking points.",
+    "tiktokresearch.desc":"Research TikTok competitors: view profiles, latest videos, stats, compare accounts, look up hashtags, keyword search.",
+    "mastermarketing.desc":"All-in-one marketing toolkit: growth strategy, trend analysis, multi-channel content repurposing. One request, many outputs.",
+    "contentrepurposer.desc":"Turn one long-form piece into multiple formats: Twitter thread, LinkedIn post, email newsletter, Instagram caption — same voice.",
+    "marketingskills.desc":"23 specialized marketing playbooks: Paid Ads, SEO Audit, Copywriting, Email Sequence, Social Content, CRO, Referral Program and more.",
+    "safedriveupload.desc":"Safely upload workspace files to Google Drive, verify permissions, confirm file exists, return Drive link immediately.",
+    "drivereportsummarizer.desc":"Read files from Google Drive (Docs, Sheets, PDF, reports) and generate concise executive summaries, directly in chat.",
+    "createandupload.desc":"Create a file (report, Excel, PDF, PPTX) and upload it straight to Google Drive in one step — no manual steps needed.",
+    "telegramvoice.desc":"Automatically transcribe Telegram voice messages to text via Whisper API. Send a voice note, get back full text.",
+    "agentbrowser.desc":"Automate browser interactions: navigate websites, click, fill forms, take screenshots, extract data from any website."
+  },
+  zh: {
+    "nav.overview":"概览","nav.all":"所有技能","nav.categories":"分类",
+    "cat.documents":"文档处理","cat.spreadsheets":"电子表格","cat.presentations":"演示文稿","cat.google":"Google Workspace","cat.dev":"开发工具",
+    "hero.tag":"官方文档","hero.title":"技能使用指南",
+    "hero.desc":"探索 VBP Agent 的所有内置技能。点击每个技能查看可以发送给 Agent 的真实示例请求。",
+    "stat.skills":"技能","stat.cats":"分类","stat.langs":"语言",
+    "sec.documents.desc":"PDF、Word 处理，内容提取",
+    "sec.spreadsheets.desc":"Excel、CSV，表格数据处理",
+    "sec.presentations.desc":"PowerPoint，专业幻灯片",
+    "sec.google.desc":"Sheets、Drive、Gmail、Docs 完整集成",
+    "sec.dev.desc":"创建和管理自定义技能",
+    "pdf.sub":"读取 · 创建 · 编辑 · OCR","pdf.desc":"处理所有 PDF 操作：读取内容、合并/拆分文件、OCR 扫描文档、填写表单、添加水印。",
+    "docx.sub":"创建 · 编辑 · Word","docx.desc":"创建和编辑专业 Word 文档：报告、合同、信头模板、自动目录。",
+    "xlsx.sub":"Excel · CSV · 电子表格","xlsx.desc":"创建、读取和编辑 Excel/CSV 文件：数据输入、公式计算、图表、表格格式化。",
+    "pptx.sub":"PowerPoint · 幻灯片","pptx.desc":"创建和编辑 PowerPoint 演示文稿：设计幻灯片、添加图表、应用专业模板。",
+    "google.desc":"创建和更新 Google 表格，保存文件到 Drive，发送 Gmail，创建 Google Docs——直接在聊天中完成。",
+    "skillcreator.sub":"创建 · 测试 · 发布","skillcreator.desc":"设计和发布新的 Agent 技能。从创意到完整技能，有引导式工作流。",
+    "btn.guide":"查看示例","search.noresult":"未找到结果","search.try":"尝试其他关键词或按分类浏览",
+    "detail.howto":"如何向 Agent 提出请求","detail.tip":"使用提示",
+    "cat.research":"研究与搜索","cat.marketing":"营销","cat.drive":"Drive 工具","cat.automation":"自动化",
+    "sec.research.desc":"网络搜索、竞争对手监控、线索分析",
+    "sec.marketing.desc":"内容、广告、SEO、邮件、CRO",
+    "sec.drive.desc":"上传、摘要、创建文件并保存到 Drive",
+    "sec.automation.desc":"语音转录、浏览器自动化",
+    "bravesearch.desc":"通过 Brave API 进行实时网络搜索。注重隐私的结果，支持带引用的 AI 答案。",
+    "competitorwatch.desc":"自动竞争对手监控：检测产品变化、定价、内容。获取真正重要内容的智能摘要。",
+    "leadenrichment.desc":"将姓名+公司转化为完整档案：社交链接、简介、公司情报、近期动态、个性化谈话要点。",
+    "tiktokresearch.desc":"研究 TikTok 竞争对手：查看个人资料、最新视频、统计数据、比较账户、查找话题标签。",
+    "mastermarketing.desc":"一体化营销工具包：增长策略、趋势分析、多渠道内容再利用。一个请求，多种输出。",
+    "contentrepurposer.desc":"将一篇长文转化为多种格式：Twitter 线程、LinkedIn 帖子、邮件通讯、Instagram 说明 — 保持原有语气。",
+    "marketingskills.desc":"23 个专业营销手册：付费广告、SEO 审计、文案写作、邮件序列、社交内容、CRO、推荐计划等。",
+    "safedriveupload.desc":"安全地将工作区文件上传到 Google Drive，验证权限，确认文件存在，立即返回 Drive 链接。",
+    "drivereportsummarizer.desc":"读取 Google Drive 中的文件（Docs、Sheets、PDF、报告）并直接在聊天中生成简洁的执行摘要。",
+    "createandupload.desc":"一步创建文件（报告、Excel、PDF、PPTX）并直接上传到 Google Drive — 无需手动操作。",
+    "telegramvoice.desc":"通过 Whisper API 自动将 Telegram 语音消息转录为文本。发送语音消息，获得完整文本。",
+    "agentbrowser.desc":"自动化浏览器操作：导航网站、点击、填写表单、截图、从任何网站提取数据。"
+  }
+};
+
+// ─── SKILL DETAIL DATA ───────────────────────────────────────
+const skills = {
+  pdf: {
+    icon: "📕", bg: "rgba(239,68,68,0.12)", color: "#ef4444",
+    title: { vi: "PDF", en: "PDF", zh: "PDF" },
+    sub: { vi: "pypdf · pdfplumber · pikepdf", en: "pypdf · pdfplumber · pikepdf", zh: "pypdf · pdfplumber · pikepdf" },
+    prompts: {
+      vi: [
+        { msg: "Đọc file hợp đồng.pdf và tóm tắt các điều khoản chính", result: "Agent trích xuất và tóm tắt nội dung PDF" },
+        { msg: "Gộp file bao-cao-q1.pdf và bao-cao-q2.pdf thành một file duy nhất", result: "Agent tạo file PDF đã gộp và lưu về workspace" },
+        { msg: "Tách trang 1-5 từ file catalogue.pdf thành file riêng", result: "Agent tách và xuất file PDF mới với các trang chỉ định" },
+        { msg: "File scan này bị mờ, dùng OCR đọc nội dung giúp tôi", result: "Agent nhận dạng chữ và trả về văn bản đầy đủ" },
+        { msg: "Điền form đơn xin việc.pdf với thông tin: Tên: Nguyễn Văn A, Ngày sinh: 01/01/1990", result: "Agent điền form và trả về file PDF hoàn chỉnh" },
+        { msg: "Thêm watermark 'BẢO MẬT' vào tất cả trang của file này", result: "Agent thêm watermark và xuất file PDF mới" }
+      ],
+      en: [
+        { msg: "Read contract.pdf and summarize the main clauses", result: "Agent extracts and summarizes PDF content" },
+        { msg: "Merge q1-report.pdf and q2-report.pdf into a single file", result: "Agent creates merged PDF and saves to workspace" },
+        { msg: "Extract pages 1–5 from catalogue.pdf as a separate file", result: "Agent splits and exports new PDF with selected pages" },
+        { msg: "This scanned file is blurry, use OCR to read its content", result: "Agent recognizes text and returns full document content" },
+        { msg: "Fill job-application.pdf with: Name: John Doe, DOB: 01/01/1990", result: "Agent fills the form and returns completed PDF" },
+        { msg: "Add a 'CONFIDENTIAL' watermark to all pages of this file", result: "Agent adds watermark and exports new PDF" }
+      ],
+      zh: [
+        { msg: "读取 contract.pdf 并总结主要条款", result: "Agent 提取并总结 PDF 内容" },
+        { msg: "将 q1-report.pdf 和 q2-report.pdf 合并为一个文件", result: "Agent 创建合并的 PDF 并保存到工作区" },
+        { msg: "从 catalogue.pdf 中提取第 1–5 页作为单独文件", result: "Agent 拆分并导出包含所选页面的新 PDF" },
+        { msg: "这个扫描文件很模糊，用 OCR 帮我读取内容", result: "Agent 识别文字并返回完整文档内容" },
+        { msg: "填写 job-application.pdf，信息：姓名：张三，出生日期：1990/01/01", result: "Agent 填写表单并返回完整的 PDF" },
+        { msg: "在此文件的所有页面上添加'机密'水印", result: "Agent 添加水印并导出新 PDF" }
+      ]
+    },
+    tip: {
+      vi: "Gửi file PDF kèm yêu cầu hoặc nhắc đến tên file đã có trong workspace. Agent tự nhận diện loại thao tác cần thực hiện.",
+      en: "Attach the PDF with your request or mention a filename already in the workspace. The agent automatically identifies the required operation.",
+      zh: "将 PDF 附加到请求中，或提及工作区中已有的文件名。Agent 会自动识别所需操作。"
+    }
+  },
+  docx: {
+    icon: "📘", bg: "rgba(59,130,246,0.12)", color: "#3b82f6",
+    title: { vi: "DOCX", en: "DOCX", zh: "DOCX" },
+    sub: { vi: "docx-js · pandoc · python-docx", en: "docx-js · pandoc · python-docx", zh: "docx-js · pandoc · python-docx" },
+    prompts: {
+      vi: [
+        { msg: "Tạo báo cáo kinh doanh tháng 4 dạng file Word, gồm: tổng doanh thu, top 5 sản phẩm, và nhận xét", result: "Agent tạo file .docx có heading, bảng, định dạng chuyên nghiệp" },
+        { msg: "Viết hợp đồng dịch vụ giữa công ty ABC và khách hàng XYZ, lưu thành file Word", result: "Agent soạn hợp đồng đầy đủ điều khoản và xuất file .docx" },
+        { msg: "Đọc file proposal.docx và tóm tắt ý chính trong 5 bullet point", result: "Agent trích xuất và tóm tắt nội dung tài liệu Word" },
+        { msg: "Chuyển file báo-cáo.docx sang định dạng PDF", result: "Agent convert và trả về file PDF tương ứng" },
+        { msg: "Thêm bảng so sánh 3 gói dịch vụ vào cuối file đề-xuất.docx", result: "Agent chỉnh sửa file Word và thêm bảng theo yêu cầu" }
+      ],
+      en: [
+        { msg: "Create an April business report in Word format, including: total revenue, top 5 products, and comments", result: "Agent creates .docx with headings, tables, professional formatting" },
+        { msg: "Write a service contract between company ABC and client XYZ, save as Word file", result: "Agent drafts full contract with terms and exports .docx" },
+        { msg: "Read proposal.docx and summarize the key points in 5 bullet points", result: "Agent extracts and summarizes Word document content" },
+        { msg: "Convert bao-cao.docx to PDF format", result: "Agent converts and returns the corresponding PDF file" },
+        { msg: "Add a comparison table of 3 service packages at the end of proposal.docx", result: "Agent edits Word file and adds table as requested" }
+      ],
+      zh: [
+        { msg: "创建 4 月业务报告的 Word 文件，包括：总收入、前 5 名产品和评论", result: "Agent 创建带有标题、表格和专业格式的 .docx" },
+        { msg: "起草公司 ABC 与客户 XYZ 之间的服务合同，保存为 Word 文件", result: "Agent 起草包含完整条款的合同并导出 .docx" },
+        { msg: "读取 proposal.docx 并用 5 个要点总结关键内容", result: "Agent 提取并总结 Word 文档内容" },
+        { msg: "将 bao-cao.docx 转换为 PDF 格式", result: "Agent 转换并返回相应的 PDF 文件" },
+        { msg: "在 proposal.docx 末尾添加 3 个服务套餐的对比表", result: "Agent 编辑 Word 文件并按要求添加表格" }
+      ]
+    },
+    tip: {
+      vi: "Càng mô tả rõ cấu trúc tài liệu (số mục, loại bảng, phong cách) thì kết quả càng chính xác.",
+      en: "The more clearly you describe the document structure (sections, table types, style), the more accurate the result.",
+      zh: "描述文档结构（章节、表格类型、风格）越清晰，结果越准确。"
+    }
+  },
+  xlsx: {
+    icon: "📗", bg: "rgba(16,185,129,0.12)", color: "#10b981",
+    title: { vi: "XLSX", en: "XLSX", zh: "XLSX" },
+    sub: { vi: "openpyxl · pandas · LibreOffice", en: "openpyxl · pandas · LibreOffice", zh: "openpyxl · pandas · LibreOffice" },
+    prompts: {
+      vi: [
+        { msg: "Tạo file Excel theo dõi doanh thu tháng 1-6 theo từng khu vực, kèm biểu đồ cột", result: "Agent tạo file .xlsx với dữ liệu, công thức tổng và biểu đồ" },
+        { msg: "Đọc file bang-luong.xlsx và tính tổng lương từng phòng ban", result: "Agent phân tích và trả kết quả tính toán từ file Excel" },
+        { msg: "Làm sạch file data.csv: xóa dòng trống, chuẩn hóa định dạng ngày tháng, lưu thành Excel", result: "Agent xử lý và xuất file .xlsx sạch" },
+        { msg: "Thêm cột 'Thuế VAT 10%' và 'Thành tiền' vào bảng giá hiện tại trong file san-pham.xlsx", result: "Agent chỉnh sửa file và thêm cột tính toán tự động" },
+        { msg: "Tạo bảng tổng hợp KPI quý 1 từ 3 file Excel riêng lẻ này", result: "Agent gộp dữ liệu từ nhiều file và tạo bảng tổng hợp" }
+      ],
+      en: [
+        { msg: "Create an Excel file tracking monthly revenue Jan–Jun by region, with a bar chart", result: "Agent creates .xlsx with data, sum formulas and chart" },
+        { msg: "Read payroll.xlsx and calculate total salary per department", result: "Agent analyzes and returns calculation results from Excel" },
+        { msg: "Clean data.csv: remove blank rows, normalize date format, save as Excel", result: "Agent processes and exports clean .xlsx file" },
+        { msg: "Add 'VAT 10%' and 'Total' columns to the current price table in products.xlsx", result: "Agent edits file and adds auto-calculation columns" },
+        { msg: "Create a Q1 KPI summary from these 3 separate Excel files", result: "Agent merges data from multiple files and creates summary" }
+      ],
+      zh: [
+        { msg: "创建跟踪 1–6 月各地区月收入的 Excel 文件，并附柱状图", result: "Agent 创建带数据、求和公式和图表的 .xlsx" },
+        { msg: "读取 payroll.xlsx 并计算各部门总工资", result: "Agent 分析并从 Excel 返回计算结果" },
+        { msg: "清理 data.csv：删除空行、规范化日期格式、保存为 Excel", result: "Agent 处理并导出干净的 .xlsx 文件" },
+        { msg: "在 products.xlsx 的当前价格表中添加'增值税 10%'和'合计'列", result: "Agent 编辑文件并添加自动计算列" },
+        { msg: "从这 3 个独立的 Excel 文件创建 Q1 KPI 汇总表", result: "Agent 合并多个文件的数据并创建汇总" }
+      ]
+    },
+    tip: {
+      vi: "Nếu có file mẫu sẵn, hãy gửi kèm và nói 'theo format này'. Agent sẽ giữ nguyên cấu trúc và chỉ thêm dữ liệu.",
+      en: "If you have an existing template, attach it and say 'use this format'. The agent will keep the structure and only add data.",
+      zh: "如果您有现有模板，请附上并说'使用此格式'。Agent 将保留结构并仅添加数据。"
+    }
+  },
+  pptx: {
+    icon: "📙", bg: "rgba(245,158,11,0.12)", color: "#f59e0b",
+    title: { vi: "PPTX", en: "PPTX", zh: "PPTX" },
+    sub: { vi: "pptxgenjs · python-pptx", en: "pptxgenjs · python-pptx", zh: "pptxgenjs · python-pptx" },
+    prompts: {
+      vi: [
+        { msg: "Tạo slide pitch deck 10 trang cho sản phẩm AI Agent của tôi, phong cách tối hiện đại", result: "Agent thiết kế 10 slide với layout, màu sắc và nội dung chuyên nghiệp" },
+        { msg: "Đọc file thuyet-trinh.pptx và tóm tắt ý chính mỗi slide", result: "Agent trích xuất và tóm tắt nội dung từng slide" },
+        { msg: "Tạo slide báo cáo doanh thu Q1 với biểu đồ cột so sánh 3 tháng", result: "Agent tạo slide có biểu đồ dữ liệu trực quan" },
+        { msg: "Thêm slide tổng kết 'Next Steps' vào cuối file presentation.pptx", result: "Agent chỉnh sửa file và thêm slide mới theo yêu cầu" },
+        { msg: "Chuyển nội dung file bao-cao.docx thành bộ slide thuyết trình", result: "Agent chuyển đổi tài liệu Word thành slide PowerPoint" }
+      ],
+      en: [
+        { msg: "Create a 10-slide pitch deck for my AI Agent product, dark modern style", result: "Agent designs 10 slides with professional layout, colors and content" },
+        { msg: "Read presentation.pptx and summarize the key point of each slide", result: "Agent extracts and summarizes content from each slide" },
+        { msg: "Create a Q1 revenue report slide with a bar chart comparing 3 months", result: "Agent creates slide with visual data chart" },
+        { msg: "Add a 'Next Steps' summary slide at the end of presentation.pptx", result: "Agent edits file and adds new slide as requested" },
+        { msg: "Convert the content of report.docx into a presentation slide deck", result: "Agent converts Word document to PowerPoint slides" }
+      ],
+      zh: [
+        { msg: "为我的 AI Agent 产品创建 10 页 pitch deck，深色现代风格", result: "Agent 设计 10 张带有专业布局、颜色和内容的幻灯片" },
+        { msg: "读取 presentation.pptx 并总结每张幻灯片的要点", result: "Agent 提取并总结每张幻灯片的内容" },
+        { msg: "创建 Q1 收入报告幻灯片，包含比较 3 个月的柱状图", result: "Agent 创建带有可视化数据图表的幻灯片" },
+        { msg: "在 presentation.pptx 末尾添加'下一步'总结幻灯片", result: "Agent 编辑文件并按要求添加新幻灯片" },
+        { msg: "将 report.docx 的内容转换为演示幻灯片", result: "Agent 将 Word 文档转换为 PowerPoint 幻灯片" }
+      ]
+    },
+    tip: {
+      vi: "Nêu rõ số slide, màu sắc chủ đạo, và ngành/lĩnh vực. Ví dụ: '10 slide, tông xanh navy, công ty fintech'. Kết quả sẽ sát hơn nhiều.",
+      en: "Specify the number of slides, main colors, and industry. E.g.: '10 slides, navy blue theme, fintech company'. Results will be much more accurate.",
+      zh: "指定幻灯片数量、主色调和行业。例如：'10 张幻灯片，海军蓝主题，金融科技公司'。结果会更准确。"
+    }
+  },
+  google: {
+    icon: "🌐", bg: "rgba(14,165,233,0.12)", color: "#0ea5e9",
+    title: { vi: "Google Workspace", en: "Google Workspace", zh: "Google Workspace" },
+    sub: { vi: "Sheets · Drive · Gmail · Docs", en: "Sheets · Drive · Gmail · Docs", zh: "Sheets · Drive · Gmail · Docs" },
+    prompts: {
+      vi: [
+        { msg: "Tạo Google Sheet tổng hợp doanh thu tháng 4, chia theo từng nhân viên sales", result: "Agent tạo Google Sheet mới và gửi link cho bạn" },
+        { msg: "Upload file bao-cao-thang4.xlsx lên Google Drive, lưu vào thư mục 'Báo cáo 2025'", result: "Agent upload file và trả về link Drive" },
+        { msg: "Gửi email cho team@company.com với nội dung: báo cáo tháng 4 đã hoàn thành, đính kèm file", result: "Agent soạn và gửi email qua Gmail" },
+        { msg: "Cập nhật sheet 'Theo dõi đơn hàng' thêm dữ liệu từ file mới này", result: "Agent ghi dữ liệu vào Google Sheet có sẵn" },
+        { msg: "Tạo Google Doc tóm tắt kết quả họp hôm nay, chia sẻ cho cả team với quyền xem", result: "Agent tạo Docs và thiết lập quyền chia sẻ tự động" }
+      ],
+      en: [
+        { msg: "Create a Google Sheet summarizing April revenue, broken down by each sales rep", result: "Agent creates new Google Sheet and sends you the link" },
+        { msg: "Upload april-report.xlsx to Google Drive, save to 'Reports 2025' folder", result: "Agent uploads file and returns Drive link" },
+        { msg: "Send an email to team@company.com: April report is complete, attach the file", result: "Agent composes and sends email via Gmail" },
+        { msg: "Update the 'Order Tracking' sheet with data from this new file", result: "Agent writes data to existing Google Sheet" },
+        { msg: "Create a Google Doc summarizing today's meeting, share with the whole team as view-only", result: "Agent creates Docs and sets up sharing permissions automatically" }
+      ],
+      zh: [
+        { msg: "创建一个汇总 4 月收入的 Google 表格，按每位销售人员细分", result: "Agent 创建新的 Google 表格并发送链接给您" },
+        { msg: "将 april-report.xlsx 上传到 Google Drive，保存到'2025 年报告'文件夹", result: "Agent 上传文件并返回 Drive 链接" },
+        { msg: "发送电子邮件至 team@company.com：4 月报告已完成，附上文件", result: "Agent 通过 Gmail 撰写并发送电子邮件" },
+        { msg: "用新文件中的数据更新'订单跟踪'表格", result: "Agent 将数据写入现有 Google 表格" },
+        { msg: "创建一个总结今天会议的 Google 文档，以只读权限与整个团队共享", result: "Agent 创建文档并自动设置共享权限" }
+      ]
+    },
+    tip: {
+      vi: "Agent cần được cấu hình tài khoản Google trước. Nếu có nhiều tài khoản, hãy ghi rõ email nào dùng, ví dụ: 'dùng tài khoản work@company.com'.",
+      en: "The agent needs a Google account configured beforehand. If you have multiple accounts, specify which email to use, e.g.: 'use work@company.com account'.",
+      zh: "Agent 需要提前配置 Google 账户。如果您有多个账户，请指明使用哪个电子邮件，例如：'使用 work@company.com 账户'。"
+    }
+  },
+  skillcreator: {
+    icon: "🛠️", bg: "rgba(124,58,237,0.12)", color: "#7c3aed",
+    title: { vi: "Skill Creator", en: "Skill Creator", zh: "Skill Creator" },
+    sub: { vi: "Thiết kế · Test · Publish", en: "Design · Test · Publish", zh: "设计 · 测试 · 发布" },
+    prompts: {
+      vi: [
+        { msg: "Tạo skill mới giúp agent soạn email marketing chuyên nghiệp theo từng ngành", result: "Agent phân tích yêu cầu và tạo file SKILL.md hoàn chỉnh" },
+        { msg: "Tôi muốn agent biết cách tạo báo cáo tài chính chuẩn công ty tôi, hãy tạo skill cho việc này", result: "Agent thiết kế skill với workflow và ví dụ phù hợp" },
+        { msg: "Đánh giá chất lượng skill pdf.md hiện tại và đề xuất cải tiến", result: "Agent phân tích và trả về báo cáo đánh giá chi tiết" },
+        { msg: "Publish skill email-writer lên marketplace để chia sẻ với người dùng khác", result: "Agent kiểm tra, đóng gói và xuất bản skill lên marketplace" }
+      ],
+      en: [
+        { msg: "Create a new skill to help the agent write professional marketing emails by industry", result: "Agent analyzes requirements and creates complete SKILL.md file" },
+        { msg: "I want the agent to know how to create financial reports in my company's standard format, create a skill for this", result: "Agent designs skill with appropriate workflow and examples" },
+        { msg: "Evaluate the quality of the current pdf.md skill and suggest improvements", result: "Agent analyzes and returns detailed evaluation report" },
+        { msg: "Publish the email-writer skill to the marketplace to share with other users", result: "Agent reviews, packages and publishes skill to marketplace" }
+      ],
+      zh: [
+        { msg: "创建一个新技能，帮助 Agent 按行业撰写专业营销邮件", result: "Agent 分析需求并创建完整的 SKILL.md 文件" },
+        { msg: "我希望 Agent 知道如何按公司标准格式创建财务报告，请为此创建技能", result: "Agent 设计具有适当工作流和示例的技能" },
+        { msg: "评估当前 pdf.md 技能的质量并提出改进建议", result: "Agent 分析并返回详细的评估报告" },
+        { msg: "将 email-writer 技能发布到市场以与其他用户共享", result: "Agent 审查、打包并将技能发布到市场" }
+      ]
+    },
+    tip: {
+      vi: "Mô tả cụ thể 'agent cần làm gì' và 'output trông như thế nào'. Càng cụ thể thì skill tạo ra càng chính xác và hữu ích.",
+      en: "Describe specifically 'what the agent needs to do' and 'what the output should look like'. The more specific, the more accurate and useful the skill.",
+      zh: "具体描述'Agent 需要做什么'和'输出应该是什么样子'。越具体，创建的技能越准确和有用。"
+    }
+  }
+
+,'brave-search':{icon:"🦁",bg:"rgba(99,102,241,0.12)",color:"#6366f1",title:{vi:"Brave Search",en:"Brave Search",zh:"Brave Search"},sub:{vi:"Brave API · Real-time · Privacy-first",en:"Brave API · Real-time · Privacy-first",zh:"Brave API · 实时 · 隐私优先"},prompts:{vi:[{msg:"Tìm kiếm thông tin mới nhất về AI Agent năm 2025",result:"Agent tìm kiếm và trả về kết quả thời gian thực kèm nguồn"},{msg:"Search xem framework nào đang được dùng nhiều nhất cho RAG",result:"Agent tìm và tóm tắt xu hướng với trích dẫn cụ thể"},{msg:"Tìm tin tức về GPT-5 trong 7 ngày gần đây",result:"Agent trả về tin tức mới nhất có kèm link nguồn"},{msg:"Search giá iPhone 16 Pro hiện tại ở các cửa hàng Việt Nam",result:"Agent tìm và tổng hợp thông tin giá từ nhiều nguồn"}],en:[{msg:"Search for the latest information about AI Agent in 2025",result:"Agent searches and returns real-time results with sources"},{msg:"Search which framework is most used for RAG right now",result:"Agent finds and summarizes trends with specific citations"},{msg:"Find news about GPT-5 in the last 7 days",result:"Agent returns latest news with source links"},{msg:"Search current iPhone 16 Pro prices in stores",result:"Agent finds and aggregates price info from multiple sources"}],zh:[{msg:"搜索 2025 年 AI Agent 的最新信息",result:"Agent 搜索并返回带来源的实时结果"},{msg:"搜索目前最常用的 RAG 框架",result:"Agent 查找并总结带具体引用的趋势"},{msg:"查找过去 7 天内关于 GPT-5 的新闻",result:"Agent 返回带来源链接的最新新闻"},{msg:"搜索各商店目前的 iPhone 16 Pro 价格",result:"Agent 从多个来源查找并汇总价格信息"}]},tip:{vi:"Dùng khi cần thông tin thời gian thực hoặc dữ liệu cần cập nhật liên tục. Brave Search không theo dõi lịch sử, kết quả khách quan hơn Google.",en:"Use when you need real-time information or continuously updated data. Brave Search doesn't track history, giving more objective results than Google.",zh:"当您需要实时信息或持续更新的数据时使用。Brave Search 不跟踪历史记录，结果比 Google 更客观。"}}
+,'competitor-watch':{icon:"👁️",bg:"rgba(139,92,246,0.12)",color:"#8b5cf6",title:{vi:"Competitor Watch",en:"Competitor Watch",zh:"Competitor Watch"},sub:{vi:"Monitor · Pricing · Product changes",en:"Monitor · Pricing · Product changes",zh:"监控 · 定价 · 产品变化"},prompts:{vi:[{msg:"Theo dõi website của Notion và báo cáo những thay đổi mới nhất về pricing",result:"Agent quét trang pricing Notion và tóm tắt thay đổi"},{msg:"So sánh tính năng mới ra của đối thủ A, B, C trong tháng này",result:"Agent phân tích và trả bảng so sánh tính năng"},{msg:"Theo dõi blog của Linear.app và thông báo khi có bài viết mới về product",result:"Agent thiết lập monitoring và alert khi có nội dung mới"},{msg:"Đối thủ tôi vừa cập nhật trang landing page, phân tích xem họ thay đổi gì",result:"Agent so sánh nội dung cũ/mới và highlight điểm khác biệt"}],en:[{msg:"Monitor Notion's website and report the latest pricing changes",result:"Agent scans Notion pricing page and summarizes changes"},{msg:"Compare new features from competitors A, B, C this month",result:"Agent analyzes and returns feature comparison table"},{msg:"Monitor Linear.app's blog and notify when there's a new product post",result:"Agent sets up monitoring and alerts for new content"},{msg:"My competitor just updated their landing page, analyze what changed",result:"Agent compares old/new content and highlights differences"}],zh:[{msg:"监控 Notion 网站并报告最新的定价变化",result:"Agent 扫描 Notion 定价页面并总结变化"},{msg:"比较本月竞争对手 A、B、C 的新功能",result:"Agent 分析并返回功能对比表"},{msg:"监控 Linear.app 的博客，有新产品文章时通知",result:"Agent 设置监控并在有新内容时发出警报"},{msg:"我的竞争对手刚更新了他们的落地页，分析发生了什么变化",result:"Agent 比较新旧内容并突出显示差异"}]},tip:{vi:"Cấu hình 'tier' đối thủ: đối thủ trực tiếp theo dõi sâu, đối thủ gián tiếp theo dõi tổng quan. Tiết kiệm thời gian mà vẫn không bỏ sót gì quan trọng.",en:"Configure competitor tiers: direct rivals get deep monitoring, indirect competitors get high-level overviews. Save time without missing anything important.",zh:"配置竞争对手级别：直接竞争对手进行深度监控，间接竞争对手进行高层次概览。节省时间同时不遗漏任何重要信息。"}}
+,'lead-enrichment':{icon:"🎯",bg:"rgba(168,85,247,0.12)",color:"#a855f7",title:{vi:"Lead Enrichment",en:"Lead Enrichment",zh:"Lead Enrichment"},sub:{vi:"LinkedIn · Profile · Sales intel",en:"LinkedIn · Profile · Sales intel",zh:"LinkedIn · 档案 · 销售情报"},prompts:{vi:[{msg:"Tìm thông tin về Nguyễn Văn A, CEO của công ty TechViet",result:"Agent trả về profile đầy đủ: LinkedIn, website công ty, tin tức gần đây"},{msg:"Enrich danh sách 20 lead trong file leads.csv này",result:"Agent xử lý batch và trả file CSV đã có đầy đủ thông tin"},{msg:"Tôi sẽ gặp Trần Thị B từ Startup XYZ, chuẩn bị talking points cho tôi",result:"Agent research và đề xuất chủ đề phù hợp để mở đầu cuộc trò chuyện"},{msg:"Tìm email và LinkedIn của những người phụ trách marketing tại 5 công ty này",result:"Agent tìm kiếm và tổng hợp thông tin liên hệ"}],en:[{msg:"Find information about John Doe, CEO of TechCorp",result:"Agent returns full profile: LinkedIn, company website, recent news"},{msg:"Enrich this list of 20 leads in leads.csv",result:"Agent processes batch and returns CSV with complete info"},{msg:"I'm meeting Jane Smith from Startup XYZ, prepare talking points for me",result:"Agent researches and suggests relevant conversation starters"},{msg:"Find email and LinkedIn of marketing leads at these 5 companies",result:"Agent searches and aggregates contact information"}],zh:[{msg:"查找 TechCorp 首席执行官张伟的信息",result:"Agent 返回完整档案：LinkedIn、公司网站、近期新闻"},{msg:"丰富 leads.csv 中这 20 个线索的信息",result:"Agent 批量处理并返回包含完整信息的 CSV"},{msg:"我要见来自初创公司 XYZ 的李明，为我准备谈话要点",result:"Agent 研究并建议相关对话开场白"},{msg:"在这 5 家公司中找到营销负责人的邮箱和 LinkedIn",result:"Agent 搜索并汇总联系信息"}]},tip:{vi:"Kết hợp Lead Enrichment với Content Repurposer để cá nhân hóa outreach theo từng prospect. Hiệu quả gấp đôi so với template chung.",en:"Combine Lead Enrichment with Content Repurposer to personalize outreach for each prospect. Twice as effective as generic templates.",zh:"将 Lead Enrichment 与 Content Repurposer 结合，为每个潜在客户个性化推广。比通用模板效果提升一倍。"}}
+,'tiktok-research':{icon:"🎵",bg:"rgba(236,72,153,0.12)",color:"#ec4899",title:{vi:"TikTok Research",en:"TikTok Research",zh:"TikTok Research"},sub:{vi:"Profile · Video · Hashtag · Xu hướng",en:"Profile · Video · Hashtag · Trends",zh:"主页 · 视频 · 话题标签 · 趋势"},prompts:{vi:[{msg:"Phân tích kênh TikTok @duongthanhtam và cho tôi biết video nào đang trending",result:"Agent trả về thống kê kênh, top video, mức độ tương tác"},{msg:"So sánh 3 kênh TikTok đối thủ: @A, @B, @C về follower, view và engagement",result:"Agent tạo bảng so sánh chi tiết các chỉ số"},{msg:"Hashtag #marketingvietnam đang có bao nhiêu video? Nội dung chủ đạo là gì?",result:"Agent phân tích hashtag và tóm tắt xu hướng nội dung"},{msg:"Tìm video TikTok về 'review son môi' có view cao nhất tuần này",result:"Agent tìm và trả danh sách video theo tiêu chí"}],en:[{msg:"Analyze TikTok channel @competitor and tell me which videos are trending",result:"Agent returns channel stats, top videos, engagement rates"},{msg:"Compare 3 competitor TikTok channels: @A, @B, @C on followers, views and engagement",result:"Agent creates detailed comparison table of metrics"},{msg:"How many videos does #marketingvietnam have? What's the main content theme?",result:"Agent analyzes hashtag and summarizes content trends"},{msg:"Find TikTok videos about 'lipstick review' with highest views this week",result:"Agent finds and returns video list by criteria"}],zh:[{msg:"分析 TikTok 频道 @competitor，告诉我哪些视频正在流行",result:"Agent 返回频道统计、热门视频、互动率"},{msg:"比较 3 个竞争对手 TikTok 频道：@A、@B、@C 的粉丝、播放量和互动",result:"Agent 创建详细指标对比表"},{msg:"#marketing 话题标签有多少视频？主要内容主题是什么？",result:"Agent 分析话题标签并总结内容趋势"},{msg:"找本周播放量最高的'口红测评'TikTok 视频",result:"Agent 按条件查找并返回视频列表"}]},tip:{vi:"Dùng TikTok Research kết hợp Content Repurposer: research để hiểu format nào đang hoạt động, sau đó repurpose nội dung của bạn theo đúng format đó.",en:"Use TikTok Research with Content Repurposer: research to understand what formats are working, then repurpose your content in those formats.",zh:"将 TikTok Research 与 Content Repurposer 结合：先研究哪些格式有效，然后按这些格式重新利用您的内容。"}}
+,'master-marketing':{icon:"🚀",bg:"rgba(249,115,22,0.12)",color:"#f97316",title:{vi:"Master Marketing",en:"Master Marketing",zh:"Master Marketing"},sub:{vi:"Growth · Strategy · All-in-one",en:"Growth · Strategy · All-in-one",zh:"增长 · 策略 · 一体化"},prompts:{vi:[{msg:"Xây dựng chiến lược marketing Q3 cho SaaS B2B nhắm vào SME Việt Nam",result:"Agent tạo kế hoạch marketing đầy đủ kênh, timeline, KPI"},{msg:"Phân tích xu hướng marketing digital tháng này và đề xuất 3 cơ hội cho thương hiệu của tôi",result:"Agent phân tích trends và đưa ra khuyến nghị actionable"},{msg:"Lấy bài blog này và tạo nội dung cho cả tuần: posts, stories, email",result:"Agent tạo lịch nội dung đa kênh từ một nguồn"},{msg:"Growth hack để tăng trial sign-up trong 30 ngày với budget thấp",result:"Agent đề xuất chiến lược tăng trưởng có độ ưu tiên rõ ràng"}],en:[{msg:"Build a Q3 marketing strategy for B2B SaaS targeting Vietnamese SMEs",result:"Agent creates full marketing plan with channels, timeline, KPIs"},{msg:"Analyze this month's digital marketing trends and suggest 3 opportunities for my brand",result:"Agent analyzes trends and provides actionable recommendations"},{msg:"Take this blog post and create a full week of content: posts, stories, email",result:"Agent creates multi-channel content calendar from one source"},{msg:"Growth hacks to increase trial sign-ups in 30 days on a low budget",result:"Agent suggests prioritized growth strategies"}],zh:[{msg:"为针对越南中小企业的 B2B SaaS 制定 Q3 营销策略",result:"Agent 创建包含渠道、时间线、KPI 的完整营销计划"},{msg:"分析本月数字营销趋势，为我的品牌建议 3 个机会",result:"Agent 分析趋势并提供可操作的建议"},{msg:"取这篇博客文章，创建整周内容：帖子、故事、邮件",result:"Agent 从一个来源创建多渠道内容日历"},{msg:"在低预算下 30 天内增加试用注册的增长黑客",result:"Agent 建议有明确优先级的增长策略"}]},tip:{vi:"Cung cấp context về thương hiệu: ngành, đối tượng mục tiêu, USP, ngân sách. Kết quả sẽ cụ thể và áp dụng được ngay thay vì chung chung.",en:"Provide brand context: industry, target audience, USP, budget. Results will be specific and immediately actionable instead of generic.",zh:"提供品牌背景：行业、目标受众、USP、预算。结果将具体且可立即执行，而不是泛泛而谈。"}}
+,'content-repurposer':{icon:"♻️",bg:"rgba(239,68,68,0.12)",color:"#ef4444",title:{vi:"Content Repurposer",en:"Content Repurposer",zh:"Content Repurposer"},sub:{vi:"Blog → Thread → Post → Newsletter",en:"Blog → Thread → Post → Newsletter",zh:"博客 → 帖子 → 通讯"},prompts:{vi:[{msg:"Biến bài blog 2000 chữ này thành Twitter thread 10 tweets",result:"Agent tạo 10 tweets có hook, nội dung, và CTA chuẩn format"},{msg:"Tôi có video transcript này, tạo LinkedIn post và email newsletter từ nó",result:"Agent tạo post LinkedIn + newsletter giữ nguyên insight gốc"},{msg:"Tạo 5 Instagram caption khác nhau từ bài viết case study này",result:"Agent tạo 5 caption với tone và angle khác nhau để test"},{msg:"Chuyển podcast notes này thành bài blog SEO-friendly 1500 chữ",result:"Agent viết bài blog với structure, heading và keyword hợp lý"}],en:[{msg:"Turn this 2000-word blog post into a 10-tweet Twitter thread",result:"Agent creates 10 tweets with hook, content, and proper CTA format"},{msg:"I have this video transcript, create a LinkedIn post and email newsletter from it",result:"Agent creates LinkedIn post + newsletter preserving original insights"},{msg:"Create 5 different Instagram captions from this case study",result:"Agent creates 5 captions with different tones and angles to test"},{msg:"Convert these podcast notes into a 1500-word SEO-friendly blog post",result:"Agent writes blog with proper structure, headings and keywords"}],zh:[{msg:"将这篇 2000 字的博客文章转化为 10 条推特线程",result:"Agent 创建 10 条带钩子、内容和标准格式 CTA 的推文"},{msg:"我有这个视频文字稿，从中创建 LinkedIn 帖子和邮件通讯",result:"Agent 创建 LinkedIn 帖子+通讯，保留原始见解"},{msg:"从这个案例研究中创建 5 个不同的 Instagram 说明",result:"Agent 创建 5 个不同语气和角度的说明供测试"},{msg:"将这些播客笔记转化为 1500 字的 SEO 友好博客文章",result:"Agent 编写结构、标题和关键词合理的博客"}]},tip:{vi:"Chỉ định rõ tone: 'chuyên nghiệp', 'thân thiện', 'hài hước', hay 'trực tiếp'. Agent sẽ giữ nhất quán tone đó xuyên suốt tất cả format.",en:"Specify the tone clearly: 'professional', 'friendly', 'humorous', or 'direct'. The agent will maintain that tone consistently across all formats.",zh:"明确指定语气：'专业'、'友好'、'幽默'或'直接'。Agent 将在所有格式中保持一致的语气。"}}
+,'marketing-skills':{icon:"📚",bg:"rgba(245,158,11,0.12)",color:"#f59e0b",title:{vi:"Marketing Playbooks",en:"Marketing Playbooks",zh:"营销手册"},sub:{vi:"23 playbooks chuyên biệt",en:"23 specialized playbooks",zh:"23 个专业手册"},prompts:{vi:[{msg:"Viết Google Ads copy cho sản phẩm CRM B2B, ngân sách 50 triệu/tháng",result:"Agent tạo headlines, descriptions và chiến lược bidding"},{msg:"Audit SEO cho trang landing page này và đề xuất cải tiến",result:"Agent phân tích on-page SEO và trả danh sách actionable fixes"},{msg:"Tạo email sequence 5 bước nurture lead từ trial đến paid cho SaaS của tôi",result:"Agent viết 5 email với subject line, nội dung, timing cụ thể"},{msg:"Thiết kế A/B test cho nút CTA trên trang pricing, muốn tăng conversion 20%",result:"Agent đề xuất variants, metric cần đo và cách phân tích kết quả"},{msg:"Tạo social content plan cho Instagram tuần này: 3 posts, 5 stories",result:"Agent lên lịch và viết nội dung đầy đủ cho từng post/story"}],en:[{msg:"Write Google Ads copy for a B2B CRM product, $2000/month budget",result:"Agent creates headlines, descriptions and bidding strategy"},{msg:"Audit SEO for this landing page and suggest improvements",result:"Agent analyzes on-page SEO and returns actionable fixes list"},{msg:"Create a 5-step email nurture sequence from trial to paid for my SaaS",result:"Agent writes 5 emails with subject lines, content, specific timing"},{msg:"Design an A/B test for the CTA button on the pricing page to increase conversion by 20%",result:"Agent suggests variants, metrics to measure and how to analyze results"},{msg:"Create a social content plan for Instagram this week: 3 posts, 5 stories",result:"Agent schedules and writes full content for each post/story"}],zh:[{msg:"为 B2B CRM 产品编写 Google Ads 文案，预算每月 2000 美元",result:"Agent 创建标题、描述和竞价策略"},{msg:"审计此落地页的 SEO 并建议改进",result:"Agent 分析页面 SEO 并返回可操作的修复列表"},{msg:"为我的 SaaS 创建从试用到付费的 5 步电子邮件培育序列",result:"Agent 编写 5 封带主题行、内容、具体时间的邮件"},{msg:"为定价页面上的 CTA 按钮设计 A/B 测试，目标提高转化率 20%",result:"Agent 建议变体、要测量的指标和如何分析结果"},{msg:"为本周 Instagram 创建社交内容计划：3 篇帖子，5 个故事",result:"Agent 为每个帖子/故事安排并编写完整内容"}]},tip:{vi:"Gói 23 playbooks hoạt động tốt nhất khi bạn nêu rõ: ngành (SaaS/ecommerce/agency), đối tượng mục tiêu (B2B/B2C), và mục tiêu cụ thể (tăng lead, tăng conversion, giữ chân user).",en:"The 23-playbook bundle works best when you specify: industry (SaaS/ecommerce/agency), target audience (B2B/B2C), and specific goal (increase leads, boost conversion, retain users).",zh:"23 个手册套装在您指定以下内容时效果最佳：行业（SaaS/电商/代理机构）、目标受众（B2B/B2C）和具体目标（增加线索、提高转化率、留住用户）。"}}
+,'safe-drive-upload':{icon:"⬆️",bg:"rgba(34,197,94,0.12)",color:"#22c55e",title:{vi:"Safe Drive Upload",en:"Safe Drive Upload",zh:"Safe Drive Upload"},sub:{vi:"Upload · Verify · Link",en:"Upload · Verify · Link",zh:"上传 · 验证 · 链接"},prompts:{vi:[{msg:"Upload file bao-cao-thang4.xlsx lên Google Drive",result:"Agent kiểm tra file tồn tại, upload và trả về link Drive"},{msg:"Lưu file PDF vừa tạo lên Drive vào thư mục 'Báo cáo 2025'",result:"Agent upload vào đúng thư mục và xác nhận thành công"},{msg:"Upload tất cả file trong workspace lên Drive và gửi tôi danh sách link",result:"Agent upload batch và trả danh sách file kèm link tương ứng"}],en:[{msg:"Upload april-report.xlsx to Google Drive",result:"Agent verifies file exists, uploads and returns Drive link"},{msg:"Save the PDF just created to Drive in the 'Reports 2025' folder",result:"Agent uploads to correct folder and confirms success"},{msg:"Upload all workspace files to Drive and send me the link list",result:"Agent batch uploads and returns file list with corresponding links"}],zh:[{msg:"将 april-report.xlsx 上传到 Google Drive",result:"Agent 验证文件存在，上传并返回 Drive 链接"},{msg:"将刚创建的 PDF 保存到 Drive 的'2025 年报告'文件夹",result:"Agent 上传到正确文件夹并确认成功"},{msg:"将工作区中的所有文件上传到 Drive 并发送链接列表",result:"Agent 批量上传并返回带相应链接的文件列表"}]},tip:{vi:"Nếu gặp lỗi quyền, hãy nói 'kiểm tra Google account'. Agent sẽ tự chẩn đoán vấn đề auth và hướng dẫn cách fix.",en:"If you encounter permission errors, say 'check Google account'. The agent will self-diagnose the auth issue and guide you on how to fix it.",zh:"如果遇到权限错误，请说'检查 Google 账户'。Agent 将自行诊断认证问题并指导您如何修复。"}}
+,'drive-report-summarizer':{icon:"📋",bg:"rgba(22,163,74,0.12)",color:"#16a34a",title:{vi:"Drive Report Summarizer",en:"Drive Report Summarizer",zh:"Drive Report Summarizer"},sub:{vi:"Read Drive · Summarize · Report",en:"Read Drive · Summarize · Report",zh:"读取 Drive · 摘要 · 报告"},prompts:{vi:[{msg:"Tóm tắt file 'meeting-notes-q1.docx' trên Drive thành báo cáo điều hành 1 trang",result:"Agent đọc file Drive và tạo tóm tắt súc tích theo cấu trúc"},{msg:"Đọc 3 file proposal trên Drive và so sánh điểm mạnh/yếu của từng file",result:"Agent đọc tất cả và trả bảng phân tích so sánh"},{msg:"Tổng hợp tất cả báo cáo trong thư mục 'Q1 Reports' thành overview 1 trang",result:"Agent đọc folder và tạo executive summary tổng hợp"}],en:[{msg:"Summarize 'meeting-notes-q1.docx' on Drive into a 1-page executive report",result:"Agent reads Drive file and creates structured concise summary"},{msg:"Read 3 proposal files on Drive and compare strengths/weaknesses of each",result:"Agent reads all and returns comparative analysis table"},{msg:"Consolidate all reports in the 'Q1 Reports' folder into a 1-page overview",result:"Agent reads folder and creates consolidated executive summary"}],zh:[{msg:"将 Drive 上的'meeting-notes-q1.docx'总结为 1 页执行报告",result:"Agent 读取 Drive 文件并创建结构化简洁摘要"},{msg:"读取 Drive 上的 3 个提案文件并比较各自的优缺点",result:"Agent 读取所有文件并返回比较分析表"},{msg:"将'Q1 Reports'文件夹中的所有报告整合为 1 页概览",result:"Agent 读取文件夹并创建综合执行摘要"}]},tip:{vi:"Cung cấp link Drive hoặc tên file chính xác. Nếu muốn format cụ thể (bullet points, bảng, SWOT), hãy nói rõ.",en:"Provide the Drive link or exact filename. If you want a specific format (bullet points, table, SWOT), say so explicitly.",zh:"提供 Drive 链接或准确的文件名。如果您想要特定格式（要点、表格、SWOT），请明确说明。"}}
+,'create-and-upload':{icon:"📤",bg:"rgba(21,128,61,0.12)",color:"#15803d",title:{vi:"Create & Upload",en:"Create & Upload",zh:"创建并上传"},sub:{vi:"Tạo file → Lưu Drive · One-step",en:"Create file → Save Drive · One-step",zh:"创建文件 → 保存 Drive · 一步"},prompts:{vi:[{msg:"Tạo báo cáo doanh thu tháng 4 dạng Excel rồi lưu lên Drive",result:"Agent tạo file Excel, verify, upload và gửi link Drive"},{msg:"Viết proposal cho khách hàng ABC, lưu thành Word và upload Drive",result:"Agent soạn nội dung, tạo file .docx, upload và trả link"},{msg:"Tạo slide deck 8 trang tóm tắt Q1 và lưu lên Drive thư mục 'Presentations'",result:"Agent tạo PPTX, upload vào đúng thư mục, trả link"},{msg:"Generate báo cáo phân tích đối thủ dạng PDF và lưu Drive ngay",result:"Agent tạo PDF hoàn chỉnh, upload và xác nhận"}],en:[{msg:"Create an April revenue report in Excel and save it to Drive",result:"Agent creates Excel file, verifies, uploads and sends Drive link"},{msg:"Write a proposal for client ABC, save as Word and upload to Drive",result:"Agent drafts content, creates .docx file, uploads and returns link"},{msg:"Create an 8-slide Q1 summary deck and save to Drive 'Presentations' folder",result:"Agent creates PPTX, uploads to correct folder, returns link"},{msg:"Generate a competitor analysis report as PDF and save to Drive immediately",result:"Agent creates complete PDF, uploads and confirms"}],zh:[{msg:"创建 4 月收入报告的 Excel 文件并保存到 Drive",result:"Agent 创建 Excel 文件，验证，上传并发送 Drive 链接"},{msg:"为客户 ABC 编写提案，保存为 Word 并上传到 Drive",result:"Agent 起草内容，创建 .docx 文件，上传并返回链接"},{msg:"创建 8 页 Q1 总结幻灯片并保存到 Drive '演示文稿'文件夹",result:"Agent 创建 PPTX，上传到正确文件夹，返回链接"},{msg:"生成竞争对手分析报告为 PDF 并立即保存到 Drive",result:"Agent 创建完整 PDF，上传并确认"}]},tip:{vi:"Skill này kết hợp sức mạnh của PDF/DOCX/XLSX/PPTX với Google Drive trong một workflow liền mạch. Không cần 2 yêu cầu riêng biệt.",en:"This skill combines the power of PDF/DOCX/XLSX/PPTX with Google Drive in a seamless workflow. No need for 2 separate requests.",zh:"此技能将 PDF/DOCX/XLSX/PPTX 的功能与 Google Drive 在无缝工作流中结合。无需 2 个单独的请求。"}}
+,'telegram-voice':{icon:"🎙️",bg:"rgba(20,184,166,0.12)",color:"#14b8a6",title:{vi:"Telegram Voice Transcribe",en:"Telegram Voice Transcribe",zh:"Telegram 语音转录"},sub:{vi:"Whisper · Voice → Text",en:"Whisper · Voice → Text",zh:"Whisper · 语音 → 文本"},prompts:{vi:[{msg:"(Gửi voice message) Transcribe tin nhắn thoại này cho tôi",result:"Agent nhận file voice, gọi Whisper API, trả về text đầy đủ"},{msg:"Chuyển voice note cuộc họp sáng nay thành văn bản",result:"Agent transcribe và format lại thành meeting notes có cấu trúc"},{msg:"Tôi vừa ghi âm ghi chú, đọc nội dung và tóm tắt action items",result:"Agent transcribe rồi trích xuất danh sách việc cần làm"}],en:[{msg:"(Send voice message) Transcribe this voice message for me",result:"Agent receives voice file, calls Whisper API, returns full text"},{msg:"Convert this morning's meeting voice note to text",result:"Agent transcribes and formats into structured meeting notes"},{msg:"I just recorded some notes, read the content and summarize action items",result:"Agent transcribes then extracts to-do list"}],zh:[{msg:"（发送语音消息）为我转录此语音消息",result:"Agent 接收语音文件，调用 Whisper API，返回完整文本"},{msg:"将今早会议的语音笔记转换为文本",result:"Agent 转录并格式化为结构化的会议记录"},{msg:"我刚录制了一些笔记，读取内容并总结行动项",result:"Agent 转录然后提取待办事项列表"}]},tip:{vi:"Chỉ cần gửi voice message trực tiếp trong chat. Agent tự nhận diện và transcribe. Hỗ trợ tiếng Việt, Anh, Trung và hơn 50 ngôn ngữ.",en:"Just send the voice message directly in chat. The agent auto-detects and transcribes. Supports Vietnamese, English, Chinese and 50+ languages.",zh:"只需直接在聊天中发送语音消息。Agent 自动检测并转录。支持中文、英文、越南语和 50 多种语言。"}}
+,'agent-browser':{icon:"🌏",bg:"rgba(8,145,178,0.12)",color:"#0891b2",title:{vi:"Agent Browser",en:"Agent Browser",zh:"Agent Browser"},sub:{vi:"Navigate · Click · Screenshot · Extract",en:"Navigate · Click · Screenshot · Extract",zh:"导航 · 点击 · 截图 · 提取"},prompts:{vi:[{msg:"Vào trang web techcrunch.com và lấy 10 bài viết mới nhất về AI",result:"Agent mở trang, đọc nội dung và trả danh sách bài viết có link"},{msg:"Chụp screenshot trang landing page này và phân tích UX",result:"Agent chụp screenshot và nhận xét về layout, CTA, flow"},{msg:"Điền form đăng ký demo tại link này với thông tin: tên, email, công ty",result:"Agent tự động điền và submit form"},{msg:"Check xem website đối thủ có đang chạy promotion gì không",result:"Agent duyệt trang, phát hiện banner/popup và báo cáo"}],en:[{msg:"Go to techcrunch.com and get the 10 latest articles about AI",result:"Agent opens page, reads content and returns article list with links"},{msg:"Take a screenshot of this landing page and analyze the UX",result:"Agent takes screenshot and comments on layout, CTA, flow"},{msg:"Fill in the demo registration form at this link: name, email, company",result:"Agent automatically fills and submits form"},{msg:"Check if the competitor website is running any promotions",result:"Agent browses page, detects banners/popups and reports"}],zh:[{msg:"打开 techcrunch.com 并获取最新 10 篇关于 AI 的文章",result:"Agent 打开页面，读取内容并返回带链接的文章列表"},{msg:"截取此落地页的截图并分析用户体验",result:"Agent 截图并评论布局、CTA、流程"},{msg:"在此链接填写演示注册表：姓名、邮箱、公司",result:"Agent 自动填写并提交表单"},{msg:"检查竞争对手网站是否有任何促销活动",result:"Agent 浏览页面，检测横幅/弹窗并报告"}]},tip:{vi:"Đặc biệt hữu ích cho công việc research và monitoring định kỳ. Kết hợp với Competitor Watch để tự động hóa hoàn toàn việc theo dõi đối thủ.",en:"Especially useful for research and regular monitoring tasks. Combine with Competitor Watch to fully automate competitor tracking.",zh:"对于研究和定期监控任务特别有用。与 Competitor Watch 结合，实现竞争对手跟踪的完全自动化。"}}
+};
+
+// ─── STATE & LANG ────────────────────────────────────────────
+let lang = 'vi';
+
+function setLang(l) {
+  lang = l;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.lang-btn[onclick="setLang('${l}')"]`).classList.add('active');
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.getAttribute('data-i18n');
+    if (t[l] && t[l][k]) el.textContent = t[l][k];
+  });
+  const ph = { vi: 'Tìm kiếm skill...', en: 'Search skills...', zh: '搜索技能...' };
+  document.getElementById('searchInput').placeholder = ph[l];
+}
+
+// ─── FILTER ──────────────────────────────────────────────────
+function filterCategory(cat) {
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  if (event && event.target) event.target.closest('.nav-item') && event.target.closest('.nav-item').classList.add('active');
+  document.querySelectorAll('.skill-section').forEach(s => {
+    s.classList.toggle('visible', cat === 'all' || s.dataset.category === cat);
+  });
+  document.querySelectorAll('.skill-card').forEach(c => c.style.display = '');
+  document.getElementById('noResults').classList.remove('show');
+  document.getElementById('searchInput').value = '';
+}
+
+// ─── SEARCH ──────────────────────────────────────────────────
+document.getElementById('searchInput').addEventListener('input', function() {
+  const q = this.value.toLowerCase().trim();
+  if (!q) { filterCategory('all'); return; }
+  document.querySelectorAll('.skill-section').forEach(s => s.classList.add('visible'));
+  let any = false;
+  document.querySelectorAll('.skill-card').forEach(c => {
+    const show = c.textContent.toLowerCase().includes(q);
+    c.style.display = show ? '' : 'none';
+    if (show) any = true;
+  });
+  document.getElementById('noResults').classList.toggle('show', !any);
+});
+
+// ─── DETAIL ──────────────────────────────────────────────────
+function openDetail(id) {
+  const d = skills[id]; if (!d) return;
+  const l = lang;
+  const howto = t[l]['detail.howto'] || 'Cách yêu cầu agent';
+  const tipLabel = t[l]['detail.tip'] || 'Mẹo';
+
+  document.getElementById('detailIcon').textContent = d.icon;
+  document.getElementById('detailIcon').style.background = d.bg;
+  document.getElementById('detailTitle').textContent = d.title[l];
+  document.getElementById('detailSub').textContent = d.sub[l];
+
+  const prompts = d.prompts[l] || d.prompts.vi;
+  const promptsHTML = prompts.map(p => `
+    <div class="prompt-item">
+      <div class="prompt-bubble">
+        <div class="prompt-avatar">👤</div>
+        <div class="prompt-text">${p.msg}</div>
+      </div>
+      <div class="prompt-result">${p.result}</div>
+    </div>`).join('');
+
+  document.getElementById('detailBody').innerHTML = `
+    <div class="prompt-section">
+      <h4>💬 ${howto}</h4>
+      <div class="prompt-list">${promptsHTML}</div>
+    </div>
+    <div class="tip-box">
+      <span class="tip-icon">💡</span>
+      <span>${d.tip[l]}</span>
+    </div>`;
+
+  document.getElementById('detailOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDetail(e) {
+  if (e && e.target !== document.getElementById('detailOverlay')) return;
+  document.getElementById('detailOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDetail(null); });
+setLang('vi');
+</script>
+</body>
+</html>

@@ -3,7 +3,7 @@ package methods
 import (
 	"slices"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/permissions"
+	"github.com/kadiesnguyen/vbpclaw/internal/permissions"
 )
 
 // canSeeAll checks if user has full data visibility (admin role OR owner user).

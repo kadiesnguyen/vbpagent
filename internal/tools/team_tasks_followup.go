@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
-	"github.com/nextlevelbuilder/vbpclaw/pkg/protocol"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/pkg/protocol"
 )
 
 func (t *TeamTasksTool) executeAskUser(ctx context.Context, args map[string]any) *Result {

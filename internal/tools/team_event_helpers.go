@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
-	"github.com/nextlevelbuilder/vbpclaw/pkg/protocol"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/pkg/protocol"
 )
 
 // TaskEventOption customizes optional fields on a TeamTaskEventPayload.

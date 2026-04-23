@@ -3,7 +3,7 @@ package agent
 import (
 	"testing"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
 )
 
 func TestHasParseErrors_NoCalls(t *testing.T) {

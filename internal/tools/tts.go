@@ -8,7 +8,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/tts"
+	"github.com/kadiesnguyen/vbpclaw/internal/tts"
 )
 
 // TtsTool is an agent tool that converts text to speech audio.

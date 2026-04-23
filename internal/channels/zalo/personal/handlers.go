@@ -11,12 +11,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/channels"
-	"github.com/nextlevelbuilder/vbpclaw/internal/channels/media"
-	"github.com/nextlevelbuilder/vbpclaw/internal/channels/typing"
-	"github.com/nextlevelbuilder/vbpclaw/internal/channels/zalo/personal/protocol"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
-	"github.com/nextlevelbuilder/vbpclaw/internal/tools"
+	"github.com/kadiesnguyen/vbpclaw/internal/channels"
+	"github.com/kadiesnguyen/vbpclaw/internal/channels/media"
+	"github.com/kadiesnguyen/vbpclaw/internal/channels/typing"
+	"github.com/kadiesnguyen/vbpclaw/internal/channels/zalo/personal/protocol"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/tools"
 )
 
 func (c *Channel) handleMessage(msg protocol.Message) {

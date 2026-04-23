@@ -17,11 +17,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/version"
+	"github.com/kadiesnguyen/vbpclaw/internal/version"
 )
 
 const (
-	githubRepo = "nextlevelbuilder/vbpclaw"
+	githubRepo = "kadiesnguyen/vbpclaw"
 	tagPrefix  = "lite-v"
 	// maxFileSize limits individual extracted files to 500 MB (decompression bomb guard).
 	maxFileSize = 500 << 20

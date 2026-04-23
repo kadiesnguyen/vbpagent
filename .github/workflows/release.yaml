@@ -71,7 +71,7 @@ jobs:
           VERSION: v${{ needs.release.outputs.version }}
         run: |
           CGO_ENABLED=0 go build -tags embedui \
-            -ldflags="-s -w -X github.com/nextlevelbuilder/vbpclaw/cmd.Version=${VERSION}" \
+            -ldflags="-s -w -X github.com/kadiesnguyen/vbpclaw/cmd.Version=${VERSION}" \
             -o vbpclaw .
           tar -czf "vbpclaw-${{ needs.release.outputs.version }}-${{ matrix.goos }}-${{ matrix.goarch }}.tar.gz" vbpclaw migrations/
 
@@ -265,7 +265,7 @@ jobs:
                 \"url\": \"https://github.com/${{ github.repository }}/releases/tag/${VERSION}\",
                 \"color\": 5814783,
                 \"fields\": [
-                  {\"name\": \"Docker\", \"value\": \"\`docker pull digitop/vbpclaw:latest\`\", \"inline\": false},
+                  {\"name\": \"Docker\", \"value\": \"\`docker pull digitop/vbpagent:latest\`\", \"inline\": false},
                   {\"name\": \"Install\", \"value\": \"\`curl -fsSL https://raw.githubusercontent.com/${{ github.repository }}/main/scripts/install.sh | bash\`\", \"inline\": false}
                 ],
                 \"footer\": {\"text\": \"${{ github.repository }}\"},

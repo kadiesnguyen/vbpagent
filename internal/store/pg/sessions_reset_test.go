@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
 )
 
 // TestReset_ColdCache_FallsBackToDB verifies that after the fix, Reset on a

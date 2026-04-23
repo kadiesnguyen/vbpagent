@@ -167,7 +167,7 @@ VBPClaw runs in a non-root container with three privilege levels:
 - Set up Python and Node.js runtime directories with proper env vars
 
 **Phase 2: Drop to vbpclaw user (su-exec)**
-- Main app runs as `vbpclaw` (UID 1000) via `su-exec goclaw /app/goclaw`
+- Main app runs as `vbpclaw` (UID 1000) via `su-exec vbpclaw /app/vbpclaw`
 - All agent operations execute in this context
 - System package requests are delegated to pkg-helper via Unix socket
 

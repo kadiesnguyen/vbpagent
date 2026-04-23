@@ -12,7 +12,7 @@
 
 services:
   vbpclaw-ui:
-    image: ghcr.io/nextlevelbuilder/goclaw-web:latest
+    image: ghcr.io/kadiesnguyen/vbpclaw-web:latest
     build:
       context: ${VBPCLAW_DIR:-.}/ui/web
       dockerfile: Dockerfile

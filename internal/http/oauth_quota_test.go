@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
 )
 
 func TestOAuthHandlerQuotaSuccess(t *testing.T) {

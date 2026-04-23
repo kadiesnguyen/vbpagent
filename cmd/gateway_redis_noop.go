@@ -5,9 +5,9 @@ package cmd
 import (
 	"log/slog"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/cache"
-	"github.com/nextlevelbuilder/vbpclaw/internal/config"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/cache"
+	"github.com/kadiesnguyen/vbpclaw/internal/config"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
 )
 
 // initRedisClient is a no-op when built without the "redis" tag.

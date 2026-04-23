@@ -6,9 +6,9 @@ import (
 	"context"
 	"log/slog"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/config"
-	"github.com/nextlevelbuilder/vbpclaw/internal/tracing"
-	"github.com/nextlevelbuilder/vbpclaw/internal/tracing/otelexport"
+	"github.com/kadiesnguyen/vbpclaw/internal/config"
+	"github.com/kadiesnguyen/vbpclaw/internal/tracing"
+	"github.com/kadiesnguyen/vbpclaw/internal/tracing/otelexport"
 )
 
 // initOTelExporter creates and wires the OpenTelemetry OTLP exporter

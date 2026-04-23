@@ -12,9 +12,9 @@ import (
 	"time"
 
 	mcpclient "github.com/mark3labs/mcp-go/client"
-	"github.com/nextlevelbuilder/vbpclaw/internal/config"
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
-	"github.com/nextlevelbuilder/vbpclaw/internal/tools"
+	"github.com/kadiesnguyen/vbpclaw/internal/config"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/tools"
 
 	"github.com/google/uuid"
 )
@@ -45,6 +45,7 @@ type ServerStatus struct {
 type serverState struct {
 	name       string
 	transport  string
+	url        string // non-empty for http/sse/streamable-http transports
 	client     *mcpclient.Client
 	connected  atomic.Bool
 	toolNames  []string // registered tool names in the registry

@@ -6,8 +6,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/config"
-	"github.com/nextlevelbuilder/vbpclaw/internal/providers"
+	"github.com/kadiesnguyen/vbpclaw/internal/config"
+	"github.com/kadiesnguyen/vbpclaw/internal/providers"
 )
 
 // toolGroupsMu protects toolGroups from concurrent access.

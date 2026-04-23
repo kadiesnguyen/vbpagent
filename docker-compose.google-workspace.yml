@@ -15,17 +15,24 @@ services:
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-}
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET:-}
       - WORKSPACE_DIR=/app/workspace
+      # Disable per-child token warmup — stateless mode spawns a fresh child per
+      # request, so warming 14 accounts on every child wastes ~100 MB/child and
+      # causes OOM with concurrent requests. Tokens are fetched on-demand instead.
+      - GWS_SKIP_WARMUP=1
     volumes:
       - google-workspace-data:/data
       - vbpclaw-workspace:/app/workspace:ro
     networks:
       - vbpclaw-net
     restart: unless-stopped
+    stop_grace_period: 30s
     mem_limit: 1536m
     mem_reservation: 128m
     healthcheck:
-      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3100/mcp', r => process.exit(r.statusCode < 500 ? 0 : 1)).on('error', () => process.exit(1))"]
-      interval: 15s
+      # TCP-only check — does NOT hit the /mcp endpoint so supergateway never
+      # spawns a child process for the health check, preventing memory exhaustion.
+      test: ["CMD", "node", "-e", "require('net').createConnection(3100,'localhost').on('connect',()=>process.exit(0)).on('error',()=>process.exit(1))"]
+      interval: 30s
       timeout: 5s
       retries: 3
 

@@ -3,7 +3,7 @@ package http
 import (
 	"net/http"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/store"
+	"github.com/kadiesnguyen/vbpclaw/internal/store"
 )
 
 // MemoryHandler handles memory document management endpoints.

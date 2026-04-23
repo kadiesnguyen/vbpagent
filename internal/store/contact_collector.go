@@ -5,7 +5,7 @@ import (
 	"log/slog"
 	"time"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/cache"
+	"github.com/kadiesnguyen/vbpclaw/internal/cache"
 )
 
 const contactSeenTTL = 30 * time.Minute

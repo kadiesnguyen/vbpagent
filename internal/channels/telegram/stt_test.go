@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/nextlevelbuilder/vbpclaw/internal/config"
+	"github.com/kadiesnguyen/vbpclaw/internal/config"
 )
 
 // sttTestResponse mirrors the STT proxy JSON response for test assertions.
