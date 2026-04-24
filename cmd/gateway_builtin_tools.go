@@ -87,6 +87,9 @@ func builtinToolSeedData() []store.BuiltinToolDef {
 		// messaging
 		{Name: "message", DisplayName: "Message", Description: "Send a proactive message to a user on a connected channel (Telegram, Discord, etc.)", Category: "messaging", Enabled: true},
 
+		// integrations
+		{Name: "facebook_pages", DisplayName: "Facebook Pages", Description: "Get the list of Facebook Pages connected to this agent, including page names, categories, and user info. ALWAYS use this tool when user asks about: Facebook pages, fanpages, which pages are connected, page list, tài khoản Facebook, 'page nào', 'fanpage nào', 'quản lý page nào', 'có page nào', 'danh sách page'", Category: "integrations", Enabled: true},
+
 		// scheduling
 		{Name: "cron", DisplayName: "Cron Scheduler", Description: "Schedule or manage recurring tasks using cron expressions, at-times, or intervals", Category: "scheduling", Enabled: true,
 			Metadata: json.RawMessage(`{"config_hint":"Config → Cron"}`),

@@ -147,6 +147,14 @@ func ToolAgentKeyFromCtx(ctx context.Context) string {
 	return ""
 }
 
+// ToolAgentIDFromCtx returns the calling agent's UUID from context.
+func ToolAgentIDFromCtx(ctx context.Context) string {
+	if rc := store.RunContextFromCtx(ctx); rc != nil {
+		return rc.AgentID.String()
+	}
+	return ""
+}
+
 // WithToolSessionKey injects the parent's session key so subagent announce
 // can route results back to the exact same session (required for WS where
 // session keys don't follow BuildScopedSessionKey format).

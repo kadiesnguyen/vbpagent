@@ -28,14 +28,17 @@ const SCOPES = [
   'public_profile',
 ].join(',');
 
-// In-memory state store (CSRF protection)
+// In-memory state store (CSRF protection + agent_id)
 const stateStore = new Map();
 setInterval(() => {
   const now = Date.now();
-  for (const [s, ts] of stateStore) {
-    if (now - ts > 30 * 60 * 1000) stateStore.delete(s);
+  for (const [s, data] of stateStore) {
+    if (now - data.timestamp > 30 * 60 * 1000) stateStore.delete(s);
   }
 }, 60_000);
+
+// Assignment file path
+const ASSIGNMENTS_FILE = join(DATA_DIR, 'facebook', 'assignments.json');
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
@@ -91,6 +94,26 @@ function loadAllPages() {
       })
       .filter(Boolean);
   } catch { return []; }
+}
+
+function loadAssignments() {
+  if (!existsSync(ASSIGNMENTS_FILE)) return {};
+  try {
+    return JSON.parse(readFileSync(ASSIGNMENTS_FILE, 'utf8'));
+  } catch { return {}; }
+}
+
+function saveAssignments(assignments) {
+  ensureDirs();
+  writeFileSync(ASSIGNMENTS_FILE, JSON.stringify(assignments, null, 2), { mode: 0o600 });
+}
+
+function getPageCredentials(pageId) {
+  const filePath = join(CREDS_DIR, `page_${pageId}.json`);
+  if (!existsSync(filePath)) return null;
+  try {
+    return JSON.parse(readFileSync(filePath, 'utf8'));
+  } catch { return null; }
 }
 
 // ── HTML pages ─────────────────────────────────────────────────────────────
@@ -156,7 +179,8 @@ const server = createServer(async (req, res) => {
       return;
     }
     const state = randomBytes(16).toString('hex');
-    stateStore.set(state, Date.now());
+    const agentId = url.searchParams.get('agent_id');
+    stateStore.set(state, { timestamp: Date.now(), agent_id: agentId });
     const authUrl = new URL(FB_AUTH_URL);
     authUrl.searchParams.set('client_id', APP_ID);
     authUrl.searchParams.set('redirect_uri', REDIRECT_URI);
@@ -165,7 +189,7 @@ const server = createServer(async (req, res) => {
     authUrl.searchParams.set('state', state);
     res.writeHead(302, { Location: authUrl.toString() });
     res.end();
-    console.log('[fb-oauth] Auth flow started');
+    console.log('[fb-oauth] Auth flow started', agentId ? `for agent ${agentId}` : '');
     return;
   }
 
@@ -189,6 +213,9 @@ const server = createServer(async (req, res) => {
         link: { href: '/fb/auth', label: 'Thử lại' } }));
       return;
     }
+    const stateData = stateStore.get(state);
+    const agentId = stateData.agent_id;
+    console.log('[fb-oauth] Callback received, agentId from state:', agentId);
     stateStore.delete(state);
 
     try {
@@ -223,6 +250,27 @@ const server = createServer(async (req, res) => {
       pages.forEach(p => savePageCredential(p, user.email || user.name));
       console.log(`[fb-oauth] Saved ${pages.length} page(s) for ${user.email || user.name}`);
 
+      // 6. Auto-assign all pages to agent if agent_id provided
+      console.log('[fb-oauth] Checking auto-assign condition:', { agentId, pagesLength: pages.length });
+      if (agentId && pages.length > 0) {
+        const assignments = loadAssignments();
+        assignments[agentId] = {
+          user_id: user.id,
+          user_name: user.name,
+          user_email: user.email || '',
+          pages: pages.map(p => ({
+            page_id: p.id,
+            page_name: p.name,
+            category: p.category || '',
+          })),
+          assigned_at: new Date().toISOString(),
+        };
+        saveAssignments(assignments);
+        console.log(`[fb-oauth] Auto-assigned ${pages.length} page(s) to agent ${agentId}`);
+      } else {
+        console.log('[fb-oauth] Skipping auto-assign:', agentId ? 'no pages' : 'no agentId');
+      }
+
       const pagesHtml = pages.map(p => `
         <div class="page-item">
           <div class="page-name">${p.name}</div>
@@ -235,7 +283,7 @@ const server = createServer(async (req, res) => {
         title: 'Kết nối thành công!',
         subtitle: `Đã lưu token cho <strong>${pages.length}</strong> Facebook Page.`,
         body: `<div class="badge">👤 ${user.name}${user.email ? ' · ' + user.email : ''}</div><div class="pages">${pagesHtml}</div>`,
-        hint: 'Bạn có thể đóng tab này.',
+        hint: agentId ? 'Vui lòng quay lại trang Agent và F5 để xem kết nối.' : 'Bạn có thể đóng tab này.',
       }));
     } catch (err) {
       console.error('[fb-oauth] Error:', err.message);
@@ -259,6 +307,61 @@ const server = createServer(async (req, res) => {
     }
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ pages }, null, 2));
+    return;
+  }
+
+  // ── GET /fb/pages/:page_id → get page credentials ────────────────────────
+  const pageMatch = url.pathname.match(/^\/fb\/pages\/([^/]+)$/);
+  if (pageMatch && req.method === 'GET') {
+    const pageId = pageMatch[1];
+    const creds = getPageCredentials(pageId);
+    if (!creds) {
+      res.writeHead(404, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Page not found' }));
+      return;
+    }
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(creds));
+    return;
+  }
+
+  // ── GET /fb/agent/:agent_id → get assigned pages for agent ───────────────
+  const agentMatch = url.pathname.match(/^\/fb\/agent\/([^/]+)$/);
+  if (agentMatch && req.method === 'GET') {
+    const agentId = agentMatch[1];
+    console.log(`[fb-oauth] GET /fb/agent/${agentId}`);
+    const assignments = loadAssignments();
+    const assignment = assignments[agentId];
+    if (!assignment) {
+      console.log(`[fb-oauth] No assignment found for agent ${agentId}`);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ assigned: false }));
+      return;
+    }
+    console.log(`[fb-oauth] Returning ${assignment.pages.length} pages for agent ${agentId}`);
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({
+      assigned: true,
+      user_id: assignment.user_id,
+      user_name: assignment.user_name,
+      user_email: assignment.user_email,
+      pages: assignment.pages,
+      assigned_at: assignment.assigned_at,
+    }));
+    return;
+  }
+
+
+  // ── DELETE /fb/assign/:agent_id → unassign page from agent ───────────────
+  const unassignMatch = url.pathname.match(/^\/fb\/assign\/([^/]+)$/);
+  if (unassignMatch && req.method === 'DELETE') {
+    const agentId = unassignMatch[1];
+    const assignments = loadAssignments();
+    delete assignments[agentId];
+    saveAssignments(assignments);
+    console.log(`[fb-oauth] Unassigned agent ${agentId}`);
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ success: true }));
     return;
   }
 

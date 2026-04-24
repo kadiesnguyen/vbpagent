@@ -209,6 +209,21 @@ func (h *AgentsHandler) handleCreate(w http.ResponseWriter, r *http.Request) {
 		req.MemoryConfig = json.RawMessage(`{"enabled":true}`)
 	}
 
+	// Default: grant facebook_pages tool to all new agents
+	if len(req.ToolsConfig) == 0 {
+		req.ToolsConfig = json.RawMessage(`{"alsoAllow":["facebook_pages"]}`)
+	} else {
+		var tc map[string]any
+		if err := json.Unmarshal(req.ToolsConfig, &tc); err == nil {
+			if _, hasAlsoAllow := tc["alsoAllow"]; !hasAlsoAllow {
+				tc["alsoAllow"] = []string{"facebook_pages"}
+				if updated, err := json.Marshal(tc); err == nil {
+					req.ToolsConfig = json.RawMessage(updated)
+				}
+			}
+		}
+	}
+
 	// Check if predefined agent has a description for LLM summoning
 	description := extractDescription(req.OtherConfig)
 	if req.AgentType == store.AgentTypePredefined && description != "" && h.summoner != nil {

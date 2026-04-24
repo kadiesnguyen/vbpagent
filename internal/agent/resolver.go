@@ -271,6 +271,7 @@ func NewManagedResolver(deps ResolverDeps) ResolverFunc {
 		if deps.MCPStore != nil {
 			if toolsReg == deps.Tools {
 				toolsReg = deps.Tools.Clone()
+				slog.Debug("agent.registry_cloned", "agent", agentKey, "builtin_tools", len(toolsReg.List()))
 			}
 			var mcpOpts []mcpbridge.ManagerOption
 			mcpOpts = append(mcpOpts, mcpbridge.WithStore(deps.MCPStore))
@@ -295,7 +296,10 @@ func NewManagedResolver(deps ResolverDeps) ResolverFunc {
 					toolNames := mcpMgr.ToolNames()
 					if len(toolNames) > 0 {
 						hasMCPTools = true
-						slog.Info("mcp.agent.tools_loaded", "agent", agentKey, "tools", len(toolNames))
+						slog.Info("mcp.agent.tools_loaded", "agent", agentKey, "mcp_tools", len(toolNames), "total_tools", len(toolsReg.List()))
+					} else {
+						// No MCP tools loaded, but agent still has builtin tools from cloned registry
+						slog.Info("agent.builtin_tools_only", "agent", agentKey, "tools", len(toolsReg.List()))
 					}
 				}
 			}

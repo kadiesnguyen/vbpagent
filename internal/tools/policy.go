@@ -34,7 +34,7 @@ var toolGroups = map[string][]string{
 		"read_image", "read_document", "read_audio", "read_video",
 		"create_image", "create_video",
 		"skill_search", "mcp_tool_search", "tts",
-		"team_tasks",
+		"team_tasks", "facebook_pages",
 	},
 }
 

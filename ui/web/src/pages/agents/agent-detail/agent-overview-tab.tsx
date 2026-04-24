@@ -11,6 +11,7 @@ import { EvolutionSection } from "./overview-sections/evolution-section";
 import { CapabilitiesSection } from "./overview-sections/capabilities-section";
 import { ChatGPTOAuthRoutingSummarySection } from "./overview-sections/chatgpt-oauth-routing-summary-section";
 import { GoogleWorkspaceSection } from "./overview-sections/google-workspace-section";
+import { FacebookPageSection } from "./overview-sections/facebook-page-section";
 import { HeartbeatCard } from "./overview-sections/heartbeat-card";
 import { MemorySection } from "./config-sections";
 import type { UseAgentHeartbeatReturn } from "../hooks/use-agent-heartbeat";
@@ -140,6 +141,8 @@ export function AgentOverviewTab({ agent, onUpdate, heartbeat, onManageCodexPool
       <ChatGPTOAuthRoutingSummarySection agent={agent} onManage={onManageCodexPool} />
 
       <GoogleWorkspaceSection emails={googleEmails} onChange={setGoogleEmails} />
+
+      <FacebookPageSection agentId={agent.id} />
 
       {/* Memory — always visible, per-agent overrides */}
       <MemorySection

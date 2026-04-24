@@ -436,6 +436,11 @@ func (s *Server) SetSecureCLIHandler(h *httpapi.SecureCLIHandler) {
 	s.handlers = append(s.handlers, h)
 }
 
+// SetFacebookPageHandler sets the Facebook Page integration handler.
+func (s *Server) SetFacebookPageHandler(h *httpapi.FacebookPageHandler) {
+	s.handlers = append(s.handlers, h)
+}
+
 // SetPackagesHandler sets the runtime package management handler.
 func (s *Server) SetPackagesHandler(h *httpapi.PackagesHandler) {
 	s.handlers = append(s.handlers, h)
